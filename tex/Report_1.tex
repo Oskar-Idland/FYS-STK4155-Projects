@@ -1,0 +1,71 @@
+\documentclass[reprint,english,notitlepage]{revtex4-1}
+\usepackage{amsmath}
+\usepackage{mathtools} %for \abs{x}
+\usepackage[warnings-off={mathtools-colon,mathtools-overbracket}]{unicode-math}
+\usepackage[margin=1.5in]{geometry}
+\usepackage{enumerate}
+\usepackage[dvipsnames]{xcolor}
+\setlength{\parindent}{0cm}
+\usepackage{graphics}
+\usepackage{graphicx} % Required for including images
+\usepackage{subcaption}
+\usepackage{bigintcalc}
+\usepackage{pythonhighlight} %for pythonkode \begin{python}   \end{python}
+\usepackage{appendix}
+\usepackage{arydshln}
+\usepackage[colorlinks=true,linktoc=page]{hyperref} %for linker, må ha med hypersetup
+\usepackage[noabbrev, nameinlink]{cleveref} % to be loaded after hyperref
+
+% \usepackage[style=science, backend=biber]{biblatex}
+% \addbibresource{References_Project_1.bib} % TODO: Fix før innlevering
+
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}}
+
+\lstset{inputpath=,
+backgroundcolor=\color{white!88!black},
+basicstyle={\ttfamily\scriptsize},
+commentstyle=\color{magenta},
+language=Python,
+morekeywords={True,False},
+tabsize=4,
+stringstyle=\color{green!55!black},
+frame=single,
+keywordstyle=\color{blue},
+showstringspaces=false,
+columns=fullflexible,
+keepspaces=true}
+
+\begin{document}
+
+\title{Project 1}
+\author{Håvard Skåli, Erik Røset \& Oskar Idland}
+\date{\today}
+\affiliation{University of Oslo, Department of Physics}
+
+\begin{abstract}
+    This is an abstract \colorbox{red}{Complete this summary at the end of the paper}
+\end{abstract}
+\maketitle
+\section{Introduction} \label{sec: theory}
+
+\section{Method \& Implementation} \label{sec: method}
+
+\section{Code} \label{sec: code}
+
+\section{Results} \label{sec: results}
+
+\section{Discussion} \label{sec: discussion}
+
+\section{Conclusion} \label{sec: conclusion}
+
+\section{Appendix} \label{sec: appendix}
+
+\section*{ACKNOWLEDGMENTS}
+
+\section*{References} \label{sec: references}
+
+\end{document}
