@@ -1,0 +1,365 @@
+%% USEFUL LINKS:
+%% -------------
+%%
+%% - UiO LaTeX guides:          https://www.mn.uio.no/ifi/tjenester/it/hjelp/latex/
+%% - Mathematics:               https://en.wikibooks.org/wiki/LaTeX/Mathematics
+%% - Physics:                   https://ctan.uib.no/macros/latex/contrib/physics/physics.pdf
+%% - Basics of Tikz:            https://en.wikibooks.org/wiki/LaTeX/PGF/Tikz
+%% - All the colors!            https://en.wikibooks.org/wiki/LaTeX/Colors
+%% - How to make tables:        https://en.wikibooks.org/wiki/LaTeX/Tables
+%% - Code listing styles:       https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings
+%% - \includegraphics           https://en.wikibooks.org/wiki/LaTeX/Importing_Graphics
+%% - Learn more about figures:  https://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions
+%% - Automagic bibliography:    https://en.wikibooks.org/wiki/LaTeX/Bibliography_Management  (this one is kinda difficult the first time)
+%%
+%%                              (This document is of class "revtex4-1", the REVTeX Guide explains how the class works)
+%%   REVTeX Guide:              http://www.physics.csbsju.edu/370/papers/Journal_Style_Manuals/auguide4-1.pdf
+%%
+%% COMPILING THE .pdf FILE IN THE LINUX IN THE TERMINAL
+%% ----------------------------------------------------
+%%
+%% [terminal]$ pdflatex report_example.tex
+%%
+%% Run the command twice, always.
+%%
+%% When using references, footnotes, etc. you should run the following chain of commands:
+%%
+%% [terminal]$ pdflatex report_example.tex
+%% [terminal]$ bibtex report_example
+%% [terminal]$ pdflatex report_example.tex
+%% [terminal]$ pdflatex report_example.tex
+%%
+%% This series of commands can of course be gathered into a single-line command:
+%% [terminal]$ pdflatex report_example.tex && bibtex report_example.aux && pdflatex report_example.tex && pdflatex report_example.tex
+%%
+%% ----------------------------------------------------
+
+\PassOptionsToPackage{square,comma,numbers,sort&compress,super}{natbib}
+\documentclass[aps,pra,english,notitlepage,reprint,nofootinbib]{revtex4-1}  % defines the basic parameters of the document
+% For preview: skriv i terminal: latexmk -pdf -pvc filnavn
+% If you want a single-column, remove "reprint"
+
+% Allows special characters (including æøå)
+\usepackage[mathletters]{ucs}
+\usepackage[utf8x]{inputenc}
+% \usepackage[english]{babel}
+\usepackage{silence}
+\WarningFilter{revtex4-1}{Repair the float}
+
+%% Note that you may need to download some of these packages manually, it depends on your setup.
+%% I recommend downloading TeXMaker, because it includes a large library of the most common packages.
+
+\usepackage{physics,amssymb}  % mathematical symbols (physics imports amsmath)
+\usepackage{amsmath}
+\usepackage{graphicx} 
+% include graphics such as plots
+\usepackage{xcolor}           % set colors
+\usepackage{hyperref}         % automagic cross-referencing
+%\usepackage{url}
+\usepackage{cleveref}
+\usepackage{listings}         % display code
+\usepackage{subfigure}        % imports a lot of cool and useful figure commands
+\usepackage{subcaption}
+%\usepackage{float}
+%\usepackage[section]{placeins}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{cprotect}
+\usepackage{multirow}
+\usepackage{array, booktabs}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\usepackage[noend]{algpseudocode}
+\usepackage{subfigure}
+\newcommand{\imp}{\hspace{5pt}\Rightarrow\hspace{5pt}}
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+\usepackage{tikz}
+\usetikzlibrary{quantikz}
+% defines the color of hyperref objects
+% Blending two colors:  blue!80!black  =  80% blue and 20% black
+\hypersetup{ % this is just my personal choice, feel free to change things
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black},
+    breaklinks=true}
+\urlstyle{same}
+
+
+\renewcommand{\bibsection}{\section*{References}}
+\newcommand{\psp}{\hspace{1pt}}
+% ===========================================
+
+
+\begin{document}
+
+\title{\texorpdfstring{\begin{Large}Project 1\end{Large}\\\vspace{5pt}FYS-STK4155}{Lg}}
+\author{Håvard Skåli, Erik Røset \& Oskar Idland}
+\date{\today}
+\affiliation{University of Oslo, Department of Physics}
+
+\begin{abstract}
+% EXAMPLE OF HOW AN ABSTRACT COULD BE STRUCTURED
+% This study revolves around the famous double-slit experiment and the wave-nature of particles. By employing the Crank-Nicholson scheme we managed to discretize the Schrödinger equation describing the evolution of a single particle in a two-dimensional box. This was used to perform simulations with single-, double-, and triple-slit configurations, storing the probability values associated with the particle's position within the box at each time step. Visualizing these results proved striking resemblence to the behavior of coherent waves passing through corresponding setups, as expected. Hence, we observed the probability distribution describing the particle's position to evolve and interact with obstacles like a wave packet, which is a clear indicator that a an actual stream of such particles would too. By assuming that the particle eventually hits a detection screen on the other side of the slits, we plotted the probability values versus $y$-position at $x=0.8$ and found that the patterns all agreed with those famously observed during real life experiments. Furthermore, we determined that the real part of the wave packet itself was constantly phase-shifted $\pi/2$ relative to its imaginary part throughout the double-slit simulation. This was expected based on the initial state, hence further validating our methods and results. 
+\end{abstract}
+\maketitle
+\onecolumngrid
+\begin{center}
+  \vspace{-15pt}
+  % LINK TO REPOSITORY
+  \href{https://github.com/Oskar-Idland/FYS-STK4155-Projects}{https://github.com/Oskar-Idland/FYS-STK4155-Projects}%{GitHub Repository}
+  \vspace{5pt}
+\end{center}
+% \tableofcontents % TODO: Fjern hvis stygg
+% \endgroup
+% \phantom{.} \newline 
+\twocolumngrid
+% ===========================================
+
+
+\section{Introduction}\label{sec:introduction}
+% EXAMPLE OF HOW AN INTRODUCTION COULD BE STRUCTURED
+% One of the most famous experiments in modern physics is the double-slit experiment, where electrons are fired towards a wall with two narrow slits, and a detector screen on the other side of this wall lights up when hit with the electrons passing through. Figure \ref{fig:DoubleSlitPic} shows a simple illustration of what is expected versus what is observed when conducting the double slit experiment. Panel a shows what we would expect from classical physics; the particles pass through either the first or the second slit, and the spots lighting up on the detector wall have a similar shape as the slits, parallel to their respective positions. Panel b shows what we actually observe; the spots where the electrons hit build up to replicate the interference pattern from a wave, a stream of photons, as seen from panel c. Hence the experiment clearly demonstrates the wave-nature of particles with mass, which is commonly seen as proof of the probabilistic nature of quantum physics. 
+
+% The double-slit experiment with quantum particles and variations thereof are of great relevancy within many fields of research, and contributes to a fundamental understanding of the smallest building blocks of the universe. For this reason we will attempt to simulate solutions to the two-dimensional time-dependent Schrödinger equation, and use it to study a double-slit-in-a-box setup with various initial states. We will then use these same methods to study what happens to the wave function when we change to one or three slits, which can help gain further insight into the behavior of quantum particles in more complex systems. Performing simulations such as these is essential for deepening our understanding of quantum mechanics, challenging our classical views of physics, and contributing to the development of new technology and theoretical models.
+
+% IMPORTANT PARAGRAPH: GIVE OVERVIEW OF REPORT
+% The purpose of \cref{sec:methods} below is to properly explain the relevant theory, the assumptions we make, our specific methods and numerical tools used in this study. In \cref{subsec:theo} we introduce and interpret the two-dimensional time-dependent Schrödinger equation as well as the Born rule, and present the expected qualitative behavior of our results based on classical wave theory. We introduce the Crank-Nicolson scheme and use it to discretize the Schrödinger equation in \cref{subsec:model}, then move on to describe our numerical approach when modelling the experiments, as well as initializing and evolving the wave function. The purpose of the different simulations is explained in \cref{subsec:sim}, and their respective details and conditions are specified. In \cref{subsec:program} we provide an overview of our program structure and the specific numerical tools we use to run the simulations and visualize the results. The results of our calculations and simulations are presented, interpreted and discussed in light of what we expect from wave theory and previously conducted experiments in \cref{sec:results discussion}, and in \cref{sec:conclusion} we summarize and conclude the main findings. 
+
+
+% ===========================================
+\section{Theory}\label{sec:theory}
+% EXPLAIN ANALYTICAL EXPRESSIONS ETC., REFER TO DERIVATIONS IN APPENDIX
+% THESE ARE POSSIBLE SUBSECTIONS
+\subsection{The Franke Function}\label{subsec:franke}
+\subsection{Bias-Variance Tradeoff}\label{subsec:tradeoff}
+% EXPLAIN MODEL BIAS, MODEL VARIANCE, NOISE VARIANCE, THE MEAN SQUARED ERROR, THE R2 SCORE FUNCTION
+      
+
+\section{Methods}\label{sec:methods}
+\subsection{Algorithms}\label{subsec:algorithms}
+\subsubsection{Ordinary Least Squares (OLS)}\label{subsubsec:ols}
+\subsubsection{Ridge}\label{subsubsec:ridge} 
+\subsubsection{Lasso}\label{subsubsec:lasso} 
+% INCLUDE PSEUDOCODE HERE IF IMPLEMENTED
+% MAYBE FUSE INTO IMPLEMENTATION SUBSECTION, OR MOVE TO THEORY
+    
+\subsection{Implementation}\label{subsec:code}
+\subsubsection{Code Structure}\label{subsubsec:codestructure}
+% EXAMPLE OF HOW THIS CAN LOOK
+% Our main program is divided into a series of \verb|.cpp|-files, each containing one or more functions, with \verb|main.cpp| either calling the test functions, or the validating- and error-throwing functions and running the simulations, depending on how the project is built. In the header-file \verb|Simulation.h| we have documented the \verb|Simulation|-class and all its private and public member functions. All test functions are defined in \verb|test.cpp| and documented in \verb|test.h|, while validating- and error-throwing functions are defined in \verb|validate_input.cpp| and documented in \verb|validate.h|. All functions for reading data and visualizing the results are defined in \verb|.py|-files, and are imported and called on in \verb|main.py|. A detailed description of the program structure and how to build and run the program is given in the \verb|README.md|-file linked to \href{https://github.uio.no/oskarei/CompFys-Project5/blob/main/README.md}{here}.
+
+\subsubsection{Tools}\label{subsubsec:tools}
+% EXAMPLE OF HOW THIS CAN LOOK
+% C++ \cite{C++} is used for all the numerically heavy computations and simulations. The standard library of C++ is used for mathematical and trigonometric functions, and as containers of data and for vectorization we implement Armadillo's \cite{Armadillo} \verb|arma::vec| class, together with other functions the library offer. To parse the \verb|.json| input files we use the json parsing library \cite{json}. Python \cite{Python} is used for plotting and animating our results. To vectorize our code we use \verb|numpy| \cite{Numpy}, and for visualization we use \verb|matplotlib.pyplot| \cite{Matplotlib}. To make our plots prettier we use the colormaps module \cite{colormaps}. Code completion and debugging is done in Visual Studio Code \cite{VSCode} with additional assistance of GitHub Copilot \cite{Copilot}. We use \verb|git| \cite{Git} for version control, and \verb|GitHub| \cite{GitHub} for remote storage of our code.
+
+\subsection{Data Analysis}\label{subsec:data}
+% EXPLAIN THE TYPE OF DATA WE ARE IMPLEMENTING OUR ALGORITHM TO ANALYZE AND HOW WE ARE DOING IT
+
+
+
+% ===========================================
+% MAYBE HAVE THESE TWO SECTIONS GATHERED INSTEAD?
+% \section{Results \& Discussions}\label{sec:results discussion}
+
+\section{Results}\label{sec:results}
+
+
+\section{Discussion}\label{sec:discussion}
+
+
+\section{Conclusion}\label{sec:conclusion}
+
+
+\section{Reflection}\label{sec:reflection}
+% MAYBE JUST INCLUDE SOME REFLECTION IN THE CONCLUSION INSTEAD OF HAVING AS OWN SECTION
+
+\section*{Acknowledgements}\label{sec:cknowledgements}
+% MAYBE REMOVE
+
+% \Urlmuskip=0mu plus 1mu\relax
+\bibliography{references}
+% MAYBE HAVE REFERENCES IN ONECOLUMN AS WELL
+
+\newpage
+% ===========================================
+\appendix
+\onecolumngrid
+\section{Derivations}\label{appsec:derivations}
+
+\section{Additional Figures}\label{appsec:figures}
+
+\section{Code}\label{appsec:code}
+% MAYBE REMOVE
+\subsection*{\texorpdfstring{\texttt{main.py}}{Lg}}\label{appsubsec:main}
+
+\subsection*{\texorpdfstring{\texttt{franke.py}}{Lg}}\label{appsubsec:franke}
+
+
+% LINK WITH SPECIFIC NAME
+% \href{https://raw.github.uio.no/oskarei/CompFys-Project5/main/data/gif/triple_slit_200_81_anim.gif?token=GHSAT0AAAAAAAAAIZKJAEIVBDMTTIDARGUYZMAXTHA}{triple-slit}
+
+% MATHMODE IN HEADLINE
+% \subsubsection{\texorpdfstring{$\text{Re}(u_{i,j}^n)$ and $\text{Im}(u_{i,j}^n)$}{Lg}}
+
+
+% FIGURE COVERING BOTH COLUMNS
+% \begin{figure*}
+%   \vspace*{-5pt}
+%   \centering %Centers the figure
+%   \includegraphics[width=\textwidth]{../data/fig/triple_slit.pdf}
+%   \caption{The square root of the probabilities at each point in the box $\sqrt{p_{i,j}^n}$ at the beginning (top left), middle (top center) and end (top right) of the triple-slit simulation with adjusted initialization and potential position. The plot at the bottom shows the normalized probability values $p(y\:|\:x=0.9;\;t=0.0025)$ along the detection screen at $x = 0.9$ at the end of the simulation.}\label{fig:TripleSlit}
+%   \vspace*{-5pt}
+% \end{figure*}
+
+% FIGURE IN SINGLE COLUMN
+% \begin{figure}[h!]
+%   %\vspace*{-5pt}
+%   \centering %Centers the figure
+%   \includegraphics[width=0.9\columnwidth]{../data/fig/triple_sketch.png}
+%   \caption{Illustration showing how the triple-slit interference pattern changes with distance from the slits. Gathered from Physics StackExchange \cite{TripleSketch}.}\label{fig:TripleSketch}
+%   \vspace*{-10pt}
+% \end{figure}
+
+
+% TABLE COVERING BOTH COLUMNS
+% \begin{center}
+%   \vspace{-10pt}
+%   \renewcommand{\arraystretch}{1.5}
+%   \begin{table*}
+%   %\centering
+%   \begin{tabular}{| C{3.5cm} | C{2.2cm} | C{2.2cm} |  C{2.2cm} |  C{2.2cm} |  C{2.2cm} |  C{2.2cm} |}
+%   \hline
+%   \hspace{1pt} & \textbf{Model \hyperref[fig:potential model A]{A}} & \textbf{Model \hyperref[fig:potential model B]{B}} & \textbf{Model \hyperref[fig:potential model C]{C}} & \textbf{Model \hyperref[fig:potential model D]{D}} & \textbf{Model \hyperref[fig:potential model E]{E}} & \textbf{Model \hyperref[fig:potential model F]{F}} \\
+%   \hline
+%   \boldmath$m_0/M_{\astrosun}$ & $0.95$ & $0.95$ & $1.00$ & $1.00$ & $1.00$ & $1.05$ \\
+%   \hline
+%   \boldmath$r_0/R_{\astrosun}$ & $1.00$ & $1.25$ & $1.00$ & $1.00$ & $1.00$ & $1.50$ \\
+%   \hline
+%   \boldmath$L_0/L_{\astrosun}$ & $1.25$ & $1.00$ & $1.25$ & $1.50$ & $1.50$ & $1.00$ \\
+%   \hline
+%   \boldmath$\rho_0/\overline{\rho}_{\astrosun}$ & $1.00\times10^{-5}$ & $1.00\times10^{-5}$ & $7.50\times10^{-6}$ & $1.00\times10^{-5}$ & $2.50\times10^{-5}$ & $1.25\times10^{-5}$ \\
+%   \hline
+%   \textbf{Reach of }\boldmath{$m/m_0$} & $3.02\:\%$ & $4.24\:\%$ & $1.18\:\%$ & $2.66\:\%$ & $4.40\:\%$ & $3.79\:\%$ \\
+%   \hline
+%   \textbf{Reach of }\boldmath{$r/r_0$} & $0.73\:\%$ & $0.34\:\%$ & $0.06\:\%$ & $0.39\:\%$ & $0.51\:\%$ & $0.19\:\%$ \\
+%   \hline
+%   \textbf{Reach of }\boldmath{$L/L_0$} & $0.03\:\%$ & $0.14\:\%$ & $0.08\:\%$ & $0.04\:\%$ & $0.11\:\%$ & $0.21\:\%$ \\
+%   \hline
+%   \textbf{Size of core} & $0.24\times r_0$ & $0.19\times r_0$ & $0.26\times r_0$ & $0.25\times r_0$  & $0.24\times r_0$  & $0.15\times r_0$ \\
+%   \hline
+%   \textbf{Width of main zone} & $0.21\times r_0$ & $0.24\times r_0$ & $0.17\times r_0$ & $0.21\times r_0$ & $0.30\times r_0$ & $0.28\times r_0$ \\
+%   \hline
+%   \boldmath$F_\textbf{small}/F_\textbf{main}$ & No zone & No zone & $8.39\:\%$ & No zone & No zone & No zone \\
+%   \hline
+%   \end{tabular}
+%   \cprotect\caption{The first four rows contain the initial mass, radius, luminosity and mass density of the six models, respectively. The initial temperature was $T_0 = 5770\:\text{K}$ for all six models, and the initial pressure was decided by the initial mass density through the equation of state. The next three rows show how far $m$, $r$ and $L$ reached before the integration was stopped, respectively. The size of the core and of the main convection zone near the surface, both given in units of $r_0$, are listed in the two next rows. In the last row I have listed the ratios between the convective flux from an eventual second, smaller convection zone and the convective flux from the respective main convection zone. If it says ``No zone'', the model does not have any more convection zones.}\label{tab:models}
+%   \end{table*}
+%   \renewcommand{\arraystretch}{1}
+%   \vspace{-20pt}
+% \end{center}
+
+% STANDARD TABLE IN SINGLE COLUMN
+% \begin{center}
+%   \renewcommand{\arraystretch}{1.5}
+%   \begin{table}[h!]
+%   \centering
+%   \begin{tabular}{| C{2.2cm} | C{1.4cm} | C{1.4cm} | C{1.4cm} | C{1.4cm} |}
+%   \hline
+%   \textbf{No. of cycles} & \boldmath$\left<ϵ\right>$ \boldmath$[J]$ & \boldmath$\left<|m|\right>$ & \boldmath$C_V$ \boldmath$[k_\text{B}]$ & \boldmath$\chi$ \boldmath$[J^{-1}]$ \\
+%   \hline
+%   10 & $-1.8000$ & 0.9375 & 1.4400 & 0.1594 \\
+%   \hline
+%   20 & $-1.9000$ & 0.9688 & 0.7600 & 0.0836 \\
+%   \hline
+%   50 & $-1.9600$ & 0.9875 & 0.3136 & 0.0344 \\
+%   \hline
+%   100 & $-1.9800$ & 0.9938 & 0.1584 & 0.0173 \\
+%   \hline
+%   200 & $-1.9775$ & 0.9931 & 0.1780 & 0.0186 \\
+%   \hline
+%   500 & $-1.9880$ & 0.9962 & 0.0954 & 0.0104 \\
+%   \hline
+%   1000 & $-1.9940$ & 0.9981 & 0.0479 & 0.0052 \\
+%   \hline
+%   5000 & $-1.9960$ & 0.9988 & 0.0319 & 0.0033 \\
+%   \hline
+%   10000 & $-1.9974$ & 0.9992 & 0.0204 & 0.0022 \\
+%   \hline
+%   100000 & $-1.9975$ & 0.9992 & 0.0197 & 0.0022 \\
+%   \hline
+%   1000000 & $-1.9973$ & 0.9992 & 0.0215 & 0.0023 \\
+%   \hline
+%   \textbf{Analytical} & $-1.9960$ & 0.9987 & 0.0321 & 0.0040 \\
+%   \hline
+%   \end{tabular}
+%   \cprotect\caption{Numerical estimates of $\left<\epsilon\right>$, $\left<|m|\right>$, $C_V$ and $\chi$ for $T = 1.0\:J/k_\text{B}$ after increasing numbers of Monte Carlo cycles are performed. The last row contains the analytical values.}\label{tab:2x2 results}
+%   \end{table}
+%   \renewcommand{\arraystretch}{1}
+% \end{center}
+
+% TABLE WITH MULTIROW
+% \begin{center}
+%   \renewcommand{\arraystretch}{1.5}
+%   \begin{table}[h!]
+%   \centering
+%   \begin{tabular}{| C{2.4cm} | C{1.5cm} | C{1.1cm} | C{2.0cm} |}
+%   \hline
+%   \textbf{No. of} \boldmath$s = +1$ & \boldmath$E(\mathbf{s})$ \boldmath$[J]$ & \boldmath$M(\mathbf{s})$ & \textbf{Degeneracy} \\
+%   \hline
+%   0 & $-8$ & $-4$ & None \\
+%   \hline
+%   1 & \hspace{7pt}$0$ & $-2$ & $4$ \\
+%   \hline
+%   \multirow{2}{*}{2} & \hspace{7pt}$8$ & \multirow{2}{*}{\hspace{7pt}$0$} & $2$ \\
+%   \cline{2-2}\cline{4-4}
+%   & \hspace{7pt}$0$ & & $4$ \\
+%   \hline
+%   3 & \hspace{7pt}$0$ & \hspace{7pt}$2$ & $4$ \\
+%   \hline
+%   4 & $-8$ & \hspace{7pt}$4$ & None \\
+%   \hline
+%   \end{tabular}
+%   \cprotect\caption{Total energy $E(\mathbf{s})$ and magnetisation $M(\mathbf{s})$ for a \texorpdfstring{$2\times2$}{Lg} lattice with $0$, $1$, $2$, $3$ and $4$ spins $s = +1$. Because we use periodic boundary conditions, the total energy can either be 0$\:J$ or 8$\:J$ when we have two spins $s = +1$ and two spins $s = -1$, depending on if the equal spins are neighbours or not. The last column contains the degeneracy level for the different combinations of number of spins $s = +1$ and total energy.}\label{tab:2x2 lattice}
+%   \end{table}
+%   \renewcommand{\arraystretch}{1}
+% \end{center}
+
+
+% ALGORITHM
+% \begin{figure}
+%   % NOTE: We only need \begin{figure} ... \end{figure} here because of a compatability issue between the 'revtex4-1' document class and the 'algorithm' environment.
+%       \begin{algorithm}[H]
+%       \caption{The Metropolis Algorithm}
+%       \label{algo:Euler}
+%           \begin{algorithmic}
+%               \Procedure{Monte Carlo cycle}{$\mathbf{s}, L, β$}
+%               \For{$i = 0, 1, \ldots, L-1$}
+%               \For{$j = 0, 1, \ldots, L-1$}
+%               \State $\triangleright$ Compute energy difference due to flipping $s_{ij}$
+%               \State $\Delta E ← \Delta E_\text{function}(\mathbf{s}, i, j)$
+%               \State
+%               \State $\triangleright$ Flip if energy difference is negative or zero
+%               \If{$\Delta E \leq 0$}
+%                   \State $s_{ij} = -s_{ij}$ \Comment{Flip spin}
+%                   \State
+%               \Else \Comment{Energy difference is positive}
+%                   \State $w = e^{-β\Delta E}$ \Comment{Probability of flipping spin}
+%                   \State $\triangleright$ Generate random number $r ∈ [0,1]$
+%                   \State $\triangleright$ Flip spin if $r≤ w$
+%                   \If{$r≤ w$}
+%                       \State $s_{ij} = -s_{ij}$ \Comment{Flip spin}
+%                   \EndIf
+%               \EndIf
+%               \State 
+%               \State $\triangleright$ Calculate $E$, $E^2$, $|M|$ and $M^2$ for $\mathbf{s}$
+%               \State $E$, $E^2 = E_\text{function}(\mathbf{s})$
+%               \State $|M|$, $M^2 = M_\text{function}(\mathbf{s})$
+%               \State $\triangleright$ Update expectation values accordingly
+%               \EndFor
+%               \EndFor
+%               \EndProcedure
+%           \end{algorithmic}
+%       \end{algorithm}
+%   \end{figure}
+
+\end{document}
