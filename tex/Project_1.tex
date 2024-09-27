@@ -101,6 +101,7 @@
 \begin{abstract}
 % EXAMPLE OF HOW AN ABSTRACT COULD BE STRUCTURED
 % This study revolves around the famous double-slit experiment and the wave-nature of particles. By employing the Crank-Nicholson scheme we managed to discretize the Schrödinger equation describing the evolution of a single particle in a two-dimensional box. This was used to perform simulations with single-, double-, and triple-slit configurations, storing the probability values associated with the particle's position within the box at each time step. Visualizing these results proved striking resemblence to the behavior of coherent waves passing through corresponding setups, as expected. Hence, we observed the probability distribution describing the particle's position to evolve and interact with obstacles like a wave packet, which is a clear indicator that a an actual stream of such particles would too. By assuming that the particle eventually hits a detection screen on the other side of the slits, we plotted the probability values versus $y$-position at $x=0.8$ and found that the patterns all agreed with those famously observed during real life experiments. Furthermore, we determined that the real part of the wave packet itself was constantly phase-shifted $\pi/2$ relative to its imaginary part throughout the double-slit simulation. This was expected based on the initial state, hence further validating our methods and results. 
+We have used various regression techniques and resampling methods within the context of machine learning, and tested these on the Franke function, a synthetic benchmark used in numerical analysis, as well as on output data from a cosmological N-body simulation performed with the public G\begin{scriptsize}ASOLINE\end{scriptsize}2 code. The main objective was to analyze and compare the performance of Ordinary Least Squares (OLS), Ridge, and Lasso regression in fitting synthetic and real-world data, focusing on the bias-variance tradeoff and model generalizability. To assess model performance we employed resampling methods such as bootstrap and $k$-fold cross-validation, examining how they help to evaluate model accuracy under different training and test data conditions. Our study provided insights into how model complexity and regularization parameters affect the bias-variance tradeoff and prediction error, enabling us to critically evaluate each regression technique's performance using statistical and resampling approaches. \colorbox{magenta}{rewrite when results are gathered and discussion/conclusion is finished}
 \end{abstract}
 \maketitle
 \onecolumngrid
@@ -118,15 +119,6 @@
 
 
 \section{Introduction}\label{sec:introduction}
-% EXAMPLE OF HOW AN INTRODUCTION COULD BE STRUCTURED
-% One of the most famous experiments in modern physics is the double-slit experiment, where electrons are fired towards a wall with two narrow slits, and a detector screen on the other side of this wall lights up when hit with the electrons passing through. Figure \ref{fig:DoubleSlitPic} shows a simple illustration of what is expected versus what is observed when conducting the double slit experiment. Panel a shows what we would expect from classical physics; the particles pass through either the first or the second slit, and the spots lighting up on the detector wall have a similar shape as the slits, parallel to their respective positions. Panel b shows what we actually observe; the spots where the electrons hit build up to replicate the interference pattern from a wave, a stream of photons, as seen from panel c. Hence the experiment clearly demonstrates the wave-nature of particles with mass, which is commonly seen as proof of the probabilistic nature of quantum physics. 
-
-% The double-slit experiment with quantum particles and variations thereof are of great relevancy within many fields of research, and contributes to a fundamental understanding of the smallest building blocks of the universe. For this reason we will attempt to simulate solutions to the two-dimensional time-dependent Schrödinger equation, and use it to study a double-slit-in-a-box setup with various initial states. We will then use these same methods to study what happens to the wave function when we change to one or three slits, which can help gain further insight into the behavior of quantum particles in more complex systems. Performing simulations such as these is essential for deepening our understanding of quantum mechanics, challenging our classical views of physics, and contributing to the development of new technology and theoretical models.
-
-% IMPORTANT PARAGRAPH: GIVE OVERVIEW OF REPORT
-% The purpose of \cref{sec:methods} below is to properly explain the relevant theory, the assumptions we make, our specific methods and numerical tools used in this study. In \cref{subsec:theo} we introduce and interpret the two-dimensional time-dependent Schrödinger equation as well as the Born rule, and present the expected qualitative behavior of our results based on classical wave theory. We introduce the Crank-Nicolson scheme and use it to discretize the Schrödinger equation in \cref{subsec:model}, then move on to describe our numerical approach when modelling the experiments, as well as initializing and evolving the wave function. The purpose of the different simulations is explained in \cref{subsec:sim}, and their respective details and conditions are specified. In \cref{subsec:program} we provide an overview of our program structure and the specific numerical tools we use to run the simulations and visualize the results. The results of our calculations and simulations are presented, interpreted and discussed in light of what we expect from wave theory and previously conducted experiments in \cref{sec:results discussion}, and in \cref{sec:conclusion} we summarize and conclude the main findings. 
-
-
 In this work, we explore regression analysis and resampling methods in the context of machine learning, focusing on both theoretical and practical aspects. The primary goal is to develop a solid understanding of various regression techniques, including Ordinary Least Squares (OLS), Ridge, and Lasso regression, and their application to both synthetic and real-world data. We will also investigate how resampling methods such as bootstrap and cross-validation can help assess model performance.
 
 We begin by applying the abovementioned methods to the Franke function, a widely used test function in numerical analysis, and extend the analysis to cosmological N-body simulation data made with the public version of the G\begin{scriptsize}ASOLINE\end{scriptsize}2 Smoothed Particle Hydrodynamics (SPH) code \cite{gasoline}. Our approach involves fitting polynomial regression models of varying complexity to the Franke function as well as the simulation data, and studying the bias-variance tradeoff, an essential concept in machine learning, in both cases. This allows us to evaluate the impact of model complexity, noise, and the size of training data on the accuracy and generalizability of the models. The overarching aim is to gain insights into how different regression methods handle overfitting, model complexity, and data variability, and to develop a framework for critically evaluating model performance using statistical and resampling techniques. \colorbox{magenta}{rewrite?}
@@ -136,7 +128,7 @@ In \cref{sec:theory} we present relevant background theory, including central co
 % ===========================================
 \section{Theory}\label{sec:theory}
 \subsection{Bayesian Statistics}
-\colorbox{magenta}{maybe remove section if not relevant. find sources}
+\colorbox{magenta}{maybe remove section if not relevant}
 Bayesian statistics is a branch of statistics that differs from traditional frequentist approaches (like maximum likelihood estimation) by incorporating prior beliefs or knowledge into the analysis. In the Bayesian framework, we update our beliefs about model parameters based on observed data, leading to a more flexible approach to uncertainty quantification. The essence of Bayesian inference is captured by Bayes' theorem, which relates prior beliefs, likelihood, and observed data to produce an updated (posterior) belief about a parameter or model. Bayes' theorem is written as:
 
 \begin{equation}
@@ -196,7 +188,8 @@ The Franke function is a widely used synthetic function in numerical analysis an
 \end{align*}
 The function produces a surface with both smooth and non-smooth regions, making it an excellent benchmark for testing regression and interpolation algorithms. It simulates real-world data that may contain both complex variations and noise, mimicking scenarios that are encountered in practical data analysis tasks.
 
-\subsection{Terrain Data}\label{subsec:terrain}
+\subsection{Simulation Data}\label{subsec:simulation}
+\colorbox{magenta}{in method instead?}
 % MAYBE EXPLAIN THE DATA HERE, WHAT WE EXPECT FOR THE DATA FOR EXAMPLE
       
 
@@ -209,18 +202,19 @@ At its core, regression analysis seeks to find a mathematical function that rela
 \begin{equation}
   \mathbf{y} = f(\mathbf{x}) + \boldsymbol{\epsilon},
 \end{equation}
-where $f(\mathbf{x})$ is the function we are trying to estimate, which represents the relationship between $\mathbf{x}$ and $\mathbf{y}$, and $\boldsymbol{\epsilon}$ is the error term, representing the part of the variation in $\mathbf{y}$ that is not explained by the model (due to noise or other unobserved factors).
+where $f(\mathbf{x})$ is the function we are trying to estimate, which represents the relationship between $\mathbf{x}$ and $\mathbf{y}$, and $\boldsymbol{\epsilon}$ is the error term, representing the part of the variation in $\mathbf{y}$ that is not explained by the model (due to noise or other unobserved factors). 
+\colorbox{magenta}{move expression to theory?}
 
 \subsubsection{Ordinary Least Squares}\label{subsubsec:ols}
-The Ordinary Least Squares (OLS) method is one of the most fundamental and widely used techniques in regression analysis. Its objective is to find the best-fitting line or curve for a given set of data by minimizing the sum of the squared differences between the observed values and the predicted values. These squared differences are called residuals, and minimizing them ensures the best possible fit of the model to the data. \colorbox{magenta}{continue, introduce expressions (week 38)}
+The Ordinary Least Squares (OLS) method is one of the most fundamental and widely used techniques in regression analysis. Its objective is to find the best-fitting line or curve for a given set of data by minimizing the sum of the squared differences between the observed values and the predicted values. These squared differences are called residuals, and minimizing them ensures the best possible fit of the model to the data. \colorbox{magenta}{continue, introduce expressions (week 37), cite?}
 
 
 \subsubsection{Ridge}\label{subsubsec:ridge} 
-While OLS provides a foundational method for regression, it can lead to problems when the data has high multicollinearity or when there are more features than data points, leading to overfitting. OLS attempts to minimize the sum of squared errors, but it does not impose any restrictions on the model complexity. This often results in high variance when the model learns to fit noise in the training data. To address this, Ridge regression introduces a regularization term to the OLS cost function, penalizing large coefficients and preventing the model from becoming overly complex. By introducing the hyperparameter $\lambda$, Ridge regression balances the trade-off between bias and variance, allowing us to control model complexity and fit the data more effectively. \colorbox{magenta}{double check, introduce expressions (week 37)}
+While OLS provides a foundational method for regression, it can lead to problems when the data has high multicollinearity or when there are more features than data points, leading to overfitting. OLS attempts to minimize the sum of squared errors, but it does not impose any restrictions on the model complexity. This often results in high variance when the model learns to fit noise in the training data. To address this, Ridge regression introduces a regularization term to the OLS cost function, penalizing large coefficients and preventing the model from becoming overly complex. By introducing the hyperparameter $\lambda$, Ridge regression balances the trade-off between bias and variance, allowing us to control model complexity and fit the data more effectively. \colorbox{magenta}{double check, introduce expressions (week 37), cite?}
 
 
 \subsubsection{Lasso}\label{subsubsec:lasso} 
-Like Ridge regression, Lasso regression (Least Absolute Shrinkage and Selection Operator) is a regularization technique designed to improve the generalizability of the model by introducing a penalty term to the cost function. While Ridge regression uses the L2 norm (squared magnitude of coefficients) for regularization, Lasso regression employs the L1 norm, which leads to a different form of regularization. This difference has important implications, particularly for feature selection and sparse models. \colorbox{magenta}{double check, introduce expressions}
+Like Ridge regression, Lasso regression (Least Absolute Shrinkage and Selection Operator) is a regularization technique designed to improve the generalizability of the model by introducing a penalty term to the cost function. While Ridge regression uses the L2 norm (squared magnitude of coefficients) for regularization, Lasso regression employs the L1 norm, which leads to a different form of regularization. This difference has important implications, particularly for feature selection and sparse models. \colorbox{magenta}{double check, introduce expressions, cite?}
 
 
 \subsection{Resampling Methods}
@@ -229,17 +223,20 @@ Resampling methods are statistical techniques used to generate additional data s
 \subsubsection{Bootstrap}
 The Bootstrap method is a powerful resampling technique used to estimate the uncertainty and variability of a model by repeatedly drawing random samples, with replacement, from the original dataset. This resampling creates multiple "bootstrapped" datasets, each the same size as the original, but with some samples appearing multiple times and others potentially omitted.
 
-The process of bootstrap resampling approximates the underlying distribution of a statistic—whether it’s model performance, a parameter estimate, or prediction error—without requiring strong parametric assumptions about the data. This makes it particularly useful when the theoretical distribution of a statistic is unknown or difficult to calculate. Bootstrap methods are frequently used to estimate confidence intervals, standard errors, and model variance in both regression and classification tasks.
+The process of bootstrap resampling approximates the underlying distribution of a statistic—whether it's model performance, a parameter estimate, or prediction error—without requiring strong parametric assumptions about the data. This makes it particularly useful when the theoretical distribution of a statistic is unknown or difficult to calculate. Bootstrap methods are frequently used to estimate confidence intervals, standard errors, and model variance in both regression and classification tasks. \colorbox{magenta}{week 38, lecture notes, cite?}
 
 
 \subsubsection{Cross-Validation}
-Cross-validation is another resampling technique that involves partitioning the dataset into several distinct subsets (or ``folds''), and then systematically training the model on one subset while testing it on another. A common form is k-fold cross-validation, where the dataset is divided into $k$ equally-sized folds. The model is trained on $k-1$ folds and tested on the remaining fold. This process is repeated $k$ times, with each fold serving as the test set exactly once.
+Cross-validation is another resampling technique that involves partitioning the dataset into several distinct subsets (or ``folds''), and then systematically training the model on one subset while testing it on another. A common form is $k$-fold cross-validation, where the dataset is divided into $k$ equally-sized folds. The model is trained on $k-1$ folds and tested on the remaining fold. This process is repeated $k$ times, with each fold serving as the test set exactly once.
 
-\textbf{Steps in k-fold Cross-Validation}:
-1. Split the dataset into $k$ equal-sized folds (typically $k=5$ or $k=10$).
-2. Train the model on $k-1$ folds and evaluate it on the remaining fold.
-3. Repeat the process $k$ times, so that each fold is used as a test set exactly once.
-4. Calculate the average performance across all folds.
+The steps used in $k$-fold cross-validation are
+\begin{enumerate}
+  \item [1.] Split the dataset into $k$ equal-sized folds (typically $k=5$ or $k=10$). 
+  \item [2.] Train the model on $k-1$ folds and evaluate it on the remaining fold.
+  \item [3.] Repeat the process $k$ times, so that each fold is used as a test set exactly once.
+  \item [4.] Calculate the average performance across all folds.
+\end{enumerate}
+\colorbox{magenta}{continue, proof read, cite lecture notes?}
 
 
 \subsection{Algorithms}\label{subsec:algorithms}
@@ -259,7 +256,49 @@ Cross-validation is another resampling technique that involves partitioning the 
 \subsection{Data Analysis}\label{subsec:data}
 % EXPLAIN THE TYPE OF DATA WE ARE IMPLEMENTING OUR ALGORITHM TO ANALYZE AND HOW WE ARE DOING IT
 % THIS COULD POSSIBLY BE PART OF THE IMPLEMENTATION SECTION INSTEAD, WITH AN INTRODUCTION TO THE DATA SET IN THE BEGINNING
+\colorbox{magenta}{show raw 2D intensity plots first}
 
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.95\textwidth]{../figs/density_new_and_old.pdf}
+  \caption{\colorbox{magenta}{caption}}\label{fig:density 2D}
+  \vspace*{-5pt}
+\end{figure*}
+
+\colorbox{magenta}{raw and smoothed surfaces, explain reason/method}
+
+% \begin{figure*}
+%   \vspace*{-5pt}
+%   \centering %Centers the figure
+%   \includegraphics[width=0.9\textwidth]{../figs/density_surf.pdf}
+%   \caption{\colorbox{magenta}{caption}}\label{fig:density surf}
+%   \vspace*{-5pt}
+% \end{figure*}
+
+% \begin{figure*}
+%   \vspace*{-5pt}
+%   \centering %Centers the figure
+%   \includegraphics[width=0.9\textwidth]{../figs/density_smoothed_surf.pdf}
+%   \caption{\colorbox{magenta}{caption}}\label{fig:density smoothed surf}
+%   \vspace*{-5pt}
+% \end{figure*}
+
+% \begin{figure*}
+%   \vspace*{-5pt}
+%   \centering %Centers the figure
+%   \includegraphics[width=0.9\textwidth]{../figs/density_old_surf.pdf}
+%   \caption{\colorbox{magenta}{caption}}\label{fig:density old surf}
+%   \vspace*{-5pt}
+% \end{figure*}
+
+% \begin{figure*}
+%   \vspace*{-5pt}
+%   \centering %Centers the figure
+%   \includegraphics[width=0.9\textwidth]{../figs/density_old_smoothed_surf.pdf}
+%   \caption{\colorbox{magenta}{caption}}\label{fig:density old smoothed surf}
+%   \vspace*{-5pt}
+% \end{figure*}
 
 
 % ===========================================
@@ -268,6 +307,37 @@ Cross-validation is another resampling technique that involves partitioning the 
 
 \section{Results}\label{sec:results}
 
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.95\textwidth]{../figs/a_error_scaled_vs_raw.pdf}
+  \caption{\colorbox{magenta}{caption}\colorbox{magenta}{remove figure title?}}\label{fig:a error scaled vs raw}
+  \vspace*{-5pt}
+\end{figure*}
+
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.9\textwidth]{../figs/a_beta_scaled_vs_raw.pdf}
+  \caption{\colorbox{magenta}{caption}\colorbox{magenta}{remove figure title?}}\label{fig:a beta scaled vs raw}
+  \vspace*{-5pt}
+\end{figure*}
+
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.9\textwidth]{../figs/b_MSE_R2_vert.pdf}
+  \caption{\colorbox{magenta}{caption}}\label{fig:b MSE R2}
+  \vspace*{-5pt}
+\end{figure*}
+
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.9\textwidth]{../figs/c_MSE_R2_vert.pdf}
+  \caption{\colorbox{magenta}{caption}}\label{fig:c MSE R2}
+  \vspace*{-5pt}
+\end{figure*}
 
 \section{Discussion}\label{sec:discussion}
 
@@ -281,18 +351,114 @@ Cross-validation is another resampling technique that involves partitioning the 
 \section*{Acknowledgements}\label{sec:cknowledgements}
 % MAYBE REMOVE
 
-% \Urlmuskip=0mu plus 1mu\relax
+\Urlmuskip=0mu plus 1mu\relax
+\onecolumngrid
 \bibliography{references}
-% MAYBE HAVE REFERENCES IN ONECOLUMN AS WELL
 
 \newpage
 % ===========================================
 \appendix
-\onecolumngrid
 \section{Derivations}\label{appsec:derivations}
+\subsection{Expectation Value and Variance of \texorpdfstring{$\boldsymbol{\beta}_\text{OLS}$}{Lg}}\label{subapp:beta OLS}
+\colorbox{magenta}{rewrite to fit report}
+
+Since the error in $\mathbf{y}$ is normal distributed as $\boldsymbol{\varepsilon}\sim N(0,\sigma^2)$ we know that the expectation value and variance of the $i$'th element of $\boldsymbol{\varepsilon}$ is $\mathbb{E}(\varepsilon_i)=0$ and $\textrm{Var}(\varepsilon_i)=\sigma^2$. Thus, since we approximate $f(\mathbf{x})$ with $\mathbf{\tilde{y}}=\mathbf{X}\boldsymbol{\beta}$ the expectation value of $\mathbf{y}$ becomes 
+\begin{equation}
+\mathbb{E}(\mathbf{y})=\mathbb{E}(\mathbf{X}\boldsymbol{\beta}) + \mathbb{E}(\boldsymbol{\varepsilon}) = \mathbb{E}(\mathbf{X}\boldsymbol{\beta}),
+\end{equation}
+which gives us the expectation value of $\mathbf{y}$ for a given element $i$:
+\begin{equation}
+\mathbb{E}(y_i) = \mathbb{E}\left(\sum_jX_{ij}\beta_j\right) = \sum_jX_{ij}\beta_j = \mathbf{X}_{i,*}\boldsymbol{\beta}.
+\end{equation}
+Here we have used that the sum $\sum_jX_{ij}\beta_j$ is known to be the value of $\tilde{y}_i$, hence its expectation value is itself. Moreover, we can similarly find the variance of $\mathbf{y}$ for a given element $i$ by using that the aforementioned sum is known to be $\tilde{y}_i$ for all $i$, i.e. $\textrm{Var}(\mathbf{X}_{i,*}\boldsymbol{\beta})=0$. Thus, we have
+\begin{equation}
+\textrm{Var}(y_i) = \textrm{Var}(\mathbf{X}_{i,*}\boldsymbol{\beta}) + \textrm{Var}(\varepsilon_i) = \sigma^2,
+\end{equation}
+and consequently
+\begin{equation}
+  y_i\sim N(\mathbf{X}_{i,*}\boldsymbol{\beta},\sigma^2).
+\end{equation}
+Now, using that the optimal parameters in OLS are given by $\boldsymbol{\beta}_\textrm{OLS}=\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\mathbf{y}$, their expectation values become
+\begin{align*}
+  \mathbb{E}(\boldsymbol{\beta}_\textrm{OLS})&=\mathbb{E}\left\{ \left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\mathbf{y} \right\} \\
+  &= \mathbb{E}\left\{\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\right\} \mathbb{E}(\mathbf{y}) \\
+  &= \left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\mathbf{X}\boldsymbol{\beta} \\
+  &= \boldsymbol{\beta}. \numberthis \label{appeq:expect beta OLS}
+\end{align*}
+Furthermore, if $x$ and $y$ are two independent variables, the variance of their product is given by
+\begin{align*}
+\textrm{Var}(xy) &= \mathbb{E}(x^2y^2)-(\mathbb{E}(xy))^2, \\
+&= \mathbb{E}(x^2)\mathbb{E}(y^2) - \left(\mathbb{E}(x)\right)^2\left(\mathbb{E}(y)\right)^2,
+\\
+&= \left[\mathbb{E}(x^2) - \left(\mathbb{E}(x)\right)^2 + \left(\mathbb{E}(x)\right)^2\right]\left[\mathbb{E}(y^2) - \left(\mathbb{E}(y)\right)^2 + \left(\mathbb{E}(y)\right)^2\right] - \mathbb{E}(x^2)\mathbb{E}(y^2),
+\\
+&= \left[\textrm{Var}(x) + \left(\mathbb{E}(x)\right)^2\right]\left[\textrm{Var}(y) + \left(\mathbb{E}(y)\right)^2\right] - \mathbb{E}(x^2)\mathbb{E}(y^2), \\
+&= \textrm{Var}(x)\textrm{Var}(y) + \textrm{Var}(x)(\mathbb{E}(y))^2 + \textrm{Var}(y)(\mathbb{E}(x))^2 +\mathbb{E}(x^2)\mathbb{E}(y^2)- \mathbb{E}(x^2)\mathbb{E}(y^2),
+\\
+&= \textrm{Var}(x)\textrm{Var}(y) + \textrm{Var}(x)(\mathbb{E}(y))^2 + \textrm{Var}(y)(\mathbb{E}(x))^2,
+\end{align*}
+so if we now set $x=\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}$ and $y=\mathbf{y}$ we find that the variance of $\boldsymbol{\beta}_\textrm{OLS}$ is
+\begin{align*}
+\textrm{Var}(\boldsymbol{\beta}_\textrm{OLS}) 
+&= \underbrace{\textrm{Var}\left[\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\right]\textrm{Var}(\mathbf{y})}_0 
++ \underbrace{\textrm{Var}\left[\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\right](\mathbb{E}(\mathbf{y}))^2}_{0} 
++ \textrm{Var}(\mathbf{y})\left(\mathbb{E}\left[\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\right]\right)^2,
+\\
+&= \sigma^2\left[\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\right]^2,
+\\
+&= \sigma^2\left[\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\right]\left[\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\right]^\textrm{T},
+\\
+&= \sigma^2\left[\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\right]\left[\mathbf{X}\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\right],
+\\
+&= \sigma^2\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}. \numberthis \label{appeq:var beta OLS}
+\end{align*}
+Here we have used that the transpose of $\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}$ is itself since it is square and symmetric.
+
+\subsection{Alternative Expression for the OLS Cost Function}\label{subapp:cost}
+\colorbox{magenta}{rewrite to fit report}
+
+Substituting $\mathbf{y}$ with $f(\mathbf{x}) + \boldsymbol{\epsilon}$, and adding and subtracting $\mathbb{E}\left[\mathbf{\tilde{y}}\right]$, we find that
+\begin{align*}
+\mathbb{E}\left[(\mathbf{y}-\mathbf{\tilde{y}})^2 \right] 
+&= \mathbb{E}\Big[(\underbrace{f(\mathbf{x})}_{\mathbf{f}} + \boldsymbol{\epsilon}-\mathbf{\tilde{y}})^2 \Big],
+\\
+&= \mathbb{E}\left[(\mathbf{f} + \boldsymbol{\epsilon}-\mathbf{\tilde{y}} + \mathbb{E}\left[\mathbf{\tilde{y}}\right] - \mathbb{E}\left[\mathbf{\tilde{y}}\right])^2\right],
+\\
+&= \mathbb{E}\Big[\mathbf{f}^2 + \mathbf{f}\boldsymbol{\epsilon} - \mathbf{f}\mathbf{\tilde{y}} + \mathbf{f}\mathbb{E}\left[\mathbf{\tilde{y}}\right] - \mathbf{f}\mathbb{E}\left[\mathbf{\tilde{y}}\right] 
+\\
+&\hspace{23pt} + \boldsymbol{\epsilon}\mathbf{f} + \boldsymbol{\epsilon}^2 - \boldsymbol{\epsilon}\mathbf{\tilde{y}} + \boldsymbol{\epsilon}\mathbb{E}\left[\mathbf{\tilde{y}}\right] - \boldsymbol{\epsilon}\mathbb{E}\left[\mathbf{\tilde{y}}\right]
+\\
+&\hspace{23pt} - \mathbf{\tilde{y}}\mathbf{f} - \mathbf{\tilde{y}}\boldsymbol{\epsilon} + \mathbf{\tilde{y}}^2 - \mathbf{\tilde{y}}\mathbb{E}\left[\mathbf{\tilde{y}}\right] + \mathbf{\tilde{y}}\mathbb{E}\left[\mathbf{\tilde{y}}\right]
+\\
+&\hspace{23pt} + \mathbb{E}\left[\mathbf{\tilde{y}}\right]\mathbf{f} + \mathbb{E}\left[\mathbf{\tilde{y}}\right]\boldsymbol{\epsilon} - \mathbb{E}\left[\mathbf{\tilde{y}}\right]\mathbf{\tilde{y}} + \left(\mathbb{E}\left[\mathbf{\tilde{y}}\right]\right)^2 - \left(\mathbb{E}\left[\mathbf{\tilde{y}}\right]\right)^2
+\\
+&\hspace{23pt} \left. \:-\: \mathbb{E}\left[\mathbf{\tilde{y}}\right]\mathbf{f} - \mathbb{E}\left[\mathbf{\tilde{y}}\right]\boldsymbol{\epsilon} + \mathbb{E}\left[\mathbf{\tilde{y}}\right]\mathbf{\tilde{y}} - \left(\mathbb{E}\left[\mathbf{\tilde{y}}\right]\right)^2 + \left(\mathbb{E}\left[\mathbf{\tilde{y}}\right]\right)^2 \right],
+\\
+&= \mathbb{E}\Big[\mathbf{f}^2 + \mathbf{f}\boldsymbol{\epsilon} + \boldsymbol{\epsilon}\mathbf{f} + \boldsymbol{\epsilon}^2 - \mathbf{f}\mathbb{E}\left[\mathbf{\tilde{y}}\right] -\boldsymbol{\epsilon}\mathbb{E}\left[\mathbf{\tilde{y}}\right] -\mathbb{E}\left[\mathbf{\tilde{y}}\right]\mathbf{f} -\mathbb{E}\left[\mathbf{\tilde{y}}\right]\boldsymbol{\epsilon}  + \left(\mathbb{E}\left[\mathbf{\tilde{y}}\right]\right)^2\Big]
+\\
+&\hspace{10pt} + \mathbb{E}\Big[\mathbf{\tilde{y}}^2 - \mathbf{\tilde{y}}\mathbb{E}\left[\mathbf{\tilde{y}}\right] - \mathbb{E}\left[\mathbf{\tilde{y}}\right]\mathbf{\tilde{y}} + \left(\mathbb{E}\left[\mathbf{\tilde{y}}\right]\right)^2\Big]
+\\
+&\hspace{10pt} +\mathbb{E}\Big[-\mathbf{f}\mathbf{\tilde{y}}- \boldsymbol{\epsilon}\mathbf{\tilde{y}} + \mathbf{f}\mathbb{E}\left[\mathbf{\tilde{y}} \right]+ \boldsymbol{\epsilon}\mathbb{E}\left[\mathbf{\tilde{y}} \right]  - \mathbf{\tilde{y}}\mathbf{f}- \mathbf{\tilde{y}}\boldsymbol{\epsilon} + \mathbf{\tilde{y}}\mathbb{E}\left[\mathbf{\tilde{y}}\right] + \mathbb{E}\left[\mathbf{\tilde{y}}\right]\mathbf{f}+ \mathbb{E}\left[\mathbf{\tilde{y}}\right]\boldsymbol{\epsilon} + \mathbb{E}\left[\mathbf{\tilde{y}}\right]\mathbf{\tilde{y}} - 2\left(\mathbb{E}\left[\mathbf{\tilde{y}}\right]\right)^2\Big].
+\end{align*}
+Before we move further we may note that the exact function $f(\mathbf{x})$ generally is not known, and we may therefore assume that our data is a good representation and replace $\mathbf{f}$ with $\mathbf{y}$ in the expression above. In practise this $\mathbf{y}$ is then the part of the data set that we have chosen as test set, while the model is made with the remaining data set (the training set). \colorbox{magenta}{correct?} Thus, using that $\mathbb{E}[\mathbb{E}[\mathbf{x}]]= \mathbb{E}[\mathbf{x}]$, $\mathbb{E}[(\mathbb{E}[\mathbf{x}])^2] = (\mathbb{E}[\mathbf{x}])^2$ and $\mathbb{E}[\mathbf{x},\mathbf{y}]=\mathbb{E}[\mathbf{x}]\mathbb{E}[\mathbf{y}]$ for any statistically independent $\mathbf{x}$ and $\mathbf{y}$, and that $\mathbb{E}[\boldsymbol{\epsilon}]=0$ so that we can remove all first order terms in $\boldsymbol{\epsilon}$, we get
+\begin{align*}
+\mathbb{E}\left[(\mathbf{y}-\mathbf{\tilde{y}})^2 \right] 
+&= \mathbb{E}\Big[\mathbf{y}^2 + \boldsymbol{\epsilon}^2 - \mathbf{y}\mathbb{E}\left[\mathbf{\tilde{y}}\right] -\mathbb{E}\left[\mathbf{\tilde{y}}\right]\mathbf{y}  + \left(\mathbb{E}\left[\mathbf{\tilde{y}}\right]\right)^2\Big]
+\\
+&\hspace{10pt} + \mathbb{E}\Big[\mathbf{\tilde{y}}^2 - \mathbf{\tilde{y}}\mathbb{E}\left[\mathbf{\tilde{y}}\right] - \mathbb{E}\left[\mathbf{\tilde{y}}\right]\mathbf{\tilde{y}} + \left(\mathbb{E}\left[\mathbf{\tilde{y}}\right]\right)^2\Big]
+\\
+&\hspace{10pt} +\mathbb{E}\Big[-\mathbf{y}\mathbf{\tilde{y}} + \mathbf{y}\mathbb{E}\left[\mathbf{\tilde{y}} \right] - \mathbf{\tilde{y}}\mathbf{y} + \mathbf{\tilde{y}}\mathbb{E}\left[\mathbf{\tilde{y}}\right] +\mathbb{E}\left[\mathbf{\tilde{y}}\right]\mathbf{y} + \mathbb{E}\left[\mathbf{\tilde{y}}\right]\mathbf{\tilde{y}} - 2\left(\mathbb{E}\left[\mathbf{\tilde{y}}\right]\right)^2\Big],
+\\
+&= \mathbb{E}\Big[\left(\mathbf{y} - \mathbb{E}\left[\mathbf{\tilde{y}}\right]\right)^2\Big] + \mathbb{E}\big[\boldsymbol{\epsilon}^2\big] + \mathbb{E}\Big[\left(\mathbf{\tilde{y}} - \mathbb{E}\left[\mathbf{\tilde{y}}\right]\right)^2\Big]
+\\
+&\hspace{10pt} - \mathbb{E}[\mathbf{y}]\mathbb{E}[\mathbf{\tilde{y}}] + \mathbb{E}[\mathbf{y}]\mathbb{E}[\mathbf{\tilde{y}}] - \mathbb{E}[\mathbf{\tilde{y}}]\mathbb{E}[\mathbf{y}] + \mathbb{E}[\mathbf{\tilde{y}}]\mathbb{E}[\mathbf{\tilde{y}}] + \mathbb{E}[\mathbf{\tilde{y}}]\mathbb{E}[\mathbf{y}] + \mathbb{E}[\mathbf{\tilde{y}}]\mathbb{E}[\mathbf{\tilde{y}}] - 2\left(\mathbb{E}\left[\mathbf{\tilde{y}}\right]\right)^2,
+\\
+&= \text{Bias}[\tilde{y}] + \text{Var}[\tilde{y}] + \sigma^2. \numberthis \label{appeq:cost OLS}
+\end{align*}
+
 
 \section{Additional Figures}\label{appsec:figures}
-
+% MAYBE REMOVE
 
 % LINK WITH SPECIFIC NAME
 % \href{https://raw.github.uio.no/oskarei/CompFys-Project5/main/data/gif/triple_slit_200_81_anim.gif?token=GHSAT0AAAAAAAAAIZKJAEIVBDMTTIDARGUYZMAXTHA}{triple-slit}

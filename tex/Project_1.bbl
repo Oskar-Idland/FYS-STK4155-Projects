@@ -51,5 +51,5 @@
 %</preamble>
 \bibitem [{\citenamefont {James W.~Wadsley}(2024)}]{gasoline}%
   \BibitemOpen
-  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {T.~R.~Q.}\ \bibnamefont {James W.~Wadsley}, \bibfnamefont {Benjamin W.~Keller}},\ }\href@noop {} {\enquote {\bibinfo {title} {Gasoline2: A modern sph code},}\ }\bibinfo {howpublished} {\url{https://arxiv.org/abs/1707.03824}} (\bibinfo {year} {Accessed: September 2024})\BibitemShut {NoStop}%
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {T.~R.~Q.}\ \bibnamefont {James W.~Wadsley}, \bibfnamefont {Benjamin W.~Keller}},\ }\href@noop {} {\enquote {\bibinfo {title} {{Gasoline2: A Modern SPH Code}},}\ }\bibinfo {howpublished} {\url{https://arxiv.org/abs/1707.03824}} (\bibinfo {year} {Accessed: September 2024})\BibitemShut {NoStop}%
 \end{thebibliography}%
