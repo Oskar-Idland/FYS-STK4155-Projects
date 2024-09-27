@@ -73,7 +73,6 @@
 \newcommand{\imp}{\hspace{5pt}\Rightarrow\hspace{5pt}}
 \newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
 \usepackage{tikz}
-\usetikzlibrary{quantikz2}
 \usepackage{hyperref}         % automagic cross-referencing
 \usepackage{cleveref}
 % defines the color of hyperref objects
@@ -149,22 +148,23 @@ Here $P(\boldsymbol{\beta} | \mathbf{y}, \mathbf{X})$ is the posterior distribut
 In Bayesian regression, we treat the regression coefficients $\boldsymbol{\beta}$ as random variables with a prior distribution. After observing the data, we update our belief about $\boldsymbol{\beta}$ to obtain a posterior distribution. This provides not only a point estimate for $\boldsymbol{\beta}$, but also an uncertainty estimate (posterior variance) for each parameter. For example, in Ridge regression we effectively place a Gaussian prior on the parameters $\boldsymbol{\beta}$, centered around zero, with variance controlled by the hyperparameter $\lambda$. This discourages large parameter values (regularization), and leads to a tradeoff between fitting the data well and keeping the model coefficients small.
 
 
-\subsection{Predictive Models}\label{subsec:tradeoff}
+\subsection{Properties of Predictive Models}\label{subsec:tradeoff}
 % EXPLAIN MODEL BIAS, MODEL VARIANCE, NOISE VARIANCE, THE MEAN SQUARED ERROR, THE R2 SCORE FUNCTION
 \colorbox{magenta}{maybe change title of section}
 \colorbox{magenta}{explain what y, ytilde etc. represent. see week 38}
 \colorbox{magenta}{explain cost function, MSE, score function}
 \colorbox{magenta}{include analytic part of week 37}
-When constructing predictive models, it is important to understand the sources of error in the model's predictions. These errors can be decomposed into noise variance $\sigma^2$, model bias and model variance. The latter two are expressed as
+
+\subsubsection{Predicted Values}
+In the context of predictive modeling, $\mathbf{\tilde{y}}$ represents the model's predicted values of the target variable $\mathbf{y}$. These predictions are made based on the features and parameters learned from the training data. For new or unseen data, the true target values $\mathbf{y}$ are often unknown, but the model generates an estimate $\mathbf{\tilde{y}}$ that approximates these values.
+
+The performance of the model's predictions can be analyzed by decomposing the error into several components. The error of $\mathbf{\tilde{y}}$ stems from three main sources: noise variance $\sigma^2$, model bias and model variance. The latter two are expressed as
 \begin{align}
   \text{Bias}\left[\tilde{y}\right] &= \mathbb{E}\left[\left(\mathbf{y}-\mathbb{E}\left[\mathbf{\tilde{y}}\right] \right)^2\right], \label{eq:Bias}
   \\
   \text{Var}\left[\tilde{y}\right] &= \mathbb{E}\left[\left(\mathbf{\tilde{y}}-\mathbb{E}\left[\mathbf{\tilde{y}}\right] \right)^2\right]. \label{eq:Var}
 \end{align}
 Each of these represents a different aspect of the total error that affects the model's performance.
-
-\subsubsection{Noise Variance}
-The noise variance represents the inherent randomness in the data. It stems from factors that cannot be explained by the model because they are not captured by the available features or because the underlying data-generating process includes random variations. In practical terms, noise variance is the part of the error that cannot be reduced, no matter how sophisticated or complex the model becomes. For example, when modeling real-world phenomena, there may be measurement errors, missing information, or intrinsic randomness that contribute to the noise.
 
 \subsubsection{Model Bias}
 Model bias refers to the systematic error introduced by the model's inability to capture the true underlying relationship between the independent and dependent variables. This error arises when the model makes incorrect assumptions about the data or oversimplifies the relationship. For example, a linear model trying to fit highly non-linear data will result in high bias because the model cannot flexibly represent the complexity of the data.
@@ -227,8 +227,19 @@ Like Ridge regression, Lasso regression (Least Absolute Shrinkage and Selection 
 Resampling methods are statistical techniques used to generate additional data samples from the available data. These methods are particularly useful in machine learning and data analysis when the dataset is limited, and we want to better assess the performance of a model. The primary goal of resampling is to estimate the accuracy of a model by splitting the data into different subsets or generating new samples of the data, repeatedly fitting the model, and evaluating its performance on different sets of data. In this work we implement two commonly used resampling techniques: bootstrap and cross-validation.
 
 \subsubsection{Bootstrap}
-  
+The Bootstrap method is a powerful resampling technique used to estimate the uncertainty and variability of a model by repeatedly drawing random samples, with replacement, from the original dataset. This resampling creates multiple "bootstrapped" datasets, each the same size as the original, but with some samples appearing multiple times and others potentially omitted.
+
+The process of bootstrap resampling approximates the underlying distribution of a statistic—whether it’s model performance, a parameter estimate, or prediction error—without requiring strong parametric assumptions about the data. This makes it particularly useful when the theoretical distribution of a statistic is unknown or difficult to calculate. Bootstrap methods are frequently used to estimate confidence intervals, standard errors, and model variance in both regression and classification tasks.
+
+
 \subsubsection{Cross-Validation}
+Cross-validation is another resampling technique that involves partitioning the dataset into several distinct subsets (or ``folds''), and then systematically training the model on one subset while testing it on another. A common form is k-fold cross-validation, where the dataset is divided into $k$ equally-sized folds. The model is trained on $k-1$ folds and tested on the remaining fold. This process is repeated $k$ times, with each fold serving as the test set exactly once.
+
+\textbf{Steps in k-fold Cross-Validation}:
+1. Split the dataset into $k$ equal-sized folds (typically $k=5$ or $k=10$).
+2. Train the model on $k-1$ folds and evaluate it on the remaining fold.
+3. Repeat the process $k$ times, so that each fold is used as a test set exactly once.
+4. Calculate the average performance across all folds.
 
 
 \subsection{Algorithms}\label{subsec:algorithms}
