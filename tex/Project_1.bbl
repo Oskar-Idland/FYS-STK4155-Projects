@@ -6,7 +6,7 @@
 %Control: page (0) single
 %Control: year (1) truncated
 %Control: production of eprint (0) enabled
-\begin{thebibliography}{0}%
+\begin{thebibliography}{1}%
 \makeatletter
 \providecommand \@ifxundefined [1]{%
  \@ifx{#1\undefined}
@@ -49,4 +49,7 @@
 \providecommand \BibitemShut  [1]{\csname bibitem#1\endcsname}%
 \let\auto@bib@innerbib\@empty
 %</preamble>
+\bibitem [{\citenamefont {James W.~Wadsley}(2024)}]{gasoline}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {T.~R.~Q.}\ \bibnamefont {James W.~Wadsley}, \bibfnamefont {Benjamin W.~Keller}},\ }\href@noop {} {\enquote {\bibinfo {title} {Gasoline2: A modern sph code},}\ }\bibinfo {howpublished} {\url{https://arxiv.org/abs/1707.03824}} (\bibinfo {year} {Accessed: September 2024})\BibitemShut {NoStop}%
 \end{thebibliography}%
