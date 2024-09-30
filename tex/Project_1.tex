@@ -127,25 +127,126 @@ In \cref{sec:theory} we present relevant background theory, including central co
 
 % ===========================================
 \section{Theory}\label{sec:theory}
-\subsection{Bayesian Statistics}
-\colorbox{magenta}{maybe remove section if not relevant}
-Bayesian statistics is a branch of statistics that differs from traditional frequentist approaches (like maximum likelihood estimation) by incorporating prior beliefs or knowledge into the analysis. In the Bayesian framework, we update our beliefs about model parameters based on observed data, leading to a more flexible approach to uncertainty quantification. The essence of Bayesian inference is captured by Bayes' theorem, which relates prior beliefs, likelihood, and observed data to produce an updated (posterior) belief about a parameter or model. Bayes' theorem is written as:
+% \subsection{Bayesian Statistics}
+% \colorbox{magenta}{maybe remove section if not relevant}
+% Bayesian statistics is a branch of statistics that differs from traditional frequentist approaches (like maximum likelihood estimation) by incorporating prior beliefs or knowledge into the analysis. In the Bayesian framework, we update our beliefs about model parameters based on observed data, leading to a more flexible approach to uncertainty quantification. The essence of Bayesian inference is captured by Bayes' theorem, which relates prior beliefs, likelihood, and observed data to produce an updated (posterior) belief about a parameter or model. Bayes' theorem is written as:
 
+% \begin{equation}
+%   P(\boldsymbol{\beta} | \mathbf{y}, \mathbf{X}) = \frac{P(\mathbf{y} | \mathbf{X}, \boldsymbol{\beta}) P(\boldsymbol{\beta})}{P(\mathbf{y})}.
+% \end{equation}
+
+% Here $P(\boldsymbol{\beta} | \mathbf{y}, \mathbf{X})$ is the posterior distribution, representing our updated belief about the model parameters $\boldsymbol{\beta}$, given the data $\mathbf{y}$ and design matrix $\mathbf{X}$. Furthermore, $P(\mathbf{y} | \mathbf{X}, \boldsymbol{\beta})$ is the likelihood function, representing the probability of the data given the model and its parameters. This is the same likelihood function used in maximum likelihood estimation. The prior distribution $P(\boldsymbol{\beta})$ represents our prior beliefs about the parameters $\boldsymbol{\beta}$ before seeing the data, and lastly $P(\mathbf{y})$ is the marginal likelihood, a normalizing constant that ensures the posterior is a valid probability distribution.
+
+% In Bayesian regression, we treat the regression coefficients $\boldsymbol{\beta}$ as random variables with a prior distribution. After observing the data, we update our belief about $\boldsymbol{\beta}$ to obtain a posterior distribution. This provides not only a point estimate for $\boldsymbol{\beta}$, but also an uncertainty estimate (posterior variance) for each parameter. For example, in Ridge regression we effectively place a Gaussian prior on the parameters $\boldsymbol{\beta}$, centered around zero, with variance controlled by the hyperparameter $\lambda$. This discourages large parameter values (regularization), and leads to a tradeoff between fitting the data well and keeping the model coefficients small.
+
+\subsection{Regression Analysis}
+Regression analysis is a fundamental statistical technique used to model the relationship between one or more independent variables (also known as predictors or features) and a dependent variable (or target). The goal of regression analysis is to find the mathematical relationship that best explains the variation in the dependent variable based on the values of the independent variables.
+
+Given a dataset consisting of $n$ data points $\{(\mathbf{x}_i, y_i)\}_{i=0}^{n-1}$, where $\mathbf{x}_i$ represents the input features (which is a vector in the case of multiple features), and $y_i$ is the corresponding target value, the goal is to find a model that predicts $\tilde{y}_i$ based on $x_i$ such that it is as close to $y_i$ as possible. For a linear model, the relationship between $x_i$ and $\tilde{y}_i$ can be expressed as
 \begin{equation}
-  P(\boldsymbol{\beta} | \mathbf{y}, \mathbf{X}) = \frac{P(\mathbf{y} | \mathbf{X}, \boldsymbol{\beta}) P(\boldsymbol{\beta})}{P(\mathbf{y})}.
+\tilde{y}_i = \mathbf{x}_i^\top \boldsymbol{\beta} = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \dots + \beta_p x_{ip},
+\end{equation}
+where $\mathbf{x}_i^\top$ is the vector of input features for the $i$-th data point and $\boldsymbol{\beta} = [\beta_0, \beta_1, \dots, \beta_p]^\top$ is the vector of regression coefficients that we want to estimate. This can be written as a full-fledged matrix equation by using the so-called design or feature matrix $\mathbf{X} \in \mathbb{R}^{n \times (p+1)}$, which contains all input features and the bias term (so that the intercept $\beta_0$ is included):
+\begin{equation}
+  \mathbf{\tilde{y}}=\mathbf{X}\boldsymbol{\beta}.
+\end{equation}
+\colorbox{magenta}{write differently?}
+
+At its core, regression analysis seeks to find a mathematical function that relates the independent variables to the dependent variable. In its most basic form, the relationship between a dependent variable $\mathbf{y}$ and an independent variable $\mathbf{x}$ is modeled as
+\begin{equation}
+  \mathbf{y} = f(\mathbf{x}) + \boldsymbol{\epsilon},
+\end{equation}
+where $f(\mathbf{x})$ is the function we are trying to estimate, which represents the relationship between $\mathbf{x}$ and $\mathbf{y}$. This is then what we approximate with our model $\mathbf{\tilde{y}}$. Furthermore, $\boldsymbol{\epsilon}$ is the error term, representing the part of the variation in $\mathbf{y}$ that is not explained by the model (due to noise or other unobserved factors). 
+
+\subsubsection{Ordinary Least Squares}\label{subsubsec:ols}
+The Ordinary Least Squares (OLS) method is one of the most fundamental and widely used techniques in regression analysis. Its objective is to find the best-fitting line or curve for a given set of data by minimizing the sum of the squared differences between the observed values and the predicted values. These squared differences are called errors, hence the sum of squared errors (SSE):
+\begin{equation}
+\text{SSE} = \sum_{i=0}^{n-1} \left( y_i - \tilde{y}_i \right)^2.
+\end{equation}
+Minimizing this sum is equivalent to minimizing the cost function
+\begin{equation}
+C(\mathbf{X},\boldsymbol{\beta}) = \left(\mathbf{y}-\mathbf{X}\boldsymbol{\beta} \right)^2 = (\mathbf{y} - \mathbf{X} \boldsymbol{\beta})^\top (\mathbf{y} - \mathbf{X} \boldsymbol{\beta}), \label{eq:OLS cost}
+\end{equation}
+since the solution to this minimization problem gives the optimal values of $\boldsymbol{\beta}$.
+
+To minimize $C(\boldsymbol{\beta})$, we take the derivative of the cost function with respect to $\boldsymbol{\beta}$ and set it to zero:
+\begin{equation}
+\frac{\partial C(\boldsymbol{\beta})}{\partial \boldsymbol{\beta}} = -2 \mathbf{X}^\top (\mathbf{y} - \mathbf{X} \boldsymbol{\beta}) = 0.
+\end{equation}
+This gives the normal equation
+\begin{equation}
+\mathbf{X}^\top \mathbf{X} \boldsymbol{\beta} = \mathbf{X}^\top \mathbf{y},
+\end{equation}
+which, by solving for $\boldsymbol{\beta}$ yields the OLS estimator:
+\begin{equation}
+\boldsymbol{\hat{\beta}} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}.
+\end{equation}
+This formula provides the best-fitting coefficients $\boldsymbol{\beta}$ that minimize the sum of squared errors. In \cref{subapp:beta OLS} we derive the following important results: \colorbox{magenta}{edit? maybe move up here?}
+\begin{align}
+  \mathbb{E}\big[\hat{\boldsymbol{\beta}}\big] &= \boldsymbol{\beta},
+  \\
+  \text{Var}\big[\hat{\boldsymbol{\beta}}\big] &= \sigma^2\left(\mathbf{X}^\top\mathbf{X}\right)^{-1}.
+\end{align}
+Here $\mathbb{E}\big[\hat{\boldsymbol{\beta}}\big]$ and $\text{Var}\big[\hat{\boldsymbol{\beta}}\big]$ are the expectation value and variance of the OLS estimator, respectively, while $\sigma^2$ is the variance of the error term $\boldsymbol{\epsilon}$. 
+
+% To evaluate the performance of the OLS model, we compute two important metrics: the mean-squared error (MSE) and the $R^2$ score. The former measures the average squared difference between the true values and the predicted values, and is defined as
+% \begin{equation}
+%   \text{MSE} = \frac{1}{n} \sum_{i=0}^{n-1} \left( y_i - \tilde{y}_i \right)^2.
+% \end{equation}
+% A lower MSE indicates a better fit of the model to the data. Furthermore, the $R^2$ score function, also known as the coefficient of determination, measures the proportion of variance in the dependent variable that is predictable from the independent variables:
+% \begin{equation}
+%   R^2 = 1 - \frac{\sum_{i=0}^{n - 1} (y_i - \tilde{y}_i)^2}{\sum_{i=0}^{n - 1} (y_i - \bar{y})^2}. \label{eq:}
+% \end{equation}
+% Here $\bar{y}$ is the mean of the observed values. An $R^2$ score close to 1 indicates a good fit, while a score near 0 suggests that the model does not explain the variability in the data well.
+
+
+\subsubsection{Ridge}\label{subsubsec:ridge} 
+While OLS provides a foundational method for regression, it can lead to problems when the data has high multicollinearity or when there are more features than data points, leading to overfitting. OLS attempts to minimize the sum of squared errors, but it does not impose any restrictions on the model complexity. This often results in high variance when the model learns to fit noise in the training data, especially when the design matrix $\mathbf{X}$ is poorly conditioned (i.e., when columns of $\mathbf{X}$ are nearly linearly dependent). This is because the matrix $\mathbf{X}^\top \mathbf{X}$ becomes close to singular, making its inverse highly sensitive to small changes in the data. \colorbox{magenta}{remove last sentences?}
+
+To mitigate the issue with OLS, Ridge regression introduces a regularization term to the cost function \eqref{eq:OLS cost}, penalizing large coefficients and preventing the model from becoming overly complex. The modified cost function is
+\begin{equation}
+  C_{\text{Ridge}}(\mathbf{X},\boldsymbol{\beta}) = \frac{1}{n}\left|\left|\mathbf{y}-\mathbf{X}\boldsymbol{\beta} \right|\right|_2^2 + \lambda \left|\left|\boldsymbol{\beta}\right|\right|_2^2,
+\end{equation}
+where $\lambda \geq 0$ is a hyperparameter that controls the strength of the regularization, and the subscripts 2 simply mean that we are taking the $L^2$ norm. This is defined as
+\begin{equation*}
+  \left|\left|\mathbf{x}\right|\right|_2 = \sqrt{\sum_ix_i^2}.
+\end{equation*}
+
+We see that when $\lambda = 0$, Ridge regression reduces to OLS, as the regularization term disappears. On the other hand, when $\lambda$ is large, the coefficients $\boldsymbol{\beta}$ must shrink to minimize the cost function, potentially reducing overfitting. It is important to note, however, that if $\lambda$ becomes too large the coefficients tend to zero, and we may end up with underfitting instead. We therefore need to determine the hyperparameter carefully in order to find the perfect balance between the two extremes. \colorbox{magenta}{formulate differently?}
+
+To minimize this altered cost function, we again take the derivative with respect to $\boldsymbol{\beta}$ and set it to zero:
+\begin{equation}
+  \frac{\partial C_{\text{Ridge}}(\boldsymbol{\beta})}{\partial \boldsymbol{\beta}} = -2 \mathbf{X}^\top (\mathbf{y} - \mathbf{X} \boldsymbol{\beta}) + 2 \lambda \boldsymbol{\beta} = 0.
+\end{equation}
+Rearranging this equation gives us the Ridge regression normal equation:
+\begin{equation}
+  (\mathbf{X}^\top \mathbf{X} + \lambda \mathbf{I}) \boldsymbol{\beta} = \mathbf{X}^\top \mathbf{y},
+\end{equation}
+where $\mathbf{I}$ is the identity matrix. Notice the term $\lambda \mathbf{I}$ added to $\mathbf{X}^\top \mathbf{X}$, which makes the matrix invertible even when $\mathbf{X}^\top \mathbf{X}$ is poorly conditioned. This leads to the Ridge regression estimator:
+\begin{equation}
+  \boldsymbol{\hat{\beta}}_{\text{Ridge}} = (\mathbf{X}^\top \mathbf{X} + \lambda \mathbf{I})^{-1} \mathbf{X}^\top \mathbf{y}.
+\end{equation}
+Here, the regularization term $\lambda$ shrinks the coefficients and prevents them from becoming too large, thereby controlling the model's variance. \colorbox{magenta}{remove this paragraph?}
+
+
+
+\subsubsection{Lasso}\label{subsubsec:lasso} 
+Like Ridge regression, Lasso regression (Least Absolute Shrinkage and Selection Operator) is a regularization technique designed to improve the generalizability of the model by introducing a penalty term to the cost function. While Ridge regression uses the $L^2$ norm for regularization, Lasso regression employs the $L^1$ norm, defined as 
+\begin{equation*}
+  \left|\left|\mathbf{x}\right|\right|_1 = \sum_i|x_i|.
+\end{equation*}
+This leads to a different form of regularization, since the cost function now takes the form
+\begin{equation}
+  C_{\text{Lasso}}(\mathbf{X},\boldsymbol{\beta}) = \frac{1}{n}\left|\left|\mathbf{y}-\mathbf{X}\boldsymbol{\beta} \right|\right|_2^2 + \lambda \left|\left|\boldsymbol{\beta}\right|\right|_1.
 \end{equation}
 
-Here $P(\boldsymbol{\beta} | \mathbf{y}, \mathbf{X})$ is the posterior distribution, representing our updated belief about the model parameters $\boldsymbol{\beta}$, given the data $\mathbf{y}$ and design matrix $\mathbf{X}$. Furthermore, $P(\mathbf{y} | \mathbf{X}, \boldsymbol{\beta})$ is the likelihood function, representing the probability of the data given the model and its parameters. This is the same likelihood function used in maximum likelihood estimation. The prior distribution $P(\boldsymbol{\beta})$ represents our prior beliefs about the parameters $\boldsymbol{\beta}$ before seeing the data, and lastly $P(\mathbf{y})$ is the marginal likelihood, a normalizing constant that ensures the posterior is a valid probability distribution.
-
-In Bayesian regression, we treat the regression coefficients $\boldsymbol{\beta}$ as random variables with a prior distribution. After observing the data, we update our belief about $\boldsymbol{\beta}$ to obtain a posterior distribution. This provides not only a point estimate for $\boldsymbol{\beta}$, but also an uncertainty estimate (posterior variance) for each parameter. For example, in Ridge regression we effectively place a Gaussian prior on the parameters $\boldsymbol{\beta}$, centered around zero, with variance controlled by the hyperparameter $\lambda$. This discourages large parameter values (regularization), and leads to a tradeoff between fitting the data well and keeping the model coefficients small.
+The difference from Ridge regression has important implications, mainly because the $L^2$ norm makes it impossible for any of the coefficients to vanish completely. \colorbox{magenta}{correct?} This can be problematic in high-dimensional datasets where we might expect many features to be irrelevant. By using the $L^1$ norm, Lasso regression has the unique ability to drive some coefficients to exactly zero, effectively performing both regularization and feature selection. Thus, Lasso regression not only addresses overfitting but also simplifies the model by automatically excluding irrelevant features, making it particularly useful for sparse models where only a subset of features are truly important.
+\colorbox{magenta}{double check, introduce expressions, cite?}
 
 
 \subsection{Properties of Predictive Models}\label{subsec:tradeoff}
 % EXPLAIN MODEL BIAS, MODEL VARIANCE, NOISE VARIANCE, THE MEAN SQUARED ERROR, THE R2 SCORE FUNCTION
-\colorbox{magenta}{maybe change title of section}
-\colorbox{magenta}{explain what y, ytilde etc. represent. see week 38}
-\colorbox{magenta}{explain cost function, MSE, score function}
-\colorbox{magenta}{include analytic part of week 37}
+\colorbox{magenta}{maybe change structure, avoid repetitiveness}
 
 \subsubsection{Predicted Values}
 In the context of predictive modeling, $\mathbf{\tilde{y}}$ represents the model's predicted values of the target variable $\mathbf{y}$. These predictions are made based on the features and parameters learned from the training data. For new or unseen data, the true target values $\mathbf{y}$ are often unknown, but the model generates an estimate $\mathbf{\tilde{y}}$ that approximates these values.
@@ -171,84 +272,155 @@ Measures of a predictive model's total error and how well it is likely to predic
   \\
   R^2(\mathbf{y},\mathbf{\tilde{y}}) &= 1 -\frac{\sum_{i=0}^{n-1}\left(y_i-\tilde{y}_i\right)^2}{\sum_{i=0}^{n-1}\left(y_i-\overline{y}\right)^2},
 \end{align}
-where $\overline{y}$ is the mean value of $\mathbf{y}$ and $n$ is the number of data points. In \cref{appsec:derivations} \colorbox{magenta}{maybe move up here?} we show that the MSE alternatively can be expressed in terms of the model bias, model variance and noise variance as 
+where $\overline{y}$ is the mean value of $\mathbf{y}$ and $n$ is the number of data points. In \cref{subapp:cost} \colorbox{magenta}{maybe move up here?} we show that the MSE alternatively can be expressed in terms of the model bias, model variance and noise variance as 
 \begin{equation}
   \mathbb{E}\left[(\mathbf{y}-\mathbf{\tilde{y}})^2 \right] = \text{Bias}[\tilde{y}] + \text{Var}[\tilde{y}] + \sigma^2. \label{eq:model error}
 \end{equation}
 Since the noise variance adds an irreducible contribution to the total model error, an ideal model strikes a balance between bias and variance, where it is flexible enough to capture the underlying patterns in the data but not so flexible that it fits the noise. This balance is referred to as the bias-variance tradeoff. It is a fundamental concept in machine learning, specifically when building predictive models, and will be studied in great detail throughout this work.
 
 
-% EXPLAIN ANALYTICAL EXPRESSIONS ETC., REFER TO DERIVATIONS IN APPENDIX
-% THESE ARE POSSIBLE SUBSECTIONS
-\subsection{The Franke Function}\label{subsec:franke}
-The Franke function is a widely used synthetic function in numerical analysis and computational mathematics, particularly in the fields of interpolation, regression analysis, and surface fitting. It is a two-dimensional function defined over the unit square $[0, 1] \times [0, 1]$, combining several Gaussian functions of varying width and amplitude to simulate complex surface behavior. The function is defined as:
-\begin{align*}
-  f(x,y) =& \frac{3}{4} \exp{\left( -\frac{(9x - 2)^2}{4} - \frac{(9y - 2)^2}{4} \right)} \\
-&+ \frac{3}{4} \exp{\left( -\frac{(9x + 1)^2}{49} - \frac{9y + 1}{10} \right)} \\
-&+ \frac{1}{2} \exp{\left( -\frac{(9x - 7)^2}{4} - \frac{(9y - 3)^2}{4} \right)} \\
-&- \frac{1}{5} \exp{\left( -(9x - 4)^2 - (9y - 7)^2 \right)}. \numberthis
-\end{align*}
-The function produces a surface with both smooth and non-smooth regions, making it an excellent benchmark for testing regression and interpolation algorithms. It simulates real-world data that may contain both complex variations and noise, mimicking scenarios that are encountered in practical data analysis tasks.
-
-\subsection{Simulation Data}\label{subsec:simulation}
-\colorbox{magenta}{in method instead?}
-% MAYBE EXPLAIN THE DATA HERE, WHAT WE EXPECT FOR THE DATA FOR EXAMPLE
-      
-
-
-\section{Methods}\label{sec:methods}
-\subsection{Regression Analysis}
-Regression analysis is a fundamental statistical technique used to model the relationship between one or more independent variables (also known as predictors or features) and a dependent variable (or target). The goal of regression analysis is to find the mathematical relationship that best explains the variation in the dependent variable based on the values of the independent variables.
-
-At its core, regression analysis seeks to find a mathematical function that relates the independent variables to the dependent variable. In its most basic form, the relationship between a dependent variable $\mathbf{y}$ and an independent variable $\mathbf{x}$ is modeled as
-\begin{equation}
-  \mathbf{y} = f(\mathbf{x}) + \boldsymbol{\epsilon},
-\end{equation}
-where $f(\mathbf{x})$ is the function we are trying to estimate, which represents the relationship between $\mathbf{x}$ and $\mathbf{y}$, and $\boldsymbol{\epsilon}$ is the error term, representing the part of the variation in $\mathbf{y}$ that is not explained by the model (due to noise or other unobserved factors). 
-\colorbox{magenta}{move expression to theory?}
-
-\subsubsection{Ordinary Least Squares}\label{subsubsec:ols}
-The Ordinary Least Squares (OLS) method is one of the most fundamental and widely used techniques in regression analysis. Its objective is to find the best-fitting line or curve for a given set of data by minimizing the sum of the squared differences between the observed values and the predicted values. These squared differences are called residuals, and minimizing them ensures the best possible fit of the model to the data. \colorbox{magenta}{continue, introduce expressions (week 37), cite?}
-
-\colorbox{magenta}{mention the cost function, and refer to MSE?}
-
-
-\subsubsection{Ridge}\label{subsubsec:ridge} 
-While OLS provides a foundational method for regression, it can lead to problems when the data has high multicollinearity or when there are more features than data points, leading to overfitting. OLS attempts to minimize the sum of squared errors, but it does not impose any restrictions on the model complexity. This often results in high variance when the model learns to fit noise in the training data. To address this, Ridge regression introduces a regularization term to the OLS cost function, penalizing large coefficients and preventing the model from becoming overly complex. By introducing the hyperparameter $\lambda$, Ridge regression balances the trade-off between bias and variance, allowing us to control model complexity and fit the data more effectively. \colorbox{magenta}{double check, introduce expressions (week 37), cite?}
-
-
-\subsubsection{Lasso}\label{subsubsec:lasso} 
-Like Ridge regression, Lasso regression (Least Absolute Shrinkage and Selection Operator) is a regularization technique designed to improve the generalizability of the model by introducing a penalty term to the cost function. While Ridge regression uses the L2 norm (squared magnitude of coefficients) for regularization, Lasso regression employs the L1 norm, which leads to a different form of regularization. This difference has important implications, particularly for feature selection and sparse models. \colorbox{magenta}{double check, introduce expressions, cite?}
-
-
 \subsection{Resampling Methods}
 Resampling methods are statistical techniques used to generate additional data samples from the available data. These methods are particularly useful in machine learning and data analysis when the dataset is limited, and we want to better assess the performance of a model. The primary goal of resampling is to estimate the accuracy of a model by splitting the data into different subsets or generating new samples of the data, repeatedly fitting the model, and evaluating its performance on different sets of data. In this work we implement two commonly used resampling techniques: bootstrap and cross-validation.
 
 \subsubsection{Bootstrap}
-The Bootstrap method is a powerful resampling technique used to estimate the uncertainty and variability of a model by repeatedly drawing random samples, with replacement, from the original dataset. This resampling creates multiple "bootstrapped" datasets, each the same size as the original, but with some samples appearing multiple times and others potentially omitted.
+The bootstrap method is a powerful resampling technique used to estimate the uncertainty and variability of a model by repeatedly drawing random samples, with replacement, from the original dataset. This resampling creates multiple ``bootstrapped'' datasets, each the same size as the original, but with some samples appearing multiple times and others potentially omitted. By computing the average performance of the multiple models created with the bootstrapped datasets it becomes easier to estimate the model's bias and variance.
 
-The process of bootstrap resampling approximates the underlying distribution of a statistic—whether it's model performance, a parameter estimate, or prediction error—without requiring strong parametric assumptions about the data. This makes it particularly useful when the theoretical distribution of a statistic is unknown or difficult to calculate. Bootstrap methods are frequently used to estimate confidence intervals, standard errors, and model variance in both regression and classification tasks. \colorbox{magenta}{week 38, lecture notes, cite?}
+The process of bootstrap resampling approximates the underlying distribution of a statistic, whether it's model performance, a parameter estimate or prediction error, without requiring strong parametric assumptions about the data. This makes it particularly useful when the theoretical distribution of a statistic is unknown or difficult to calculate. Bootstrap is especially convenient when the dataset is small, or when no explicit train-test split is available, as it makes the most out of the available data. It is also good for understanding the bias-variance tradeoff since it can be used to determine a model's variability, and it allows for the estimation of confidence intervals for predictions and model parameters. The downside is that it involves training a model multiple times, which can be computationally expensive, especially with large datasets or complex models. \colorbox{magenta}{shorten or cite?}
 
 
 \subsubsection{Cross-Validation}
 Cross-validation is another resampling technique that involves partitioning the dataset into several distinct subsets (or ``folds''), and then systematically training the model on one subset while testing it on another. A common form is $k$-fold cross-validation, where the dataset is divided into $k$ equally-sized folds. The model is trained on $k-1$ folds and tested on the remaining fold. This process is repeated $k$ times, with each fold serving as the test set exactly once.
 
-The steps used in $k$-fold cross-validation are
-\begin{enumerate}
-  \item [1.] Split the dataset into $k$ equal-sized folds (typically $k=5$ or $k=10$). 
-  \item [2.] Train the model on $k-1$ folds and evaluate it on the remaining fold.
-  \item [3.] Repeat the process $k$ times, so that each fold is used as a test set exactly once.
-  \item [4.] Calculate the average performance across all folds.
-\end{enumerate}
-\colorbox{magenta}{continue, proof read, cite lecture notes?}
+Cross-validation maximizes the use of available data since all observations are used for both training and validation, hence it is especially useful in the case of limited datasets. It also helps in managing the bias-variance tradeoff by evaluating the model's performance on different subsets of data. By averaging the results across multiple folds, cross-validation reduces the variance of the model's predictions, as it minimizes overfitting to any particular subset of the data. Additionally, by testing the model on unseen data, it ensures that the bias is not too high, making it a good indicator of model generalization. It does require multiple model trainings however (e.g., 10-fold cross-validation requires 10 models to be trained), making it computationally expensive for large datasets or complex models.
+\colorbox{magenta}{shorten or cite?}
 
 
-\subsection{Algorithms}\label{subsec:algorithms}
-% INCLUDE PSEUDOCODE HERE IF IMPLEMENTED
-% MAYBE FUSE ALGORITHMS INTO IMPLEMENTATION SUBSECTION, OR MOVE TO THEORY
+% EXPLAIN ANALYTICAL EXPRESSIONS ETC., REFER TO DERIVATIONS IN APPENDIX
+% THESE ARE POSSIBLE SUBSECTIONS
+\subsection{The Franke Function}\label{subsec:franke}
+The Franke function is a widely used two-dimensional synthetic function in numerical analysis and computational mathematics, particularly in the fields of interpolation, regression analysis, and surface fitting. It is defined over the unit square $[0, 1] \times [0, 1]$ and expressed as
+\begin{align*}
+  f(x,y) =& \frac{3}{4} \exp{\left( -\frac{(9x - 2)^2}{4} - \frac{(9y - 2)^2}{4} \right)} \\
+&+ \frac{3}{4} \exp{\left( -\frac{(9x + 1)^2}{49} - \frac{9y + 1}{10} \right)} \\
+&+ \frac{1}{2} \exp{\left( -\frac{(9x - 7)^2}{4} - \frac{(9y - 3)^2}{4} \right)} \\
+&- \frac{1}{5} \exp{\left( -(9x - 4)^2 - (9y - 7)^2 \right)}, \numberthis\label{eq:Franke}
+\end{align*}
+which leads to the surface shown in fig. \ref{fig:Franke}. We will use the function multiple times throughout this work, as it produces a surface with both smooth and non-smooth regions, making it an excellent benchmark for testing regression and resampling algorithms. It simulates real-world data that may contain both complex variations and noise, mimicking scenarios that we will encounter as we move on to implementing the algorithms on actual simulation data.
 
-\subsection{Implementation}\label{subsec:code}
-% THE FRANKE FUNCTION, EXPLAIN WHY. THEN REAL DATA SET. MAYBE PRESENT DATA HERE?
+\begin{figure}[h!]
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[trim=2.8cm 0.5cm 1.0cm 0.5cm,clip,width=\columnwidth,keepaspectratio]{../figs/a_Franke_surf.pdf}
+  \caption{Visualization of the two-dimensional Franke function expressed in \eqref{eq:Franke}.}\label{fig:Franke}
+  \vspace*{-5pt}
+\end{figure}
+
+\subsection{Cosmological Simulation Data}\label{subsec:simulation}
+% MAYBE EXPLAIN THE DATA HERE, WHAT WE EXPECT FOR THE DATA FOR EXAMPLE
+After implementing regression analysis and resampling methods using the Franke function we repeat the process using data from an N-body simulation of dark matter structure formation made with the public G\begin{footnotesize}ASOLINE\end{footnotesize}2 SPH code \cite{gasoline}, as mentioned in \cref{sec:introduction}. The initial conditions for the simulation were generated with MUSIC (MUlti-Scale Initial Conditions) \cite{music}, and standard Planck cosmology parameters $\Omega_\text{m}=0.3077$, $\Omega_{\Lambda}=0.6923$ and $H_0=67.81\:\text{km/s/Mpc}$ were used. The simulation box has length, width and height $L=20\:\text{Mpc}$, corresponding to a $500\times500\times500$ grid, and contains $64^3$ dark matter particles. 
+
+The output data includes 128 ``snapshots'' of the box through time, where the time paramater in the simulation is the scale factor, defined as
+\begin{equation}
+  a = \frac{1}{1+z}.
+\end{equation}
+Here $z$ is the cosmological redshift, which is 0 today and thus in the 128th snapshot. We focus on the dark matter density $\rho$, and study a snapshot at redshift $z\approx12.88$ in addition to the snapshot at $z=0$, because the distribution of $\rho$ is smoother at larger $z$. To get a function of two variables we average over one of the three axes so that we get a 2D grid, and because the density is so large and vastly different at different points in the box we take $\ln\rho$ to be our dependent variable instead of $\rho$. The resulting data is shown as intensity plots in figure \ref{fig:density 2D}. 
+
+Because the Universe expands as time goes on the box does as well, and we therefore scale the coordinates of the box by multiplying with $a$. Similarly, space between the dark matter particles also increases with time, which is why the density is scaled by multiplying with $a^{-3}$. G\begin{footnotesize}ASOLINE\end{footnotesize}2 uses the rest of the scaling factors by default. \colorbox{magenta}{move to method? explain better?}
+
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.99\textwidth]{../figs/density_new_and_old.pdf}
+  \caption{Dark matter density in the simulation box averaged over one of the three axes at redshifts $z\approx12.88$ (left) and $z=0$ (right). \colorbox{magenta}{better caption?}}\label{fig:density 2D}
+  \vspace*{-5pt}
+\end{figure*}
+
+
+\section{Methods \& Implementation}\label{sec:methods}
+\colorbox{magenta}{write in past tense from here on!}
+% \subsection{Regression Analysis}
+% Regression analysis is a fundamental statistical technique used to model the relationship between one or more independent variables (also known as predictors or features) and a dependent variable (or target). The goal of regression analysis is to find the mathematical relationship that best explains the variation in the dependent variable based on the values of the independent variables.
+
+% At its core, regression analysis seeks to find a mathematical function that relates the independent variables to the dependent variable. In its most basic form, the relationship between a dependent variable $\mathbf{y}$ and an independent variable $\mathbf{x}$ is modeled as
+% \begin{equation}
+%   \mathbf{y} = f(\mathbf{x}) + \boldsymbol{\epsilon},
+% \end{equation}
+% where $f(\mathbf{x})$ is the function we are trying to estimate, which represents the relationship between $\mathbf{x}$ and $\mathbf{y}$, and $\boldsymbol{\epsilon}$ is the error term, representing the part of the variation in $\mathbf{y}$ that is not explained by the model (due to noise or other unobserved factors). 
+% \colorbox{magenta}{move expression to theory?}
+
+% \subsubsection{Ordinary Least Squares}\label{subsubsec:ols}
+% The Ordinary Least Squares (OLS) method is one of the most fundamental and widely used techniques in regression analysis. Its objective is to find the best-fitting line or curve for a given set of data by minimizing the sum of the squared differences between the observed values and the predicted values. These squared differences are called residuals, and minimizing them ensures the best possible fit of the model to the data. \colorbox{magenta}{continue, introduce expressions (week 37), cite?}
+
+% \colorbox{magenta}{mention the cost function, and refer to MSE?}
+
+
+% \subsubsection{Ridge}\label{subsubsec:ridge} 
+% While OLS provides a foundational method for regression, it can lead to problems when the data has high multicollinearity or when there are more features than data points, leading to overfitting. OLS attempts to minimize the sum of squared errors, but it does not impose any restrictions on the model complexity. This often results in high variance when the model learns to fit noise in the training data. To address this, Ridge regression introduces a regularization term to the OLS cost function, penalizing large coefficients and preventing the model from becoming overly complex. By introducing the hyperparameter $\lambda$, Ridge regression balances the trade-off between bias and variance, allowing us to control model complexity and fit the data more effectively. \colorbox{magenta}{double check, introduce expressions (week 37), cite?}
+
+
+% \subsubsection{Lasso}\label{subsubsec:lasso} 
+% Like Ridge regression, Lasso regression (Least Absolute Shrinkage and Selection Operator) is a regularization technique designed to improve the generalizability of the model by introducing a penalty term to the cost function. While Ridge regression uses the L2 norm (squared magnitude of coefficients) for regularization, Lasso regression employs the L1 norm, which leads to a different form of regularization. This difference has important implications, particularly for feature selection and sparse models. \colorbox{magenta}{double check, introduce expressions, cite?}
+
+
+% \subsection{Resampling Methods}
+% Resampling methods are statistical techniques used to generate additional data samples from the available data. These methods are particularly useful in machine learning and data analysis when the dataset is limited, and we want to better assess the performance of a model. The primary goal of resampling is to estimate the accuracy of a model by splitting the data into different subsets or generating new samples of the data, repeatedly fitting the model, and evaluating its performance on different sets of data. In this work we implement two commonly used resampling techniques: bootstrap and cross-validation.
+
+% \subsubsection{Bootstrap}
+% The Bootstrap method is a powerful resampling technique used to estimate the uncertainty and variability of a model by repeatedly drawing random samples, with replacement, from the original dataset. This resampling creates multiple "bootstrapped" datasets, each the same size as the original, but with some samples appearing multiple times and others potentially omitted.
+
+% The process of bootstrap resampling approximates the underlying distribution of a statistic—whether it's model performance, a parameter estimate, or prediction error—without requiring strong parametric assumptions about the data. This makes it particularly useful when the theoretical distribution of a statistic is unknown or difficult to calculate. Bootstrap methods are frequently used to estimate confidence intervals, standard errors, and model variance in both regression and classification tasks. \colorbox{magenta}{week 38, lecture notes, cite?}
+
+
+% \subsubsection{Cross-Validation}
+% Cross-validation is another resampling technique that involves partitioning the dataset into several distinct subsets (or ``folds''), and then systematically training the model on one subset while testing it on another. A common form is $k$-fold cross-validation, where the dataset is divided into $k$ equally-sized folds. The model is trained on $k-1$ folds and tested on the remaining fold. This process is repeated $k$ times, with each fold serving as the test set exactly once.
+
+% The steps used in $k$-fold cross-validation are
+% \begin{enumerate}
+%   \item [1.] Split the dataset into $k$ equal-sized folds (typically $k=5$ or $k=10$). 
+%   \item [2.] Train the model on $k-1$ folds and evaluate it on the remaining fold.
+%   \item [3.] Repeat the process $k$ times, so that each fold is used as a test set exactly once.
+%   \item [4.] Calculate the average performance across all folds.
+% \end{enumerate}
+% \colorbox{magenta}{continue, proof read, cite lecture notes?}
+
+
+% \subsection{Algorithms}\label{subsec:algorithms}
+% % INCLUDE PSEUDOCODE HERE IF IMPLEMENTED
+% % MAYBE FUSE ALGORITHMS INTO IMPLEMENTATION SUBSECTION, OR MOVE TO THEORY
+
+% \subsection{Implementation}\label{subsec:implementation}
+% % THE FRANKE FUNCTION, EXPLAIN WHY. THEN REAL DATA SET. MAYBE PRESENT DATA HERE?
+% \subsubsection{The Franke Function}\label{subsubsec:Franke}
+
+% \subsubsection{Data Analysis}\label{subsubsec:data}
+% % EXPLAIN THE TYPE OF DATA WE ARE IMPLEMENTING OUR ALGORITHM TO ANALYZE AND HOW WE ARE DOING IT
+% % THIS COULD POSSIBLY BE PART OF THE IMPLEMENTATION SECTION INSTEAD, WITH AN INTRODUCTION TO THE DATA SET IN THE BEGINNING
+% \colorbox{magenta}{show raw 2D intensity plots first}
+
+\subsection{Regression Analysis}
+\colorbox{magenta}{explain implementation on both Franke and data}
+
+\subsubsection{Scaling the Data}
+
+\subsubsection{Model Complexity}
+\colorbox{magenta}{task a, OLS}
+
+\subsubsection{Hyperparameter}
+\colorbox{magenta}{task b and c, Ridge and Lasso}
+
+\subsection{Bias-Variance Tradeoff}
+\colorbox{magenta}{explain how we recreate 2.11}
+
+\subsubsection{Bootstrap With OLS}
+\colorbox{magenta}{model complexity, number of data points}
+
+\subsubsection{Cross-Validation}
+\colorbox{magenta}{go into detail how we implement} \\
+\colorbox{magenta}{compare with bootstrap}\ \
+\colorbox{magenta}{include Ridge and Lasso}
+
+
+\subsection{The Program}\label{subsec:program}
 \subsubsection{Code Structure}\label{subsubsec:codestructure}
 % EXAMPLE OF HOW THIS CAN LOOK
 % Our main program is divided into a series of \verb|.cpp|-files, each containing one or more functions, with \verb|main.cpp| either calling the test functions, or the validating- and error-throwing functions and running the simulations, depending on how the project is built. In the header-file \verb|Simulation.h| we have documented the \verb|Simulation|-class and all its private and public member functions. All test functions are defined in \verb|test.cpp| and documented in \verb|test.h|, while validating- and error-throwing functions are defined in \verb|validate_input.cpp| and documented in \verb|validate.h|. All functions for reading data and visualizing the results are defined in \verb|.py|-files, and are imported and called on in \verb|main.py|. A detailed description of the program structure and how to build and run the program is given in the \verb|README.md|-file linked to \href{https://github.uio.no/oskarei/CompFys-Project5/blob/main/README.md}{here}.
@@ -257,18 +429,8 @@ The steps used in $k$-fold cross-validation are
 % EXAMPLE OF HOW THIS CAN LOOK
 % C++ \cite{C++} is used for all the numerically heavy computations and simulations. The standard library of C++ is used for mathematical and trigonometric functions, and as containers of data and for vectorization we implement Armadillo's \cite{Armadillo} \verb|arma::vec| class, together with other functions the library offer. To parse the \verb|.json| input files we use the json parsing library \cite{json}. Python \cite{Python} is used for plotting and animating our results. To vectorize our code we use \verb|numpy| \cite{Numpy}, and for visualization we use \verb|matplotlib.pyplot| \cite{Matplotlib}. To make our plots prettier we use the colormaps module \cite{colormaps}. Code completion and debugging is done in Visual Studio Code \cite{VSCode} with additional assistance of GitHub Copilot \cite{Copilot}. We use \verb|git| \cite{Git} for version control, and \verb|GitHub| \cite{GitHub} for remote storage of our code.
 
-\subsection{Data Analysis}\label{subsec:data}
-% EXPLAIN THE TYPE OF DATA WE ARE IMPLEMENTING OUR ALGORITHM TO ANALYZE AND HOW WE ARE DOING IT
-% THIS COULD POSSIBLY BE PART OF THE IMPLEMENTATION SECTION INSTEAD, WITH AN INTRODUCTION TO THE DATA SET IN THE BEGINNING
-\colorbox{magenta}{show raw 2D intensity plots first}
 
-\begin{figure*}
-  \vspace*{-5pt}
-  \centering %Centers the figure
-  \includegraphics[width=0.99\textwidth]{../figs/density_new_and_old.pdf}
-  \caption{\colorbox{magenta}{caption}}\label{fig:density 2D}
-  \vspace*{-5pt}
-\end{figure*}
+
 
 \colorbox{magenta}{raw and smoothed surfaces, explain reason/method}
 
@@ -276,7 +438,7 @@ The steps used in $k$-fold cross-validation are
   \vspace*{-5pt}
   \centering %Centers the figure
   \includegraphics[width=0.99\textwidth]{../figs/density_surf_all.pdf}
-  \caption{\colorbox{magenta}{caption}}\label{fig:density surf}
+  \caption{\colorbox{magenta}{caption} \colorbox{magenta}{maybe ignore smoothing, crop out a piece instead?}}\label{fig:density surf}
   \vspace*{-5pt}
 \end{figure*}
 
@@ -348,7 +510,7 @@ The steps used in $k$-fold cross-validation are
 \appendix
 \section{Derivations}\label{appsec:derivations}
 \subsection{Expectation Value and Variance of \texorpdfstring{$\boldsymbol{\beta}_\text{OLS}$}{Lg}}\label{subapp:beta OLS}
-\colorbox{magenta}{rewrite to fit report}
+\colorbox{magenta}{rewrite to fit report. use hats instead of OLS. change T}
 
 Since the error in $\mathbf{y}$ is normal distributed as $\boldsymbol{\varepsilon}\sim N(0,\sigma^2)$ we know that the expectation value and variance of the $i$'th element of $\boldsymbol{\varepsilon}$ is $\mathbb{E}(\varepsilon_i)=0$ and $\textrm{Var}(\varepsilon_i)=\sigma^2$. Thus, since we approximate $f(\mathbf{x})$ with $\mathbf{\tilde{y}}=\mathbf{X}\boldsymbol{\beta}$ the expectation value of $\mathbf{y}$ becomes 
 \begin{equation}
