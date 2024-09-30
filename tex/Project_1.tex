@@ -159,21 +159,23 @@ The performance of the model's predictions can be analyzed by decomposing the er
 Each of these represents a different aspect of the total error that affects the model's performance.
 
 \subsubsection{Model Bias}
-Model bias refers to the systematic error introduced by the model's inability to capture the true underlying relationship between the independent and dependent variables. This error arises when the model makes incorrect assumptions about the data or oversimplifies the relationship. For example, a linear model trying to fit highly non-linear data will result in high bias because the model cannot flexibly represent the complexity of the data.
-
-From the expression \eqref{eq:Bias} we see that the bias measures how far the average model prediction $\mathbb{E}[\mathbf{\tilde{y}}]$ is from the true target value $\mathbf{y}$. A high bias occurs when the model is too simple, leading to underfitting, where it fails to capture the underlying structure of the data.
+From the expression \eqref{eq:Bias} we see that the model bias measures how far the average model prediction $\mathbb{E}[\mathbf{\tilde{y}}]$ is from the true target value $\mathbf{y}$. More specificaly, it refers to the systematic error introduced by the model's inability to capture the true underlying relationship between the independent and dependent variables. This error arises when the model makes incorrect assumptions about the data or oversimplifies the relationship. For example, a linear model trying to fit highly non-linear data will result in high bias because the model cannot flexibly represent the complexity of the data.
 
 \subsubsection{Model Variance}
-Model variance refers to the sensitivity of the model to fluctuations in the training data. A model with high variance fits the training data very closely but may perform poorly on new, unseen data. This happens because the model has ``memorized'' the noise in the training data rather than capturing the true underlying pattern. High variance typically arises in overly complex models that are capable of capturing minute details, which may not generalize well to new data.
-
-We see from the expression \eqref{eq:Var} for the model variance that it represents the variability in the model's predictions across different training sets. A high model variance indicates that the model is overly sensitive to the specific training data, leading to overfitting, where the model performs well on the training set but poorly on the test set.
+We see from the expression \eqref{eq:Var} for the model variance that it represents the variability in the model's predictions across different training sets. A high model variance indicates that the model is overly sensitive to the specific training data, leading to overfitting, where the model performs well on the training set but poorly on new, unseen data such as the test set. This happens because the model has ``memorized'' the noise in the training data rather than capturing the true underlying pattern. High variance typically arises in overly complex models that are capable of capturing minute details, which may not generalize well to new data.
 
 \subsubsection{Bias-Variance Tradeoff}
-An ideal model strikes a balance between bias and variance, where the model is flexible enough to capture the underlying patterns in the data but not so flexible that it fits the noise. At this point, the model minimizes the total error, including both bias and variance, as well as the irreducible noise variance. This balance is referred to as the bias-variance tradeoff, and is a fundamental concept in machine learning, specifically when building predictive models. We will study this in great detail throughout this work, as the model error
+Measures of a predictive model's total error and how well it is likely to predict future samples are commonly expressed in terms of the mean-squared error (MSE) and the score function, respectively. These are given by
+\begin{align}
+  \text{MSE}(\mathbf{y},\mathbf{\tilde{y}}) &= \frac{1}{n}\sum_{i=0}^{n-1}\left(y_i-\tilde{y}_i\right)^2,
+  \\
+  R^2(\mathbf{y},\mathbf{\tilde{y}}) &= 1 -\frac{\sum_{i=0}^{n-1}\left(y_i-\tilde{y}_i\right)^2}{\sum_{i=0}^{n-1}\left(y_i-\overline{y}\right)^2},
+\end{align}
+where $\overline{y}$ is the mean value of $\mathbf{y}$ and $n$ is the number of data points. In \cref{appsec:derivations} \colorbox{magenta}{maybe move up here?} we show that the MSE alternatively can be expressed in terms of the model bias, model variance and noise variance as 
 \begin{equation}
-  \mathbb{E}\left[(\mathbf{y}-\mathbf{\tilde{y}})^2 \right] = \text{Bias}[\tilde{y}] + \text{Var}[\tilde{y}] + \sigma^2 \label{eq:model error}
+  \mathbb{E}\left[(\mathbf{y}-\mathbf{\tilde{y}})^2 \right] = \text{Bias}[\tilde{y}] + \text{Var}[\tilde{y}] + \sigma^2. \label{eq:model error}
 \end{equation}
-is minimized through finding the correct balance between the two first terms. This expression is derived in \cref{appsec:derivations}.
+Since the noise variance adds an irreducible contribution to the total model error, an ideal model strikes a balance between bias and variance, where it is flexible enough to capture the underlying patterns in the data but not so flexible that it fits the noise. This balance is referred to as the bias-variance tradeoff. It is a fundamental concept in machine learning, specifically when building predictive models, and will be studied in great detail throughout this work.
 
 
 % EXPLAIN ANALYTICAL EXPRESSIONS ETC., REFER TO DERIVATIONS IN APPENDIX
@@ -207,6 +209,8 @@ where $f(\mathbf{x})$ is the function we are trying to estimate, which represent
 
 \subsubsection{Ordinary Least Squares}\label{subsubsec:ols}
 The Ordinary Least Squares (OLS) method is one of the most fundamental and widely used techniques in regression analysis. Its objective is to find the best-fitting line or curve for a given set of data by minimizing the sum of the squared differences between the observed values and the predicted values. These squared differences are called residuals, and minimizing them ensures the best possible fit of the model to the data. \colorbox{magenta}{continue, introduce expressions (week 37), cite?}
+
+\colorbox{magenta}{mention the cost function, and refer to MSE?}
 
 
 \subsubsection{Ridge}\label{subsubsec:ridge} 
@@ -268,35 +272,19 @@ The steps used in $k$-fold cross-validation are
 
 \colorbox{magenta}{raw and smoothed surfaces, explain reason/method}
 
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.99\textwidth]{../figs/density_surf_all.pdf}
+  \caption{\colorbox{magenta}{caption}}\label{fig:density surf}
+  \vspace*{-5pt}
+\end{figure*}
+
 % \begin{figure*}
 %   \vspace*{-5pt}
 %   \centering %Centers the figure
 %   \includegraphics[width=0.9\textwidth]{../figs/density_surf.pdf}
 %   \caption{\colorbox{magenta}{caption}}\label{fig:density surf}
-%   \vspace*{-5pt}
-% \end{figure*}
-
-% \begin{figure*}
-%   \vspace*{-5pt}
-%   \centering %Centers the figure
-%   \includegraphics[width=0.9\textwidth]{../figs/density_smoothed_surf.pdf}
-%   \caption{\colorbox{magenta}{caption}}\label{fig:density smoothed surf}
-%   \vspace*{-5pt}
-% \end{figure*}
-
-% \begin{figure*}
-%   \vspace*{-5pt}
-%   \centering %Centers the figure
-%   \includegraphics[width=0.9\textwidth]{../figs/density_old_surf.pdf}
-%   \caption{\colorbox{magenta}{caption}}\label{fig:density old surf}
-%   \vspace*{-5pt}
-% \end{figure*}
-
-% \begin{figure*}
-%   \vspace*{-5pt}
-%   \centering %Centers the figure
-%   \includegraphics[width=0.9\textwidth]{../figs/density_old_smoothed_surf.pdf}
-%   \caption{\colorbox{magenta}{caption}}\label{fig:density old smoothed surf}
 %   \vspace*{-5pt}
 % \end{figure*}
 
@@ -414,7 +402,7 @@ so if we now set $x=\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^
 \end{align*}
 Here we have used that the transpose of $\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}$ is itself since it is square and symmetric.
 
-\subsection{Alternative Expression for the OLS Cost Function}\label{subapp:cost}
+\subsection{Alternative Expression for MSE}\label{subapp:cost}
 \colorbox{magenta}{rewrite to fit report}
 
 Substituting $\mathbf{y}$ with $f(\mathbf{x}) + \boldsymbol{\epsilon}$, and adding and subtracting $\mathbb{E}\left[\mathbf{\tilde{y}}\right]$, we find that

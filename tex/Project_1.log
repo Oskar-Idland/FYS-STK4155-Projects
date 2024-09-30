@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.9.24)  27 SEP 2024 19:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.9.24)  30 SEP 2024 03:36
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -770,52 +770,57 @@ Underfull \hbox (badness 10000) in paragraph at lines 145--149
  []
 
 [2] [3]
-<../figs/density_new_and_old.pdf, id=191, 813.0375pt x 361.35pt>
+<../figs/density_new_and_old.pdf, id=195, 813.0375pt x 361.35pt>
 File: ../figs/density_new_and_old.pdf Graphic file (type pdf)
 <use ../figs/density_new_and_old.pdf>
-Package pdftex.def Info: ../figs/density_new_and_old.pdf  used on input line 264.
+Package pdftex.def Info: ../figs/density_new_and_old.pdf  used on input line 268.
 (pdftex.def)             Requested size: 504.9028pt x 224.39859pt.
-<../figs/a_error_scaled_vs_raw.pdf, id=192, 722.7pt x 433.62pt>
+<../figs/density_surf_all.pdf, id=196, 939.51pt x 794.97pt>
+File: ../figs/density_surf_all.pdf Graphic file (type pdf)
+<use ../figs/density_surf_all.pdf>
+Package pdftex.def Info: ../figs/density_surf_all.pdf  used on input line 278.
+(pdftex.def)             Requested size: 504.9028pt x 427.2274pt.
+<../figs/a_error_scaled_vs_raw.pdf, id=197, 722.7pt x 433.62pt>
 File: ../figs/a_error_scaled_vs_raw.pdf Graphic file (type pdf)
 <use ../figs/a_error_scaled_vs_raw.pdf>
-Package pdftex.def Info: ../figs/a_error_scaled_vs_raw.pdf  used on input line 313.
+Package pdftex.def Info: ../figs/a_error_scaled_vs_raw.pdf  used on input line 301.
 (pdftex.def)             Requested size: 484.49844pt x 290.70253pt.
-<../figs/a_beta_scaled_vs_raw.pdf, id=193, 722.7pt x 433.62pt>
+<../figs/a_beta_scaled_vs_raw.pdf, id=198, 722.7pt x 433.62pt>
 File: ../figs/a_beta_scaled_vs_raw.pdf Graphic file (type pdf)
 <use ../figs/a_beta_scaled_vs_raw.pdf>
-Package pdftex.def Info: ../figs/a_beta_scaled_vs_raw.pdf  used on input line 321.
+Package pdftex.def Info: ../figs/a_beta_scaled_vs_raw.pdf  used on input line 309.
 (pdftex.def)             Requested size: 458.99689pt x 275.39857pt.
-<../figs/b_MSE_R2_vert.pdf, id=194, 867.24pt x 1156.32pt>
+<../figs/b_MSE_R2_vert.pdf, id=199, 867.24pt x 1156.32pt>
 File: ../figs/b_MSE_R2_vert.pdf Graphic file (type pdf)
 <use ../figs/b_MSE_R2_vert.pdf>
-Package pdftex.def Info: ../figs/b_MSE_R2_vert.pdf  used on input line 329.
+Package pdftex.def Info: ../figs/b_MSE_R2_vert.pdf  used on input line 317.
 (pdftex.def)             Requested size: 458.99689pt x 611.99977pt.
-<../figs/c_MSE_R2_vert.pdf, id=195, 867.24pt x 1156.32pt>
+<../figs/c_MSE_R2_vert.pdf, id=200, 867.24pt x 1156.32pt>
 File: ../figs/c_MSE_R2_vert.pdf Graphic file (type pdf)
 <use ../figs/c_MSE_R2_vert.pdf>
-Package pdftex.def Info: ../figs/c_MSE_R2_vert.pdf  used on input line 337.
+Package pdftex.def Info: ../figs/c_MSE_R2_vert.pdf  used on input line 325.
 (pdftex.def)             Requested size: 458.99689pt x 611.99977pt.
- (./Project_1.bbl) [4] [5 <../figs/density_new_and_old.pdf> <../figs/a_error_scaled_vs_raw.pdf>] [6 <../figs/a_beta_scaled_vs_raw.pdf>] [7 <../figs/b_MSE_R2_vert.pdf>] [8 <../figs/c_MSE_R2_vert.pdf>] [9] [10] (./Project_1.aux)
+ (./Project_1.bbl) [4] [5 <../figs/density_new_and_old.pdf>] [6 <../figs/density_surf_all.pdf>] [7 <../figs/a_error_scaled_vs_raw.pdf> <../figs/a_beta_scaled_vs_raw.pdf>] [8 <../figs/b_MSE_R2_vert.pdf>] [9 <../figs/c_MSE_R2_vert.pdf>] [10] [11] (./Project_1.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
 Package rerunfilecheck Info: File `Project_1.out' has not changed.
-(rerunfilecheck)             Checksum: E605288D319280D8A264BB3D4B4C652D;4568.
+(rerunfilecheck)             Checksum: 3FB150B988AC1F7B521E6A7855EB487A;4469.
  ) 
 Here is how much of TeX's memory you used:
- 28433 strings out of 474116
- 513969 string characters out of 5743682
- 1973187 words of memory out of 5000000
- 50300 multiletter control sequences out of 15000+600000
+ 28445 strings out of 474116
+ 514317 string characters out of 5743682
+ 1975187 words of memory out of 5000000
+ 50308 multiletter control sequences out of 15000+600000
  568730 words of font info for 75 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  84i,19n,93p,1429b,533s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx6.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Project_1.pdf (10 pages, 557450 bytes).
+Output written on Project_1.pdf (11 pages, 4204527 bytes).
 PDF statistics:
- 468 PDF objects out of 1000 (max. 8388607)
- 369 compressed objects within 4 object streams
- 64 named destinations out of 1000 (max. 500000)
- 318 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 498 PDF objects out of 1000 (max. 8388607)
+ 393 compressed objects within 4 object streams
+ 68 named destinations out of 1000 (max. 500000)
+ 323 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -1,20 +1,21 @@
 # Fdb version 4
-["bibtex Project_1"] 1727457222.28705 "Project_1.aux" "Project_1.bbl" "Project_1" 1727458148.71886 0
-  "./Project_1Notes.bib" 1727458147.59779 103 48ad29797468f16e2853d8797278d7af ""
+["bibtex Project_1"] 1727659759.01124 "Project_1.aux" "Project_1.bbl" "Project_1" 1727660170.96964 0
+  "./Project_1Notes.bib" 1727660169.60854 103 48ad29797468f16e2853d8797278d7af ""
   "./references.bib" 1727457297.61986 3307 799d0c38c9bc1eed675b70d441c88ad7 ""
   "/usr/local/texlive/2024/texmf-dist/bibtex/bst/revtex4-1/apsrev4-1.bst" 1602107945 71515 e333383ed72bf24aa6de7e8cabb55f84 ""
-  "Project_1.aux" 1727458147.59441 10048 5b9aaa5516c4c3a79d00be5f10cf852b "pdflatex"
+  "Project_1.aux" 1727660169.60421 10334 ab82daef7e6c98e172902473801b7ee7 "pdflatex"
   (generated)
   "Project_1.bbl"
   "Project_1.blg"
   (rewritten before read)
-["pdflatex"] 1727458143.94426 "/Users/paljettrosa/Documents/GitHub/FYS-STK4155-Projects/tex/Project_1.tex" "Project_1.pdf" "Project_1" 1727458148.71941 0
-  "../figs/a_beta_scaled_vs_raw.pdf" 1727396556.39677 166364 cb15ed2391c0a76a476dd3244e27a316 ""
-  "../figs/a_error_scaled_vs_raw.pdf" 1727396556.399 135345 1fed90274d2fd9cd3805433dc20155c9 ""
-  "../figs/b_MSE_R2_vert.pdf" 1727396556.40404 169634 1e25a482c16a788a3706d6d1f36107ec ""
-  "../figs/c_MSE_R2_vert.pdf" 1727396556.40915 169509 8b06195769ef7dab08a1fee054b1497b ""
-  "../figs/density_new_and_old.pdf" 1727458118.89972 320642 3df995c0833655fa83b5cd65a25b6077 ""
-  "/Users/paljettrosa/Documents/GitHub/FYS-STK4155-Projects/tex/Project_1.tex" 1727458143.17956 48863 639e8a81f277e0f6bb84441614480e7d ""
+["pdflatex"] 1727660166.44644 "/Users/paljettrosa/Documents/GitHub/FYS-STK4155-Projects/tex/Project_1.tex" "Project_1.pdf" "Project_1" 1727660170.9704 0
+  "../figs/a_beta_scaled_vs_raw.pdf" 1727660152.73463 135281 cf9264654223fd431a7d359b9ad2912e ""
+  "../figs/a_error_scaled_vs_raw.pdf" 1727660144.50219 135245 007e85807929c02546f3a6100c9cbc4f ""
+  "../figs/b_MSE_R2_vert.pdf" 1727657202.49044 169620 839c687b5828fd3c5a553de02c5f7baf ""
+  "../figs/c_MSE_R2_vert.pdf" 1727657273.52189 169553 c91b5cea140d4eb431527e1f43f3e852 ""
+  "../figs/density_new_and_old.pdf" 1727458176.61967 320642 3df995c0833655fa83b5cd65a25b6077 ""
+  "../figs/density_surf_all.pdf" 1727660048.53855 3805013 57511f4e59aecf3c94533ca473ee2335 ""
+  "/Users/paljettrosa/Documents/GitHub/FYS-STK4155-Projects/tex/Project_1.tex" 1727659795.41032 48645 e0e305061f8a792487f4dc30790687ac ""
   "/usr/local/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1246382020 1120 1e8878807317373affa7f7bba4cf2f6a ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1246382020 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
@@ -216,10 +217,10 @@
   "/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1727214568.276 5467645 128b85b7cde5f5edc5cb7f1dd7ff8736 ""
   "/usr/local/texlive/2024/texmf-var/web2c/pdftex/pdflatex.fmt" 1727209366 8221429 db52235156dd1f5fc2399dadb68c726f ""
   "/usr/local/texlive/2024/texmf.cnf" 1710266656 577 e590dabc9e28c5b61546e15f63eebcdf ""
-  "Project_1.aux" 1727458147.59441 10048 5b9aaa5516c4c3a79d00be5f10cf852b "pdflatex"
-  "Project_1.bbl" 1727457297.41002 2410 fea060551d70d13e7d4a395a2b0d5a40 "bibtex Project_1"
-  "Project_1.out" 1727458147.59724 4568 e605288d319280d8a264bb3d4b4c652d "pdflatex"
-  "Project_1.tex" 1727458143.17956 48863 639e8a81f277e0f6bb84441614480e7d ""
+  "Project_1.aux" 1727660169.60421 10334 ab82daef7e6c98e172902473801b7ee7 "pdflatex"
+  "Project_1.bbl" 1727659759.42491 2410 fea060551d70d13e7d4a395a2b0d5a40 "bibtex Project_1"
+  "Project_1.out" 1727660169.60762 4469 3fb150b988ac1f7b521e6a7855eb487a "pdflatex"
+  "Project_1.tex" 1727659795.41032 48645 e0e305061f8a792487f4dc30790687ac ""
   (generated)
   "Project_1.aux"
   "Project_1.log"
