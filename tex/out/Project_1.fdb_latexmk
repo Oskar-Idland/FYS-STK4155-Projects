@@ -1,17 +1,17 @@
 # Fdb version 4
-["bibtex Project_1"] 1727360444 "Project_1.aux" "Project_1.bbl" "Project_1" 1727365363 0
-  "./references.bib" 1727360365 3140 80d695688839a113bb273b89a67c3a85 ""
-  "Project_1.aux" 1727360365 7927 7291e20a3bad997cfad5082a329f8674 ""
+["bibtex Project_1"] 1727360444 "Project_1.aux" "Project_1.bbl" "Project_1" 1727701854 0
+  "./references.bib" 1727701846 3140 80d695688839a113bb273b89a67c3a85 ""
+  "Project_1.aux" 1727701846 7927 7291e20a3bad997cfad5082a329f8674 ""
   "c:/texlive/2023/texmf-dist/bibtex/bst/revtex4-1/apsrev4-1.bst" 1680269977 71515 e333383ed72bf24aa6de7e8cabb55f84 ""
-  "out/Project_1Notes.bib" 1727365361 103 48ad29797468f16e2853d8797278d7af "pdflatex"
+  "out/Project_1Notes.bib" 1727701853 103 48ad29797468f16e2853d8797278d7af "pdflatex"
   (generated)
   "Project_1.bbl"
   "Project_1.blg"
   (rewritten before read)
-["pdflatex"] 1727365360 "c:/Users/Erik/Documents/ELITE - Master/H24/FYS-STK4155/FYS-STK4155-Projects/tex/Project_1.tex" "out/Project_1.pdf" "Project_1" 1727365363 0
-  "Project_1.bbl" 1727360444 1981 2371da0eeaa9c49fd2eddf057334b8bb "bibtex Project_1"
-  "Project_1.tex" 1727365357 38331 4c0c41c5c8ab75c91fb00bb5fb02bfa4 ""
-  "c:/Users/Erik/Documents/ELITE - Master/H24/FYS-STK4155/FYS-STK4155-Projects/tex/Project_1.tex" 1727365357 38331 4c0c41c5c8ab75c91fb00bb5fb02bfa4 ""
+["pdflatex"] 1727701852 "c:/Users/Erik/Documents/ELITE - Master/H24/FYS-STK4155/FYS-STK4155-Projects/tex/Project_1.tex" "out/Project_1.pdf" "Project_1" 1727701854 0
+  "Project_1.bbl" 1727701846 2033 2371da0eeaa9c49fd2eddf057334b8bb "bibtex Project_1"
+  "Project_1.tex" 1727701846 38331 4c0c41c5c8ab75c91fb00bb5fb02bfa4 ""
+  "c:/Users/Erik/Documents/ELITE - Master/H24/FYS-STK4155/FYS-STK4155-Projects/tex/Project_1.tex" 1727701846 38331 4c0c41c5c8ab75c91fb00bb5fb02bfa4 ""
   "c:/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1680267919 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1680266189 1120 1e8878807317373affa7f7bba4cf2f6a ""
   "c:/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy7.tfm" 1680266189 1120 7f9f170e8aa57527ad6c49feafd45d54 ""
@@ -195,8 +195,8 @@
   "c:/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1680271095 4662201 6a1520b5c5c935088be65b26dee0a7ec ""
   "c:/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt" 1680271177 7883396 bdfdf750cf704fd1943e5c5018aea0b7 ""
   "c:/texlive/2023/texmf.cnf" 1680271078 713 e69b156964470283e0530f5060668171 ""
-  "out/Project_1.aux" 1727365361 8232 c161a56390d7ea5c07c50595f2caf9e1 "pdflatex"
-  "out/Project_1.out" 1727365361 4100 f4ee4489b7f101d86b8db408a21f67d2 "pdflatex"
+  "out/Project_1.aux" 1727701853 8232 c161a56390d7ea5c07c50595f2caf9e1 "pdflatex"
+  "out/Project_1.out" 1727701853 4100 f4ee4489b7f101d86b8db408a21f67d2 "pdflatex"
   (generated)
   "out/Project_1.aux"
   "out/Project_1.log"
