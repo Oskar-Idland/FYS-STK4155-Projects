@@ -291,7 +291,7 @@ The process of bootstrap resampling approximates the underlying distribution of 
 \subsubsection{Cross-Validation}
 Cross-validation is another resampling technique that involves partitioning the dataset into several distinct subsets (or ``folds''), and then systematically training the model on one subset while testing it on another. A common form is $k$-fold cross-validation, where the dataset is divided into $k$ equally-sized folds. The model is trained on $k-1$ folds and tested on the remaining fold. This process is repeated $k$ times, with each fold serving as the test set exactly once.
 
-Cross-validation maximizes the use of available data since all observations are used for both training and validation, hence it is especially useful in the case of limited datasets. It also helps in managing the bias-variance tradeoff by evaluating the model's performance on different subsets of data. By averaging the results across multiple folds, cross-validation reduces the variance of the model's predictions, as it minimizes overfitting to any particular subset of the data. Additionally, by testing the model on unseen data, it ensures that the bias is not too high, making it a good indicator of model generalization. It does require multiple model trainings however (e.g., 10-fold cross-validation requires 10 models to be trained), making it computationally expensive for large datasets or complex models.
+Since all observations are used for both training and validation, cross-validation maximizes the use of available data, hence it is especially useful in the case of limited datasets. It also helps in managing the bias-variance tradeoff by evaluating the model's performance on different subsets of data. By averaging the results across multiple folds, cross-validation reduces the variance of the model's predictions, as it minimizes overfitting to any particular subset of the data. Additionally, by testing the model on unseen data, it ensures that the bias is not too high, making it a good indicator of model generalization. It does require multiple model trainings however (e.g., 10-fold cross-validation requires 10 models to be trained), making it computationally expensive for large datasets or complex models.
 \colorbox{magenta}{shorten or cite?}
 
 
@@ -402,14 +402,15 @@ Because the Universe expands as time goes on the box does as well, and we theref
 
 \subsubsection{Scaling the Data}
 
-\subsubsection{Model Complexity}
+\subsubsection{Complexity Dependency}
 \colorbox{magenta}{task a, OLS}
 
-\subsubsection{Hyperparameter}
+\subsubsection{Hyperparameter Dependency}
 \colorbox{magenta}{task b and c, Ridge and Lasso}
 
 \subsection{Bias-Variance Tradeoff}
-\colorbox{magenta}{explain how we recreate 2.11}
+\colorbox{magenta}{explain how we recreate 2.11} \\
+\colorbox{magenta}{we expect MSE=bias+var for data since noise var is 0}
 
 \subsubsection{Bootstrap With OLS}
 \colorbox{magenta}{model complexity, number of data points}
