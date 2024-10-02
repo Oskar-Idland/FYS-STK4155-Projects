@@ -1,22 +1,22 @@
 # Fdb version 4
-["bibtex out/Project_1"] 1727783321.51479 "out/Project_1.aux" "out/Project_1.bbl" "out/Project_1" 1727783323.8825 0
+["bibtex out/Project_1"] 1727857821.38628 "out/Project_1.aux" "out/Project_1.bbl" "out/Project_1" 1727857835.11941 0
   "./references.bib" 1727723374.78999 3495 71052ff99add8db7c3e0a5b13458ac05 ""
   "/usr/local/texlive/2024/texmf-dist/bibtex/bst/revtex4-1/apsrev4-1.bst" 1602107945 71515 e333383ed72bf24aa6de7e8cabb55f84 ""
-  "out/Project_1.aux" 1727783323.32131 11766 1ddef5354dcd2dd03ee97c21b0a21b63 "pdflatex"
-  "out/Project_1Notes.bib" 1727783323.3236 103 48ad29797468f16e2853d8797278d7af "pdflatex"
+  "out/Project_1.aux" 1727857834.55242 11894 1531955bf468f1243eac0ca89a69bfc7 "pdflatex"
+  "out/Project_1Notes.bib" 1727857834.5548 103 48ad29797468f16e2853d8797278d7af "pdflatex"
   (generated)
   "out/Project_1.bbl"
   "out/Project_1.blg"
   (rewritten before read)
-["pdflatex"] 1727783321.74039 "/Users/paljettrosa/Documents/GitHub/FYS-STK4155-Projects/tex/Project_1.tex" "out/Project_1.pdf" "Project_1" 1727783323.88278 0
-  "../figs/a_Franke_surf.pdf" 1727781726.75954 3768512 f38885f36c424a82e7145288caa076f3 ""
-  "../figs/a_beta_scaled_vs_raw.pdf" 1727781750.77991 135281 cafad3e23f023459a92ed82adbb684a7 ""
-  "../figs/a_error_scaled_vs_raw.pdf" 1727781743.38316 135188 cb08373349c34a989686f2afd2f6614b ""
-  "../figs/b_MSE_R2_vert.pdf" 1727782003.18778 169406 f52560acd7466d8772d597acf77a278e ""
-  "../figs/c_MSE_R2_vert.pdf" 1727697539.34537 169435 85f9ed3f8f8810a84afde39d48a6419e ""
-  "../figs/density_new_and_old.pdf" 1727697539.34822 320642 982d6a7ec8fa092420e24ef080e6dd48 ""
+["pdflatex"] 1727857832.93221 "/Users/paljettrosa/Documents/GitHub/FYS-STK4155-Projects/tex/Project_1.tex" "out/Project_1.pdf" "Project_1" 1727857835.11972 0
+  "../figs/a_Franke_surf.pdf" 1727832172.69566 3768512 8beceead27862c3b58efc11617648d75 ""
+  "../figs/a_beta_scaled_vs_raw.pdf" 1727838937.85328 135725 1d0e6ee3f3e75a85dfa93d95099fcafc ""
+  "../figs/a_error_scaled_vs_raw.pdf" 1727838929.09155 135118 2b1614b1ac6071950730501a19f9efad ""
+  "../figs/b_MSE_R2.pdf" 1727838967.91578 207362 8922f475550e3d61b5b55e9fff5f9163 ""
+  "../figs/c_MSE_R2.pdf" 1727838997.22727 236413 7fa2f67f3ead08e8dc8739abcd5925dd ""
+  "../figs/density_new_and_old.pdf" 1727832172.70719 320642 2c39ff511306e5d97708f13934ae8cbb ""
   "../figs/density_surf_all.pdf" 1727697539.36662 3805013 5cbf8bfebaf227f6530d06a7adc41580 ""
-  "/Users/paljettrosa/Documents/GitHub/FYS-STK4155-Projects/tex/Project_1.tex" 1727780960.69931 66026 0273ad54f51a43a274b07dbf62c994f6 ""
+  "/Users/paljettrosa/Documents/GitHub/FYS-STK4155-Projects/tex/Project_1.tex" 1727857832.28429 66148 4319907772af32411f08fa850b9f42ca ""
   "/usr/local/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1246382020 1120 1e8878807317373affa7f7bba4cf2f6a ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1246382020 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
@@ -70,6 +70,7 @@
   "/usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb" 1248133631 33993 9b89b85fd2d9df0482bd47194d1d3bf3 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1248133631 32569 5e5ddc8df908dea60932f3c484a54c0d ""
   "/usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb" 1248133631 32716 08e384dc442464e7285e891af9f45947 ""
+  "/usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb" 1248133631 32442 c975af247b6702f7ca0c299af3616b80 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb" 1248133631 36310 f5ddc6715cc60deb16d9db5ded6a9391 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib9.pfb" 1248133631 36510 24bd6e95867d9b5c2691bf9144a22cda ""
   "/usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb" 1248133631 34694 ad62b13721ee8eda1dcc8993c8bd7041 ""
@@ -220,10 +221,10 @@
   "/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1727214568.276 5467645 128b85b7cde5f5edc5cb7f1dd7ff8736 ""
   "/usr/local/texlive/2024/texmf-var/web2c/pdftex/pdflatex.fmt" 1727209366 8221429 db52235156dd1f5fc2399dadb68c726f ""
   "/usr/local/texlive/2024/texmf.cnf" 1710266656 577 e590dabc9e28c5b61546e15f63eebcdf ""
-  "Project_1.tex" 1727780960.69931 66026 0273ad54f51a43a274b07dbf62c994f6 ""
-  "out/Project_1.aux" 1727783323.32131 11766 1ddef5354dcd2dd03ee97c21b0a21b63 "pdflatex"
-  "out/Project_1.bbl" 1727783321.7329 2747 5401c673a77199b83d97aaffee9bd18f "bibtex out/Project_1"
-  "out/Project_1.out" 1727783323.3229 5336 23594c96c8f85c987d7b0f652a6f63d6 "pdflatex"
+  "Project_1.tex" 1727857832.28429 66148 4319907772af32411f08fa850b9f42ca ""
+  "out/Project_1.aux" 1727857834.55242 11894 1531955bf468f1243eac0ca89a69bfc7 "pdflatex"
+  "out/Project_1.bbl" 1727857821.53525 2747 5401c673a77199b83d97aaffee9bd18f "bibtex out/Project_1"
+  "out/Project_1.out" 1727857834.55403 5532 504c2dbf31f51e6c22fe235f1783aae5 "pdflatex"
   (generated)
   "out/Project_1.aux"
   "out/Project_1.log"

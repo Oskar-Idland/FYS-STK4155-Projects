@@ -69,14 +69,19 @@ def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
         x = np.ravel(x)
         y = np.ravel(y)
 
-    N = len(x)
-    l = int((n+1)*(n+2)/2) # Number of elements in beta
-    X = np.ones((N,l))
+    N_x = len(x); N_y = len(y)
+    l = int(3 + np.sum(range(3, n+2)))  # Number of features
+    X = np.ones((int(N_x*N_y), l))
+    
+    xx, yy = np.meshgrid(x, y)          # Make a meshgrid to get all possible combinations of x and y values
+    xx = xx.flatten()
+    yy = yy.flatten()
 
-    for i in range(1,n+1):
-        q = int((i)*(i+1)/2)
-        for k in range(i+1):
-            X[:,q+k] = (x**(i-k))*(y**k)
+    idx = 1
+    for i in range(1, n+1):
+        for j in range(i+1):
+            X[:, idx] = xx**(i-j)*yy**j
+            idx += 1
 
     return X
 
@@ -109,7 +114,6 @@ def OLS(x: np.ndarray, y: np.ndarray, z: np.ndarray[np.ndarray, np.ndarray], deg
         scaler_z = StandardScaler().fit(z_train)
         z_train = scaler_z.transform(z_train)
         z_test= scaler_z.transform(z_test)
-
 
     β = np.linalg.pinv(X_train.T @ X_train) @ X_train.T @ z_train
 
@@ -192,7 +196,7 @@ def Lasso(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
     X = create_X(x, y, degree)
     X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=test_size, random_state=seed)
 
-    if not scale: # Scaling the data
+    if scale: # Scaling the data
         scaler_X = StandardScaler().fit(X_train)
         X_train = scaler_X.transform(X_train)
         X_test = scaler_X.transform(X_test)
@@ -217,7 +221,7 @@ def Lasso(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
 
     return MSE_score, R2_score, β
 
-def Kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model: sklearn.linear_model.LinearRegression | sklearn.linear_model.Ridge | sklearn.linear_model.Lasso, degree: int) -> float:
+def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model: sklearn.linear_model.LinearRegression | sklearn.linear_model.Ridge | sklearn.linear_model.Lasso, degree: int, scale: bool = True) -> float:
     """
     Performs k-fold cross-validation.
 
@@ -236,6 +240,14 @@ def Kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model: s
     kfold = KFold(n_splits=k)
 
     X = create_X(x, y, degree)
+
+    #TODO mention change
+    if scale:
+        scaler_X = StandardScaler().fit(X)
+        scaler_z = StandardScaler().fit(z)
+        X = scaler_X.fit(X)
+        z = scaler_z.fit(z)
+
     estimated_mse_folds = cross_val_score(model, X, z, scoring='neg_mean_squared_error', cv=kfold)
     estimated_mse = np.mean(-estimated_mse_folds)
 
@@ -303,7 +315,7 @@ if __name__ == "__main__":
     OLS = LinearRegression(fit_intercept=False)
     for k_i in k:
         for degree in degrees:
-            OLS_mse_kfold.append(Kfold_crossval(x, y, z, k_i, OLS, degree))
+            OLS_mse_kfold.append(kfold_crossval(x, y, z, k_i, OLS, degree))
   
     # kfold Ridge
     lambdas = np.logspace(-4, 4, 6)
@@ -313,5 +325,5 @@ if __name__ == "__main__":
         for degree in degrees:
             for lmb in lambdas:
                 ridge = linear_model.Ridge(alpha=lmb, fit_intercept=False)
-                ridge_mse_kfold.append(Kfold_crossval(x, y, z, k_i, ridge, degree))
+                ridge_mse_kfold.append(kfold_crossval(x, y, z, k_i, ridge, degree))
 

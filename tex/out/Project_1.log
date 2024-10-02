@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.9.24)  1 OCT 2024 13:48
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.9.24)  2 OCT 2024 10:30
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -760,63 +760,63 @@ Underfull \hbox (badness 1005) in paragraph at lines 183--185
  []
 
 [2] [3] [4]
-<../figs/a_Franke_surf.pdf, id=231, 578.16pt x 433.62pt>
+<../figs/a_Franke_surf.pdf, id=235, 578.16pt x 433.62pt>
 File: ../figs/a_Franke_surf.pdf Graphic file (type pdf)
 <use ../figs/a_Franke_surf.pdf>
 Package pdftex.def Info: ../figs/a_Franke_surf.pdf  used on input line 313.
 (pdftex.def)             Requested size: 246.0pt x 212.04831pt.
-<../figs/density_new_and_old.pdf, id=239, 813.0375pt x 361.35pt>
+<../figs/density_new_and_old.pdf, id=243, 813.0375pt x 361.35pt>
 File: ../figs/density_new_and_old.pdf Graphic file (type pdf)
 <use ../figs/density_new_and_old.pdf>
 Package pdftex.def Info: ../figs/density_new_and_old.pdf  used on input line 333.
 (pdftex.def)             Requested size: 504.9028pt x 224.39859pt.
-<../figs/density_surf_all.pdf, id=240, 939.51pt x 794.97pt>
+ [5 <../figs/a_Franke_surf.pdf>]
+<../figs/density_surf_all.pdf, id=267, 939.51pt x 794.97pt>
 File: ../figs/density_surf_all.pdf Graphic file (type pdf)
 <use ../figs/density_surf_all.pdf>
-Package pdftex.def Info: ../figs/density_surf_all.pdf  used on input line 441.
+Package pdftex.def Info: ../figs/density_surf_all.pdf  used on input line 444.
 (pdftex.def)             Requested size: 504.9028pt x 427.2274pt.
- [5 <../figs/a_Franke_surf.pdf>]
-<../figs/a_error_scaled_vs_raw.pdf, id=264, 722.7pt x 433.62pt>
+<../figs/a_error_scaled_vs_raw.pdf, id=268, 722.7pt x 433.62pt>
 File: ../figs/a_error_scaled_vs_raw.pdf Graphic file (type pdf)
 <use ../figs/a_error_scaled_vs_raw.pdf>
-Package pdftex.def Info: ../figs/a_error_scaled_vs_raw.pdf  used on input line 464.
+Package pdftex.def Info: ../figs/a_error_scaled_vs_raw.pdf  used on input line 467.
 (pdftex.def)             Requested size: 484.49844pt x 290.70253pt.
-<../figs/a_beta_scaled_vs_raw.pdf, id=265, 722.7pt x 433.62pt>
+<../figs/a_beta_scaled_vs_raw.pdf, id=269, 722.7pt x 433.62pt>
 File: ../figs/a_beta_scaled_vs_raw.pdf Graphic file (type pdf)
 <use ../figs/a_beta_scaled_vs_raw.pdf>
-Package pdftex.def Info: ../figs/a_beta_scaled_vs_raw.pdf  used on input line 472.
+Package pdftex.def Info: ../figs/a_beta_scaled_vs_raw.pdf  used on input line 475.
 (pdftex.def)             Requested size: 458.99689pt x 275.39857pt.
-<../figs/b_MSE_R2_vert.pdf, id=266, 867.24pt x 1156.32pt>
-File: ../figs/b_MSE_R2_vert.pdf Graphic file (type pdf)
-<use ../figs/b_MSE_R2_vert.pdf>
-Package pdftex.def Info: ../figs/b_MSE_R2_vert.pdf  used on input line 480.
-(pdftex.def)             Requested size: 458.99689pt x 611.99977pt.
-<../figs/c_MSE_R2_vert.pdf, id=267, 867.24pt x 1156.32pt>
-File: ../figs/c_MSE_R2_vert.pdf Graphic file (type pdf)
-<use ../figs/c_MSE_R2_vert.pdf>
-Package pdftex.def Info: ../figs/c_MSE_R2_vert.pdf  used on input line 488.
-(pdftex.def)             Requested size: 458.99689pt x 611.99977pt.
- (out/Project_1.bbl) [6 <../figs/density_new_and_old.pdf>] [7 <../figs/density_surf_all.pdf>] [8 <../figs/a_error_scaled_vs_raw.pdf> <../figs/a_beta_scaled_vs_raw.pdf>] [9 <../figs/b_MSE_R2_vert.pdf>] [10 <../figs/c_MSE_R2_vert.pdf>] [11] [12] (out/Project_1.aux)
+<../figs/b_MSE_R2.pdf, id=270, 867.24pt x 722.7pt>
+File: ../figs/b_MSE_R2.pdf Graphic file (type pdf)
+<use ../figs/b_MSE_R2.pdf>
+Package pdftex.def Info: ../figs/b_MSE_R2.pdf  used on input line 483.
+(pdftex.def)             Requested size: 510.0pt x 424.99983pt.
+<../figs/c_MSE_R2.pdf, id=271, 867.24pt x 722.7pt>
+File: ../figs/c_MSE_R2.pdf Graphic file (type pdf)
+<use ../figs/c_MSE_R2.pdf>
+Package pdftex.def Info: ../figs/c_MSE_R2.pdf  used on input line 491.
+(pdftex.def)             Requested size: 510.0pt x 424.99983pt.
+ (out/Project_1.bbl) [6 <../figs/density_new_and_old.pdf>] [7 <../figs/density_surf_all.pdf>] [8 <../figs/a_error_scaled_vs_raw.pdf> <../figs/a_beta_scaled_vs_raw.pdf>] [9 <../figs/b_MSE_R2.pdf>] [10 <../figs/c_MSE_R2.pdf>] [11] [12] (out/Project_1.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
 Package rerunfilecheck Info: File `Project_1.out' has not changed.
-(rerunfilecheck)             Checksum: 23594C96C8F85C987D7B0F652A6F63D6;5336.
+(rerunfilecheck)             Checksum: 504C2DBF31F51E6C22FE235F1783AAE5;5532.
  ) 
 Here is how much of TeX's memory you used:
- 28492 strings out of 474116
- 515149 string characters out of 5743682
- 1965187 words of memory out of 5000000
- 50332 multiletter control sequences out of 15000+600000
+ 28494 strings out of 474116
+ 515103 string characters out of 5743682
+ 1975187 words of memory out of 5000000
+ 50333 multiletter control sequences out of 15000+600000
  569029 words of font info for 76 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  84i,19n,93p,1429b,533s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx6.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on out/Project_1.pdf (12 pages, 7934381 bytes).
+</usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx6.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on out/Project_1.pdf (12 pages, 7974935 bytes).
 PDF statistics:
- 566 PDF objects out of 1000 (max. 8388607)
- 453 compressed objects within 5 object streams
- 89 named destinations out of 1000 (max. 500000)
- 366 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 586 PDF objects out of 1000 (max. 8388607)
+ 468 compressed objects within 5 object streams
+ 90 named destinations out of 1000 (max. 500000)
+ 374 words of extra memory for PDF output out of 10000 (max. 10000000)
 
