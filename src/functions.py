@@ -221,6 +221,54 @@ def Lasso(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
 
     return MSE_score, R2_score, β
 
+def Bootstrap(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, n_bootstraps: int, scale: bool = True, test_size: float = 0.2, seed: int = None, intercept: bool = False) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """
+    Performs bootstrapping.
+
+    Parameters:
+    x (np.ndarray): The independent variable(s).
+    y (np.ndarray): The independent variable(s).
+    z (np.ndarray): The dependent variable.
+    degree (int): The degree of the polynomial features.
+    n_bootstraps (int): The number of bootstraps.
+    scale (bool, optional): Whether to scale the data. Default is True.
+    test_size (float, optional): The proportion of the dataset to include in the test split. Default is 0.2.
+    seed (int, optional): The random seed for reproducibility. Default is None.   
+    intercept (bool, optional): Whether to include an intercept term. Default is False.
+
+    Returns:
+    tuple: A tuple containing the Mean Squared Error (MSE) score, bias, and variance
+    """
+
+    X = create_X(x, y, degree)
+    X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=test_size, random_state=seed)
+    
+    if scale:
+        scaler_X = StandardScaler().fit(X_train)
+        X_train = scaler_X.transform(X_train)
+        X_test = scaler_X.transform(X_test)
+
+        scaler_y = StandardScaler().fit(z_train)
+        z_train = scaler_y.transform(z_train)
+        z_test = scaler_y.transform(z_test)
+
+    z_pred = np.empty((z_test.shape[0], n_bootstraps))
+
+    for j in range(n_bootstraps):
+        X_, z_ = resample(X_train, z_train)
+        
+        β = np.linalg.pinv(X_.T @ X_) @ X_.T @ z_
+        if not intercept:
+            β[0] = 0
+
+        z_pred[:, j] = (X_test @ β).ravel()
+
+    error = np.mean(np.mean((z_test - z_pred)**2, axis=1, keepdims=True))  
+    bias = np.mean((z_test - np.mean(z_pred, axis=1, keepdims=True))**2)            
+    variance = np.mean(np.var(z_pred, axis=1, keepdims=True))  
+
+    return error, bias, variance
+
 def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model: sklearn.linear_model.LinearRegression | sklearn.linear_model.Ridge | sklearn.linear_model.Lasso, degree: int, scale: bool = True) -> float:
     """
     Performs k-fold cross-validation.
@@ -245,8 +293,8 @@ def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model: s
     if scale:
         scaler_X = StandardScaler().fit(X)
         scaler_z = StandardScaler().fit(z)
-        X = scaler_X.fit(X)
-        z = scaler_z.fit(z)
+        X = scaler_X.transform(X)
+        z = scaler_z.transform(z)
 
     estimated_mse_folds = cross_val_score(model, X, z, scoring='neg_mean_squared_error', cv=kfold)
     estimated_mse = np.mean(-estimated_mse_folds)
@@ -257,15 +305,15 @@ if __name__ == "__main__":
       # seed = np.random.randint(1,1000)
 
     """Initial setup"""
-    seed = 42
+    seed = 43
     np.random.seed(seed)
-    N = 100
+    N = 50
 
     x = np.arange(0, 1, 1/N)
     y = np.arange(0, 1, 1/N)
     X, Y = np.meshgrid(x, y)
 
-    z = FrankeFunction(X, Y)
+    z = FrankeFunction(X, Y).reshape(-1,1)
 
     """"OLS example"""
     degrees = np.arange(1, 6)
@@ -274,9 +322,10 @@ if __name__ == "__main__":
     R2_list = []
     β_list = []
 
-    for degree in degrees:
+    for i, degree in enumerate(degrees):
+        β_list.append([])
         MSE_i, R2_i, β_i = OLS(x, y, z, degree, seed=seed)
-        MSE_list.append(MSE_i) ; R2_list.append(R2_i) ; β_list.append(β_i)
+        MSE_list.append(MSE_i) ; R2_list.append(R2_i) ; β_list[i].append(β_i)
 
 
     """Ridge example"""
@@ -287,25 +336,80 @@ if __name__ == "__main__":
     R2_list = []
     β_list = []
 
-    for degree in degrees:
+    for i, degree in enumerate(degrees):
+        MSE_list.append([]) ; R2_list.append([]) ; β_list.append([])
         for lmb in lambdas:
             MSE_i, R2_i, β_i = Ridge(x, y, z, degree, lmb, seed=seed)
-            MSE_list.append(MSE_i) ; R2_list.append(R2_i) ; β_list.append(β_i)
+            MSE_list[i].append(MSE_i) ; R2_list[i].append(R2_i) ; β_list[i].append(β_i)
       
 
     """Lasso example"""
-    degrees = np.arange(1, 6)
-    lambdas = np.logspace(-4, 4, 6)
+    degrees = np.arange(1, 7)
+    lambdas = np.logspace(-7, 2, 30)
 
     MSE_list = []
     R2_list = []
     β_list = []
 
-    for degree in degrees:
+    for i, degree in enumerate(degrees):
+        MSE_list.append([]) ; R2_list.append([]) ; β_list.append([])
         for lmb in lambdas:
             MSE_i, R2_i, β_i = Lasso(x, y, z, degree, lmb, seed=seed)
-            MSE_list.append(MSE_i) ; R2_list.append(R2_i) ; β_list.append(β_i)
+            MSE_list[i].append(MSE_i) ; R2_list[i].append(R2_i) ; β_list[i].append(β_i)
+
+    fig, axs = plt.subplots(3, 2, figsize = (12, 10), constrained_layout = True)
+    idx = [[0, 0], [0, 1], [1, 0], [1, 1], [2, 0], [2, 1]]
+    
+    for i in range(len(degrees)):   
+        ax_1 = axs[idx[i][0], idx[i][1]]
+        ax_2 = ax_1.twinx()
+        ax_1.plot(lambdas, MSE_list[i],  'r--o')
+        ax_2.plot(lambdas, R2_list[i],  'b--o')
+
+        ax_1.set_xscale("log")
+        ax_1.set_xscale("log")
+
+        ax_1.set_title(f'Polynomial degree {degrees[i]}')
+        ax_1.yaxis.set_major_formatter(FormatStrFormatter("%.2e"))
+        ax_1.yaxis.set_major_formatter(FormatStrFormatter("%.1e"))
+
+        ax_1.set_ylabel('MSE')
+        ax_2.set_ylabel(r'$R^2$')
+
+        ax_1.tick_params("y", colors = "r")
+        ax_2.tick_params("y", colors = "b")
+
+        if i < len(degrees) - 2:
+            ax_1.set_xticks([])
+            ax_1.set_xticks([])
+
+    plt.show()
+
+    """Bootystrap example"""
+
+    degrees = range(1, 52, 2)
+
+    n_bootstraps = 10
+
+    error = np.zeros((len(degrees), 1))
+    bias = np.zeros((len(degrees), 1))
+    variance = np.zeros((len(degrees), 1))
+
+    for i, degree in enumerate(degrees):
+        error[i], bias[i], variance[i] = Bootstrap(x, y, z, degree, n_bootstraps, seed=seed)
       
+    plt.figure(figsize = (10, 6))
+    plt.plot(degrees, error, label = "MSE on test set", linestyle = "--", marker = "o", color = "#ff8d00")
+    plt.plot(degrees, bias, label = "Bias", linestyle = "--", marker = "o", color = "slateblue")
+    plt.plot(degrees, variance, label = "Variance", linestyle = "--", marker = "o", color = "#ff77bc")
+    plt.legend(loc = 2)
+    plt.xticks(degrees[::2])
+    plt.xlabel("Polynomial degree")
+    plt.ylabel("Error")
+    plt.tight_layout()
+    plt.show()
+
+
     """Kfold example"""
     degrees = np.arange(1, 6) 
     k = [5, 10]
