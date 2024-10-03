@@ -1,22 +1,22 @@
 # Fdb version 4
-["bibtex out/Project_1"] 1727857821.38628 "out/Project_1.aux" "out/Project_1.bbl" "out/Project_1" 1727857835.11941 0
+["bibtex out/Project_1"] 1727903648.82615 "out/Project_1.aux" "out/Project_1.bbl" "out/Project_1" 1727903730.65573 0
   "./references.bib" 1727723374.78999 3495 71052ff99add8db7c3e0a5b13458ac05 ""
   "/usr/local/texlive/2024/texmf-dist/bibtex/bst/revtex4-1/apsrev4-1.bst" 1602107945 71515 e333383ed72bf24aa6de7e8cabb55f84 ""
-  "out/Project_1.aux" 1727857834.55242 11894 1531955bf468f1243eac0ca89a69bfc7 "pdflatex"
-  "out/Project_1Notes.bib" 1727857834.5548 103 48ad29797468f16e2853d8797278d7af "pdflatex"
+  "out/Project_1.aux" 1727903730.07566 11894 b93912b741835b5b08c226b1e9cadb8d "pdflatex"
+  "out/Project_1Notes.bib" 1727903730.079 103 48ad29797468f16e2853d8797278d7af "pdflatex"
   (generated)
   "out/Project_1.bbl"
   "out/Project_1.blg"
   (rewritten before read)
-["pdflatex"] 1727857832.93221 "/Users/paljettrosa/Documents/GitHub/FYS-STK4155-Projects/tex/Project_1.tex" "out/Project_1.pdf" "Project_1" 1727857835.11972 0
-  "../figs/a_Franke_surf.pdf" 1727832172.69566 3768512 8beceead27862c3b58efc11617648d75 ""
-  "../figs/a_beta_scaled_vs_raw.pdf" 1727838937.85328 135725 1d0e6ee3f3e75a85dfa93d95099fcafc ""
-  "../figs/a_error_scaled_vs_raw.pdf" 1727838929.09155 135118 2b1614b1ac6071950730501a19f9efad ""
-  "../figs/b_MSE_R2.pdf" 1727838967.91578 207362 8922f475550e3d61b5b55e9fff5f9163 ""
-  "../figs/c_MSE_R2.pdf" 1727838997.22727 236413 7fa2f67f3ead08e8dc8739abcd5925dd ""
+["pdflatex"] 1727903728.32071 "/Users/paljettrosa/Documents/GitHub/FYS-STK4155-Projects/tex/Project_1.tex" "out/Project_1.pdf" "Project_1" 1727903730.65604 0
+  "../figs/a_Franke_surf.pdf" 1727892651.15337 3768512 e74f381be1156d9c1e633636d03892c2 ""
+  "../figs/a_beta_scaled_vs_raw.pdf" 1727892653.09176 136874 6bf3dc32985ab84b3d870b387cac2bb0 ""
+  "../figs/a_error_scaled_vs_raw.pdf" 1727892652.64206 135181 a58ee76183c7ddf5840e91163b509faf ""
+  "../figs/b_MSE_R2.pdf" 1727892660.11924 206886 be09fd5ff2e5a5173853d03547cc2c1b ""
+  "../figs/c_MSE_R2.pdf" 1727892669.81379 205873 9ab69d35cb669271093c7798f19d7926 ""
   "../figs/density_new_and_old.pdf" 1727832172.70719 320642 2c39ff511306e5d97708f13934ae8cbb ""
   "../figs/density_surf_all.pdf" 1727697539.36662 3805013 5cbf8bfebaf227f6530d06a7adc41580 ""
-  "/Users/paljettrosa/Documents/GitHub/FYS-STK4155-Projects/tex/Project_1.tex" 1727857832.28429 66148 4319907772af32411f08fa850b9f42ca ""
+  "/Users/paljettrosa/Documents/GitHub/FYS-STK4155-Projects/tex/Project_1.tex" 1727903727.54141 66429 be0dd151d49e328dd82f2b9e7589da1c ""
   "/usr/local/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1246382020 1120 1e8878807317373affa7f7bba4cf2f6a ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1246382020 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
@@ -221,10 +221,10 @@
   "/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1727214568.276 5467645 128b85b7cde5f5edc5cb7f1dd7ff8736 ""
   "/usr/local/texlive/2024/texmf-var/web2c/pdftex/pdflatex.fmt" 1727209366 8221429 db52235156dd1f5fc2399dadb68c726f ""
   "/usr/local/texlive/2024/texmf.cnf" 1710266656 577 e590dabc9e28c5b61546e15f63eebcdf ""
-  "Project_1.tex" 1727857832.28429 66148 4319907772af32411f08fa850b9f42ca ""
-  "out/Project_1.aux" 1727857834.55242 11894 1531955bf468f1243eac0ca89a69bfc7 "pdflatex"
-  "out/Project_1.bbl" 1727857821.53525 2747 5401c673a77199b83d97aaffee9bd18f "bibtex out/Project_1"
-  "out/Project_1.out" 1727857834.55403 5532 504c2dbf31f51e6c22fe235f1783aae5 "pdflatex"
+  "Project_1.tex" 1727903727.54141 66429 be0dd151d49e328dd82f2b9e7589da1c ""
+  "out/Project_1.aux" 1727903730.07566 11894 b93912b741835b5b08c226b1e9cadb8d "pdflatex"
+  "out/Project_1.bbl" 1727903649.06553 2747 5401c673a77199b83d97aaffee9bd18f "bibtex out/Project_1"
+  "out/Project_1.out" 1727903730.07729 5532 504c2dbf31f51e6c22fe235f1783aae5 "pdflatex"
   (generated)
   "out/Project_1.aux"
   "out/Project_1.log"
