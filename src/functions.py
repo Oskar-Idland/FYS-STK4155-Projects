@@ -70,7 +70,7 @@ def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
         y = np.ravel(y)
 
     N_x = len(x); N_y = len(y)
-    l = int(3 + np.sum(range(3, n+2)))  # Number of features
+    l = int((n+1)*(n+2)/2)
     X = np.ones((int(N_x*N_y), l))
     
     xx, yy = np.meshgrid(x, y)          # Make a meshgrid to get all possible combinations of x and y values
@@ -86,7 +86,7 @@ def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
     return X
 
 
-def OLS(x: np.ndarray, y: np.ndarray, z: np.ndarray[np.ndarray, np.ndarray], degree: int, scale: bool =True, test_size: float =0.2, seed: int =None, intercept: bool =False) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+def OLS(x: np.ndarray, y: np.ndarray, z: np.ndarray[np.ndarray, np.ndarray], degree: int, scale: bool = True, test_size: float =0.2, seed: int =None, intercept: bool = False, return_beta: bool = False, return_X: bool = False, return_scalers: bool = False, return_train_test: bool = False) -> tuple:
     '''
     Performs Ordinary Least Squares (OLS) regression.
 
@@ -99,9 +99,13 @@ def OLS(x: np.ndarray, y: np.ndarray, z: np.ndarray[np.ndarray, np.ndarray], deg
     test_size (float, optional): The proportion of the dataset to include in the test split. Default is 0.2.
     seed (int, optional): The random seed for reproducibility. Default is None.
     intercept (bool, optional): Whether to include an intercept term. Default is False.
+    return beta (bool, optional): Whether to return the features β. Default is False.
+    return_X (bool, optional): Whether to return X. Default is False.
+    return_scalers (bool, optional): Whether to return the scalers used to scale the data. Default is False.
+    return_train_test (bool, optional): Whether to return X_train, X_test, z_train and z_test. Default is False.
 
     Returns:
-    tuple: A tuple containing the Mean Squared Error (MSE) score, R-squared (R2) score, and the beta values (coefficients).
+    tuple: A tuple containing the Mean Squared Error (MSE) score and the R-squared (R2) score, as well as the beta values (coefficients), the design matrix X, the scalers for X and z, and/or the training and test sets for X and z, depending on the passed arguments.
     '''
     X = create_X(x, y, degree)
     X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=test_size, random_state=seed)
@@ -120,16 +124,24 @@ def OLS(x: np.ndarray, y: np.ndarray, z: np.ndarray[np.ndarray, np.ndarray], deg
     if not intercept:
         β[0] = 0
     
-    z_tilde = X_train @ β 
     z_pred = X_test @ β
     
-    MSE_score = MSE(z_train, z_tilde)
+    MSE_score = MSE(z_test, z_pred)
     R2_score = R2(z_test, z_pred)
 
-    return MSE_score, R2_score, β
+    quantities = [MSE_score, R2_score]
+    if return_beta:
+        quantities.append(β)
+    if return_X:
+        quantities.append(X)
+    if return_scalers:
+        quantities.extend([scaler_X, scaler_z])
+    if return_train_test:
+        quantities.extend([X_train, X_test, z_train, z_test])
+    return tuple(quantities)
 
 
-def Ridge(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, scale: bool = True, test_size: float = 0.2, seed: int = None, intercept: bool = False) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+def Ridge(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, scale: bool = True, test_size: float = 0.2, seed: int = None, intercept: bool = False, return_beta: bool = False, return_X: bool = False, return_scalers: bool = False, return_train_test: bool = False) -> tuple:
     """
     Performs Ridge regression.
 
@@ -143,9 +155,13 @@ def Ridge(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
     test_size (float, optional): The proportion of the dataset to include in the test split. Default is 0.2.
     seed (int, optional): The random seed for reproducibility. Default is None.
     intercept (bool, optional): Whether to include an intercept term. Default is False.
+    return beta (bool, optional): Whether to return the features β. Default is False.
+    return_X (bool, optional): Whether to return X. Default is False.
+    return_scalers (bool, optional): Whether to return the scalers used to scale the data. Default is False.
+    return_train_test (bool, optional): Whether to return X_train, X_test, z_train and z_test. Default is False.
 
     Returns:
-    tuple: A tuple containing the Mean Squared Error (MSE) score, R-squared (R2) score, and the beta values (coefficients).
+    tuple: A tuple containing the Mean Squared Error (MSE) score and the R-squared (R2) score, as well as the beta values (coefficients), the design matrix X, the scalers for X and z, and/or the training and test sets for X and z, depending on the passed arguments.
     """
 
     X = create_X(x, y, degree)
@@ -165,16 +181,24 @@ def Ridge(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
     if not intercept:
         β[0] = 0
 
-    z_tilde = X_train @ β
     z_pred = X_test @ β
 
-    MSE_score = MSE(z_train, z_tilde)
+    MSE_score = MSE(z_test, z_pred)
     R2_score = R2(z_test, z_pred)
 
-    return MSE_score, R2_score, β
+    quantities = [MSE_score, R2_score]
+    if return_beta:
+        quantities.append(β)
+    if return_X:
+        quantities.append(X)
+    if return_scalers:
+        quantities.extend([scaler_X, scaler_z])
+    if return_train_test:
+        quantities.extend([X_train, X_test, z_train, z_test])
+    return tuple(quantities)
 
 
-def Lasso(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, scale: bool = True, test_size: float = 0.2, seed: int = None, intercept: bool = False) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+def Lasso(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, scale: bool = True, test_size: float = 0.2, seed: int = None, intercept: bool = False, return_beta: bool = False, return_X: bool = False, return_scalers: bool = False, return_train_test: bool = False) -> tuple:
     """
     Performs Lasso regression.
 
@@ -188,9 +212,13 @@ def Lasso(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
     test_size (float, optional): The proportion of the dataset to include in the test split. Default is 0.2.
     seed (int, optional): The random seed for reproducibility. Default is None.
     intercept (bool, optional): Whether to include an intercept term. Default is False.
+    return beta (bool, optional): Whether to return the features β. Default is False.
+    return_X (bool, optional): Whether to return X. Default is False.
+    return_scalers (bool, optional): Whether to return the scalers used to scale the data. Default is False.
+    return_train_test (bool, optional): Whether to return X_train, X_test, z_train and z_test. Default is False.
 
     Returns:
-    tuple: A tuple containing the Mean Squared Error (MSE) score, R-squared (R2) score, and the beta values (coefficients).
+    tuple: A tuple containing the Mean Squared Error (MSE) score and the R-squared (R2) score, as well as the beta values (coefficients), the design matrix X, the scalers for X and z, and/or the training and test sets for X and z, depending on the passed arguments.
     """
 
     X = create_X(x, y, degree)
@@ -213,15 +241,24 @@ def Lasso(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
     if intercept:
       β = [lasso.intercept_, *lasso.coef_]
 
-    z_tilde = lasso.predict(X_train)
     z_pred = lasso.predict(X_test)
 
-    MSE_score = MSE(z_train, z_tilde)
+    MSE_score = MSE(z_test, z_pred)
     R2_score = R2(z_test, z_pred)
 
-    return MSE_score, R2_score, β
+    quantities = [MSE_score, R2_score]
+    if return_beta:
+        quantities.append(β)
+    if return_X:
+        quantities.append(X)
+    if return_scalers:
+        quantities.extend([scaler_X, scaler_z])
+    if return_train_test:
+        quantities.extend([X_train, X_test, z_train, z_test])
+    return tuple(quantities)
 
-def Bootstrap(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, n_bootstraps: int, scale: bool = True, test_size: float = 0.2, seed: int = None, intercept: bool = False) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+
+def Bootstrap(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, n_bootstraps: int, scale: bool = True, test_size: float = 0.2, seed: int = None, intercept: bool = False) -> tuple[float, float, float]:
     """
     Performs bootstrapping.
 
@@ -269,7 +306,8 @@ def Bootstrap(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, n_bootst
 
     return error, bias, variance
 
-def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model: sklearn.linear_model.LinearRegression | sklearn.linear_model.Ridge | sklearn.linear_model.Lasso, degree: int, scale: bool = True) -> float:
+
+def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model, degree: int, scale: bool = True) -> float:
     """
     Performs k-fold cross-validation.
 
@@ -289,7 +327,6 @@ def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model: s
 
     X = create_X(x, y, degree)
 
-    #TODO mention change
     if scale:
         scaler_X = StandardScaler().fit(X)
         scaler_z = StandardScaler().fit(z)
@@ -300,6 +337,7 @@ def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model: s
     estimated_mse = np.mean(-estimated_mse_folds)
 
     return estimated_mse
+
 
 if __name__ == "__main__":
       # seed = np.random.randint(1,1000)
@@ -324,7 +362,7 @@ if __name__ == "__main__":
 
     for i, degree in enumerate(degrees):
         β_list.append([])
-        MSE_i, R2_i, β_i = OLS(x, y, z, degree, seed=seed)
+        MSE_i, R2_i, β_i = OLS(x, y, z, degree, seed=seed, return_beta=True)
         MSE_list.append(MSE_i) ; R2_list.append(R2_i) ; β_list[i].append(β_i)
 
 
@@ -334,13 +372,12 @@ if __name__ == "__main__":
 
     MSE_list = []
     R2_list = []
-    β_list = []
 
     for i, degree in enumerate(degrees):
-        MSE_list.append([]) ; R2_list.append([]) ; β_list.append([])
+        MSE_list.append([]) ; R2_list.append([])
         for lmb in lambdas:
-            MSE_i, R2_i, β_i = Ridge(x, y, z, degree, lmb, seed=seed)
-            MSE_list[i].append(MSE_i) ; R2_list[i].append(R2_i) ; β_list[i].append(β_i)
+            MSE_i, R2_i = Ridge(x, y, z, degree, lmb, seed=seed)
+            MSE_list[i].append(MSE_i) ; R2_list[i].append(R2_i)
       
 
     """Lasso example"""
@@ -349,13 +386,12 @@ if __name__ == "__main__":
 
     MSE_list = []
     R2_list = []
-    β_list = []
 
     for i, degree in enumerate(degrees):
-        MSE_list.append([]) ; R2_list.append([]) ; β_list.append([])
+        MSE_list.append([]) ; R2_list.append([])
         for lmb in lambdas:
-            MSE_i, R2_i, β_i = Lasso(x, y, z, degree, lmb, seed=seed)
-            MSE_list[i].append(MSE_i) ; R2_list[i].append(R2_i) ; β_list[i].append(β_i)
+            MSE_i, R2_i = Lasso(x, y, z, degree, lmb, seed=seed)
+            MSE_list[i].append(MSE_i) ; R2_list[i].append(R2_i)
 
     fig, axs = plt.subplots(3, 2, figsize = (12, 10), constrained_layout = True)
     idx = [[0, 0], [0, 1], [1, 0], [1, 1], [2, 0], [2, 1]]
