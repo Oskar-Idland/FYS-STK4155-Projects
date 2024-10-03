@@ -70,7 +70,7 @@ def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
         y = np.ravel(y)
 
     N_x = len(x); N_y = len(y)
-    l = int(3 + np.sum(range(3, n+2)))  # Number of features
+    l = int((n+1)*(n+2)/2)
     X = np.ones((int(N_x*N_y), l))
     
     xx, yy = np.meshgrid(x, y)          # Make a meshgrid to get all possible combinations of x and y values
@@ -307,7 +307,7 @@ def Bootstrap(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, n_bootst
     return error, bias, variance
 
 
-def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model: sklearn.linear_model.LinearRegression | sklearn.linear_model.Ridge | sklearn.linear_model.Lasso, degree: int, scale: bool = True) -> float:
+def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model, degree: int, scale: bool = True) -> float:
     """
     Performs k-fold cross-validation.
 
