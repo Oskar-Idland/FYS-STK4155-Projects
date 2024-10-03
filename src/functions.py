@@ -46,8 +46,8 @@ def R2(y: np.ndarray, y_pred: np.ndarray) -> float:
     Calculates the R2 score of the model.
 
     Parameters:
-    y_data (np.ndarray): The actual data values.
-    y_model (np.ndarray): The predicted data values from the model.
+    y (np.ndarray): The actual data values.
+    y_pred (np.ndarray): The predicted data values from the model.
 
     Returns:
     float: The R2 score.
@@ -90,7 +90,7 @@ def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
     return X
 
 
-def OLS(x: np.ndarray, y: np.ndarray, z: np.ndarray[np.ndarray, np.ndarray], degree: int, scale: bool = True, test_size: float =0.2, seed: int =None, intercept: bool = False, return_beta: bool = False, return_X: bool = False, return_scalers: bool = False, return_train_test: bool = False) -> tuple:
+def OLS(x: np.ndarray, y: np.ndarray, z: np.ndarray[np.ndarray, np.ndarray], degree: int, scale: bool = True, test_size: float =0.2, seed: int =None, return_beta: bool = False, return_X: bool = False, return_scalers: bool = False, return_train_test: bool = False) -> tuple:
     '''
     Performs Ordinary Least Squares (OLS) regression.
 
@@ -102,7 +102,6 @@ def OLS(x: np.ndarray, y: np.ndarray, z: np.ndarray[np.ndarray, np.ndarray], deg
     scale (bool, optional): Whether to scale the data. Default is True.
     test_size (float, optional): The proportion of the dataset to include in the test split. Default is 0.2.
     seed (int, optional): The random seed for reproducibility. Default is None.
-    intercept (bool, optional): Whether to include an intercept term. Default is False.
     return beta (bool, optional): Whether to return the features β. Default is False.
     return_X (bool, optional): Whether to return X. Default is False.
     return_scalers (bool, optional): Whether to return the scalers used to scale the data. Default is False.
@@ -124,9 +123,6 @@ def OLS(x: np.ndarray, y: np.ndarray, z: np.ndarray[np.ndarray, np.ndarray], deg
         z_test= scaler_z.transform(z_test)
 
     β = np.linalg.pinv(X_train.T @ X_train) @ X_train.T @ z_train
-
-    if not intercept:
-        β[0] = 0
     
     z_pred = X_test @ β
     
@@ -145,7 +141,7 @@ def OLS(x: np.ndarray, y: np.ndarray, z: np.ndarray[np.ndarray, np.ndarray], deg
     return tuple(quantities)
 
 
-def Ridge(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, scale: bool = True, test_size: float = 0.2, seed: int = None, intercept: bool = False, return_beta: bool = False, return_X: bool = False, return_scalers: bool = False, return_train_test: bool = False) -> tuple:
+def Ridge(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, scale: bool = True, test_size: float = 0.2, seed: int = None, return_beta: bool = False, return_X: bool = False, return_scalers: bool = False, return_train_test: bool = False) -> tuple:
     """
     Performs Ridge regression.
 
@@ -158,7 +154,6 @@ def Ridge(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
     scale (bool, optional): Whether to scale the data. Default is True.
     test_size (float, optional): The proportion of the dataset to include in the test split. Default is 0.2.
     seed (int, optional): The random seed for reproducibility. Default is None.
-    intercept (bool, optional): Whether to include an intercept term. Default is False.
     return beta (bool, optional): Whether to return the features β. Default is False.
     return_X (bool, optional): Whether to return X. Default is False.
     return_scalers (bool, optional): Whether to return the scalers used to scale the data. Default is False.
@@ -181,9 +176,6 @@ def Ridge(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
         z_test= scaler_z.transform(z_test)
 
     β = np.linalg.pinv(X_train.T @ X_train + λ*np.eye(X_train.shape[1])) @ X_train.T @ z_train
-
-    if not intercept:
-        β[0] = 0
 
     z_pred = X_test @ β
 
@@ -225,7 +217,7 @@ def Lasso(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
     tuple: A tuple containing the Mean Squared Error (MSE) score and the R-squared (R2) score, as well as the beta values (coefficients), the design matrix X, the scalers for X and z, and/or the training and test sets for X and z, depending on the passed arguments.
     """
 
-    X = create_X(x, y, degree)
+    X = create_X(x, y, degree)  
     X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=test_size, random_state=seed)
 
     if scale: # Scaling the data
@@ -241,14 +233,13 @@ def Lasso(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
     lasso.fit(X_train, z_train)
 
     β = lasso.coef_
-
     if intercept:
-      β = [lasso.intercept_, *lasso.coef_]
+        β[0] = lasso.intercept_[0]
 
     z_pred = lasso.predict(X_test)
 
-    MSE_score = MSE(z_test, z_pred)
-    R2_score = R2(z_test, z_pred)
+    MSE_score = MSE(z_test.flat, z_pred)
+    R2_score = R2(z_test.flat, z_pred)
 
     quantities = [MSE_score, R2_score]
     if return_beta:
@@ -262,7 +253,7 @@ def Lasso(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
     return tuple(quantities)
 
 
-def Bootstrap(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, n_bootstraps: int, scale: bool = True, test_size: float = 0.2, seed: int = None, intercept: bool = False) -> tuple[float, float, float]:
+def Bootstrap(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, n_bootstraps: int, scale: bool = True, test_size: float = 0.2, seed: int = None) -> tuple[float, float, float]:
     """
     Performs bootstrapping.
 
@@ -275,7 +266,6 @@ def Bootstrap(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, n_bootst
     scale (bool, optional): Whether to scale the data. Default is True.
     test_size (float, optional): The proportion of the dataset to include in the test split. Default is 0.2.
     seed (int, optional): The random seed for reproducibility. Default is None.   
-    intercept (bool, optional): Whether to include an intercept term. Default is False.
 
     Returns:
     tuple: A tuple containing the Mean Squared Error (MSE) score, bias, and variance
@@ -299,8 +289,6 @@ def Bootstrap(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, n_bootst
         X_, z_ = resample(X_train, z_train)
         
         β = np.linalg.pinv(X_.T @ X_) @ X_.T @ z_
-        if not intercept:
-            β[0] = 0
 
         z_pred[:, j] = (X_test @ β).ravel()
 
