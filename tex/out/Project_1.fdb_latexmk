@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex out/Project_1"] 1727988022 "out/Project_1.aux" "out/Project_1.bbl" "out/Project_1" 1727988033 0
+["bibtex out/Project_1"] 1727988160 "out/Project_1.aux" "out/Project_1.bbl" "out/Project_1" 1727988161 2
   "./references.bib" 1727801853 3597 71052ff99add8db7c3e0a5b13458ac05 ""
   "c:/texlive/2023/texmf-dist/bibtex/bst/revtex4-1/apsrev4-1.bst" 1680269977 71515 e333383ed72bf24aa6de7e8cabb55f84 ""
-  "out/Project_1.aux" 1727988031 12396 7ee6eb7ce11f4e06f250de47eba81bee "pdflatex"
-  "out/Project_1Notes.bib" 1727988031 103 48ad29797468f16e2853d8797278d7af "pdflatex"
+  "out/Project_1.aux" 1727988160 34 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "out/Project_1Notes.bib" 1727988157 103 48ad29797468f16e2853d8797278d7af "pdflatex"
   (generated)
   "out/Project_1.bbl"
   "out/Project_1.blg"
   (rewritten before read)
-["pdflatex"] 1727988028 "c:/Users/Erik/Documents/ELITE - Master/H24/FYS-STK4155/FYS-STK4155-Projects/tex/Project_1.tex" "out/Project_1.pdf" "Project_1" 1727988033 2
+["pdflatex"] 1727988155 "c:/Users/Erik/Documents/ELITE - Master/H24/FYS-STK4155/FYS-STK4155-Projects/tex/Project_1.tex" "out/Project_1.pdf" "Project_1" 1727988159 2
   "../figs/a_Franke_surf.pdf" 1727987895 3768512 2c0cb137795509f1c110f686220f8364 ""
   "../figs/a_beta_scaled_vs_raw.pdf" 1727987895 136874 2c7f3d0c16b937c25f81e7a844ea458f ""
   "../figs/a_error_scaled_vs_raw.pdf" 1727987895 135181 b6c9eb1c5518101d961a9aa34e3555a1 ""
@@ -16,9 +16,8 @@
   "../figs/c_MSE_R2.pdf" 1727987895 205873 5272aa51f3b83e70a457904fd9b61155 ""
   "../figs/density_new_and_old.pdf" 0 -1 0 ""
   "../figs/density_surf_all.pdf" 0 -1 0 ""
-  "Project_1.aux" 0 -1 0 ""
-  "Project_1.tex" 1727988021 67215 22802c7a5a6a42853bc60a41bf064116 ""
-  "c:/Users/Erik/Documents/ELITE - Master/H24/FYS-STK4155/FYS-STK4155-Projects/tex/Project_1.tex" 1727988021 67215 22802c7a5a6a42853bc60a41bf064116 ""
+  "Project_1.tex" 1727988153 69948 6be1985f117468c365dec5e2c4c9a14a ""
+  "c:/Users/Erik/Documents/ELITE - Master/H24/FYS-STK4155/FYS-STK4155-Projects/tex/Project_1.tex" 1727988153 69948 6be1985f117468c365dec5e2c4c9a14a ""
   "c:/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map" 1680267919 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1680266189 1120 1e8878807317373affa7f7bba4cf2f6a ""
   "c:/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1680266189 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
@@ -227,9 +226,9 @@
   "c:/texlive/2023/texmf.cnf" 1680271078 713 e69b156964470283e0530f5060668171 ""
   "out/../figs/density_new_and_old.pdf" 0 -1 0 ""
   "out/../figs/density_surf_all.pdf" 0 -1 0 ""
-  "out/Project_1.aux" 1727988031 12396 7ee6eb7ce11f4e06f250de47eba81bee "pdflatex"
-  "out/Project_1.bbl" 1727988022 2747 5401c673a77199b83d97aaffee9bd18f "bibtex out/Project_1"
-  "out/Project_1.out" 1727988031 5532 89851e3348bc3606e2d1dae47c00d639 "pdflatex"
+  "out/Project_1.aux" 1727988160 34 3985256e7290058c681f74d7a3565a19 "pdflatex"
+  "out/Project_1.bbl" 1727988161 0 d41d8cd98f00b204e9800998ecf8427e "bibtex out/Project_1"
+  "out/Project_1.out" 0 -1 0 "pdflatex"
   (generated)
   "out/Project_1.aux"
   "out/Project_1.log"
