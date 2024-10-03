@@ -25,7 +25,7 @@ def FrankeFunction(x,y):
     term4 = -0.2*np.exp(-(9*x-4)**2 - (9*y-7)**2)
     return term1 + term2 + term3 + term4
 
-def MSE(y: np.ndarray, y_tilde: np.ndarray) -> float:
+def MSE(y: np.ndarray, y_pred: np.ndarray) -> float:
     """
     Calculates the Mean Squared Error (MSE) between the true and predicted values.
 
@@ -36,10 +36,12 @@ def MSE(y: np.ndarray, y_tilde: np.ndarray) -> float:
     Returns:
     float: The Mean Squared Error.
     """
+    y = y.flatten()
+    y_pred = y_pred.flatten()
     n = len(y)
-    return np.sum((y - y_tilde)**2) / n
+    return np.sum((y - y_pred)**2) / n
 
-def R2(y_data: np.ndarray, y_model: np.ndarray) -> float:
+def R2(y: np.ndarray, y_pred: np.ndarray) -> float:
     """
     Calculates the R2 score of the model.
 
@@ -50,7 +52,9 @@ def R2(y_data: np.ndarray, y_model: np.ndarray) -> float:
     Returns:
     float: The R2 score.
     """
-    return 1 - np.sum((y_data - y_model)**2) / np.sum((y_data - np.mean(y_data))**2)
+    y = y.flatten()
+    y_pred = y_pred.flatten()
+    return 1 - np.sum((y - y_pred)**2) / np.sum((y - np.mean(y))**2)
 
 
 def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:

@@ -6,3 +6,5 @@ tex/out/Project_1.fls
 tex/out/Project_1.log
 tex/out/Project_1.out
 tex/out/Project_1.synctex.gz
+src/tempCodeRunnerFile*
+src/__pycache__/
