@@ -238,8 +238,8 @@ def Lasso(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
 
     z_pred = lasso.predict(X_test)
 
-    MSE_score = MSE(z_test.flat, z_pred)
-    R2_score = R2(z_test.flat, z_pred)
+    MSE_score = MSE(z_test, z_pred)
+    R2_score = R2(z_test, z_pred)
 
     quantities = [MSE_score, R2_score]
     if return_beta:
