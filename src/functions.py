@@ -315,7 +315,7 @@ def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model, d
     float: The estimated Mean Squared Error (MSE) from the k-fold cross-validation.
     """
 
-    kfold = KFold(n_splits=k)
+    kfold = KFold(n_splits=k, shuffle=True) 
 
     X = create_X(x, y, degree)
 
@@ -343,7 +343,7 @@ if __name__ == "__main__":
     y = np.arange(0, 1, 1/N)
     X, Y = np.meshgrid(x, y)
 
-    z = FrankeFunction(X, Y).reshape(-1,1)
+    z = (FrankeFunction(X, Y)).reshape(-1,1)
 
     """"OLS example"""
     degrees = np.arange(1, 6)
