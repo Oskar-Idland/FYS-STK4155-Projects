@@ -977,6 +977,9 @@ INPUT c:/texlive/2023/texmf-dist/tex/latex/cleveref/cleveref.sty
 INPUT c:/texlive/2023/texmf-dist/tex/latex/cleveref/cleveref.sty
 INPUT c:/texlive/2023/texmf-dist/tex/latex/cleveref/cleveref.sty
 INPUT c:/texlive/2023/texmf-dist/tex/latex/cleveref/cleveref.sty
+INPUT out/Project_1.aux
+INPUT out/Project_1.aux
+INPUT out/Project_1.aux
 OUTPUT out/Project_1.aux
 INPUT c:/texlive/2023/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 INPUT c:/texlive/2023/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
@@ -998,8 +1001,18 @@ INPUT c:/texlive/2023/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 INPUT c:/texlive/2023/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 INPUT c:/texlive/2023/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 INPUT c:/texlive/2023/texmf-dist/tex/latex/graphics/color.sty
-OUTPUT out/Project_1.out
+INPUT out/Project_1.out
+INPUT out/Project_1.out
+INPUT out/Project_1.out
+INPUT out/Project_1.out
+INPUT out/Project_1.out
+INPUT out/Project_1.out
+INPUT out/Project_1.out
+INPUT out/Project_1.out
 OUTPUT out/Project_1.pdf
+INPUT out/Project_1.out
+INPUT out/Project_1.out
+OUTPUT out/Project_1.out
 OUTPUT out/Project_1Notes.bib
 INPUT c:/texlive/2023/texmf-dist/fonts/map/fontname/texfonts.map
 INPUT c:/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmr9.tfm
@@ -1030,12 +1043,12 @@ INPUT c:/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT c:/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT c:/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmti9.tfm
 INPUT c:/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmbx9.tfm
-INPUT c:/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
 INPUT c:/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
 INPUT c:/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm
 INPUT c:/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam7.tfm
 INPUT c:/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
 INPUT c:/texlive/2023/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm
+INPUT c:/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
 INPUT c:/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmbx7.tfm
 INPUT c:/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmbx5.tfm
 INPUT c:/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmmib10.tfm
@@ -1051,7 +1064,6 @@ INPUT ../figs/a_Franke_surf.pdf
 INPUT ../figs/a_Franke_surf.pdf
 INPUT ../figs/a_Franke_surf.pdf
 INPUT c:/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmr8.tfm
-INPUT c:/texlive/2023/texmf-dist/fonts/tfm/public/cm/cmtt9.tfm
 INPUT ../figs/a_error_scaled_vs_raw.pdf
 INPUT ../figs/a_error_scaled_vs_raw.pdf
 INPUT ../figs/a_error_scaled_vs_raw.pdf
@@ -1106,5 +1118,4 @@ INPUT c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
 INPUT c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb
 INPUT c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb
 INPUT c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb
-INPUT c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb
 INPUT c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb
