@@ -327,7 +327,7 @@ def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model, d
 
     estimated_mse_folds = cross_val_score(model, X, z, scoring='neg_mean_squared_error', cv=kfold)
     estimated_mse = np.mean(-estimated_mse_folds)
-
+    
     return estimated_mse
 
 

@@ -327,13 +327,13 @@ Here $z$ is the cosmological redshift, which is 0 today and thus in the 128th sn
 
 Because the Universe expands as time goes on the box does as well, and we therefore scale the coordinates of the box by multiplying with $a$. Similarly, space between the dark matter particles also increases with time, which is why the density is scaled by multiplying with $a^{-3}$. G\begin{footnotesize}ASOLINE\end{footnotesize}2 uses the rest of the scaling factors by default. \colorbox{magenta}{move to method? explain better?}
 
-% \begin{figure*}
-%   \vspace*{-5pt}
-%   \centering %Centers the figure
-%   \includegraphics[width=0.99\textwidth]{../figs/density_new_and_old.pdf}
-%   \caption{Dark matter density in the simulation box averaged over one of the three axes at redshifts $z\approx12.88$ (left) and $z=0$ (right). \colorbox{magenta}{better caption?}}\label{fig:density 2D}
-%   \vspace*{-5pt}
-% \end{figure*}
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.99\textwidth]{../figs/density.pdf}
+  \caption{Logarithm of dark matter density in the simulation box averaged over one of the three axes at redshift $z\approx12.88$. Plotted as scalar plot on the left and as surface plot on the right.}\label{fig:density 2D}
+  \vspace*{-5pt}
+\end{figure*}
 
 
 \section{Methods \& Implementation}\label{sec:methods}
@@ -468,34 +468,117 @@ In addition to polynomial degree, we also examined the impact of the hyperparame
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[width=0.95\textwidth]{../figs/a_error_scaled_vs_raw.pdf}
-  \caption{\colorbox{magenta}{caption}\colorbox{magenta}{remove figure title?}}\label{fig:a error scaled vs raw}
+  \includegraphics[width=0.9\textwidth]{../figs/a_error_scaled_vs_raw.pdf}
+  \caption{MSE (upper row) and $R^2$ (lower row) evaluated on the Franke function test set using unscaled (left column) and scaled (right column) values, for polynomial degrees in the interval $[1,6]$.}\label{fig:a error scaled vs raw}
+  \vspace*{-5pt}
+\end{figure*}
+
+\begin{figure}[h!]
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=\columnwidth]{../figs/a_beta_scaled_vs_raw.pdf}
+  \caption{The coefficients $\beta$ for the Franke function fit estimated using unscaled (blue) and scaled (red) data, plotted for polynomial degrees in the interval $[1,6]$.}\label{fig:a beta scaled vs raw}
+  \vspace*{-5pt}
+\end{figure}
+
+\begin{figure}[h!]
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=\columnwidth]{../figs/e_MSE_train_test.pdf}
+  \caption{MSE evaluated on the Franke function training set (blue) and test set (red) for 21 evenly spaced polynomial degrees in the interval $[1, 81]$.}\label{fig:e train test}
+  \vspace*{-5pt}
+\end{figure}
+
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.9\textwidth]{../figs/b_MSE_R2.pdf}
+  \caption{MSE (upper row) and $R^2$ (lower row) for Ridge regression evaluated on the Franke test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 21 evenly spaced degrees in the interval $[1, 41]$ and 30 evenly spaced exponents for $\lambda$ in the interval $[-5,1]$. We have cropped away degrees 1 and 3 \colorbox{magenta}{rerun figure to get axis right} and the 15 largest $\lambda$ values purely for visualization purposes.}\label{fig:b MSE R2}
   \vspace*{-5pt}
 \end{figure*}
 
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[width=0.9\textwidth]{../figs/a_beta_scaled_vs_raw.pdf}
-  \caption{\colorbox{magenta}{caption}\colorbox{magenta}{remove figure title?}}\label{fig:a beta scaled vs raw}
+  \includegraphics[width=0.9\textwidth]{../figs/c_MSE_R2.pdf}
+  \caption{MSE (upper row) and $R^2$ (lower row) for Lasso regression evaluated on the Franke test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 11 evenly spaced degrees in the interval $[1, 41]$ and 30 evenly spaced exponents for $\lambda$ in the interval $[-5,1]$, but in the right column we have cropped away degrees 1 and 5 and the 20 largest $\lambda$ values.}\label{fig:c MSE R2}
   \vspace*{-5pt}
 \end{figure*}
 
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[width=\textwidth]{../figs/b_MSE_R2.pdf}
-  \caption{\colorbox{magenta}{caption}}\label{fig:b MSE R2}
+  \includegraphics[width=\textwidth]{../figs/e_bias_variance.pdf}
+  \caption{MSE (orange), bias (blue) and variance (pink) for OLS regression evaluated on Franke test dta and plotted as functions of polynomial degree (upper left), number of data points (upper right), number of bootstrap steps (lower left) and test size fraction (lower right). When these are not varied we have used degree 5, 50 data points in one direction (i.e. $2\:500$ in the grid), 100 bootstrap steps and a test size fraction of 0.2. Note that some axes are scaled logarithmically and some have a linear scale.}\label{fig:e bias variance}
   \vspace*{-5pt}
 \end{figure*}
 
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[width=\textwidth]{../figs/c_MSE_R2.pdf}
-  \caption{\colorbox{magenta}{caption}}\label{fig:c MSE R2}
+  \includegraphics[width=\textwidth]{../figs/f_kfold_vs_bootstrap.pdf}
+  \caption{MSE evaluated on Franke test data as function of polynomial degrees in the interval $[1, 15]$ and number of folds $k$ used in cross-validation for $k\in[5, 15]$ (contour plot on the left). On the right we have plotted the MSE purely as function of complexity when using the bootstrap resampling method with 100 steps.}\label{fig:f kfold vs bootstrap}
   \vspace*{-5pt}
 \end{figure*}
+
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.9\textwidth]{../figs/f_OLS_Ridge_Lasso.pdf}
+  \caption{\colorbox{magenta}{caption}}\label{fig:f OLS Ridge Lasso}
+  \vspace*{-5pt}
+\end{figure*}
+
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.9\textwidth]{../figs/g_error_scaled_vs_raw.pdf}
+  \caption{\colorbox{magenta}{caption}}\label{fig:g error scaled vs raw}
+  \vspace*{-5pt}
+\end{figure*}
+
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.9\textwidth]{../figs/density_complexity.pdf}
+  \caption{\colorbox{magenta}{caption}}\label{fig:density complexity}
+  \vspace*{-5pt}
+\end{figure*}
+
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=\textwidth]{../figs/density_surf.pdf}
+  \caption{\colorbox{magenta}{caption}}\label{fig:density surf}
+  \vspace*{-5pt}
+\end{figure*}
+
+
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.9\textwidth]{../figs/g_MSE_R2_Ridge.pdf}
+  \caption{\colorbox{magenta}{caption}}\label{fig:g MSE R2 Ridge}
+  \vspace*{-5pt}
+\end{figure*}
+
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.9\textwidth]{../figs/g_MSE_R2_Lasso.pdf}
+  \caption{\colorbox{magenta}{caption}}\label{fig:g MSE R2 Lasso}
+  \vspace*{-5pt}
+\end{figure*}
+
+
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=\textwidth]{../figs/g_kfold_vs_bootstrap.pdf}
+  \caption{\colorbox{magenta}{caption}}\label{fig:g kfold vs bootstrap}
+  \vspace*{-5pt}
+\end{figure*}
+
 
 \section{Discussion}\label{sec:discussion}
 
@@ -784,5 +867,6 @@ Before we move further we may note that the exact function $f(\mathbf{x})$ gener
 %           \end{algorithmic}
 %       \end{algorithm}
 %   \end{figure}
+
 
 \end{document}
