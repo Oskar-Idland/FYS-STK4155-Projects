@@ -336,6 +336,7 @@ INPUT ../figs/density.pdf
 INPUT ../figs/density.pdf
 INPUT ../figs/density.pdf
 INPUT ../figs/density.pdf
+INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/cm/cmtt10.tfm
 INPUT ../figs/a_error_scaled_vs_raw.pdf
 INPUT ../figs/a_error_scaled_vs_raw.pdf
 INPUT ../figs/a_error_scaled_vs_raw.pdf
@@ -439,4 +440,5 @@ INPUT /usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.p
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb
+INPUT /usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb
