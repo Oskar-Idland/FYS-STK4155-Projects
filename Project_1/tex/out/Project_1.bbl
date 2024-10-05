@@ -1,0 +1,85 @@
+%merlin.mbs apsrev4-1.bst 2010-07-25 4.21a (PWD, AO, DPC) hacked
+%Control: key (0)
+%Control: author (8) initials jnrlst
+%Control: editor formatted (1) identically to author
+%Control: production of article title (-1) disabled
+%Control: page (0) single
+%Control: year (1) truncated
+%Control: production of eprint (0) enabled
+\begin{thebibliography}{11}%
+\makeatletter
+\providecommand \@ifxundefined [1]{%
+ \@ifx{#1\undefined}
+}%
+\providecommand \@ifnum [1]{%
+ \ifnum #1\expandafter \@firstoftwo
+ \else \expandafter \@secondoftwo
+ \fi
+}%
+\providecommand \@ifx [1]{%
+ \ifx #1\expandafter \@firstoftwo
+ \else \expandafter \@secondoftwo
+ \fi
+}%
+\providecommand \natexlab [1]{#1}%
+\providecommand \enquote  [1]{``#1''}%
+\providecommand \bibnamefont  [1]{#1}%
+\providecommand \bibfnamefont [1]{#1}%
+\providecommand \citenamefont [1]{#1}%
+\providecommand \href@noop [0]{\@secondoftwo}%
+\providecommand \href [0]{\begingroup \@sanitize@url \@href}%
+\providecommand \@href[1]{\@@startlink{#1}\@@href}%
+\providecommand \@@href[1]{\endgroup#1\@@endlink}%
+\providecommand \@sanitize@url [0]{\catcode `\\12\catcode `\$12\catcode `\&12\catcode `\#12\catcode `\^12\catcode `\_12\catcode `\%12\relax}%
+\providecommand \@@startlink[1]{}%
+\providecommand \@@endlink[0]{}%
+\providecommand \url  [0]{\begingroup\@sanitize@url \@url }%
+\providecommand \@url [1]{\endgroup\@href {#1}{\urlprefix }}%
+\providecommand \urlprefix  [0]{URL }%
+\providecommand \Eprint [0]{\href }%
+\providecommand \doibase [0]{http://dx.doi.org/}%
+\providecommand \selectlanguage [0]{\@gobble}%
+\providecommand \bibinfo  [0]{\@secondoftwo}%
+\providecommand \bibfield  [0]{\@secondoftwo}%
+\providecommand \translation [1]{[#1]}%
+\providecommand \BibitemOpen [0]{}%
+\providecommand \bibitemStop [0]{}%
+\providecommand \bibitemNoStop [0]{.\EOS\space}%
+\providecommand \EOS [0]{\spacefactor3000\relax}%
+\providecommand \BibitemShut  [1]{\csname bibitem#1\endcsname}%
+\let\auto@bib@innerbib\@empty
+%</preamble>
+\bibitem [{\citenamefont {James W.~Wadsley}(2024)}]{gasoline}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {T.~R.~Q.}\ \bibnamefont {James W.~Wadsley}, \bibfnamefont {Benjamin W.~Keller}},\ }\href@noop {} {\enquote {\bibinfo {title} {{Gasoline2: A Modern SPH Code}},}\ }\bibinfo {howpublished} {\url{https://arxiv.org/abs/1707.03824}} (\bibinfo {year} {Accessed: September 2024})\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Hahn}(2024)}]{music}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {O.}~\bibnamefont {Hahn}},\ }\href@noop {} {\enquote {\bibinfo {title} {{MUSIC}},}\ }\bibinfo {howpublished} {\url{https://www-n.oca.eu/ohahn/MUSIC/}} (\bibinfo {year} {Accessed: September 2024})\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {{Python Software Foundation}}(2023)}]{Python}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibnamefont {{Python Software Foundation}}},\ }\href@noop {} {\enquote {\bibinfo {title} {Python 3.11.4 documentation},}\ }\bibinfo {howpublished} {\url{https://docs.python.org/3.11/}} (\bibinfo {year} {Accessed: October 2023})\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Pedregosa}\ \emph {et~al.}(2011)\citenamefont {Pedregosa}, \citenamefont {Varoquaux}, \citenamefont {Gramfort}, \citenamefont {Michel}, \citenamefont {Thirion}, \citenamefont {Grisel}, \citenamefont {Blondel}, \citenamefont {Prettenhofer}, \citenamefont {Weiss}, \citenamefont {Dubourg}, \citenamefont {Vanderplas}, \citenamefont {Passos}, \citenamefont {Cournapeau}, \citenamefont {Brucher}, \citenamefont {Perrot},\ and\ \citenamefont {Duchesnay}}]{scikit-learn}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {F.}~\bibnamefont {Pedregosa}}, \bibinfo {author} {\bibfnamefont {G.}~\bibnamefont {Varoquaux}}, \bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Gramfort}}, \bibinfo {author} {\bibfnamefont {V.}~\bibnamefont {Michel}}, \bibinfo {author} {\bibfnamefont {B.}~\bibnamefont {Thirion}}, \bibinfo {author} {\bibfnamefont {O.}~\bibnamefont {Grisel}}, \bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Blondel}}, \bibinfo {author} {\bibfnamefont {P.}~\bibnamefont {Prettenhofer}}, \bibinfo {author} {\bibfnamefont {R.}~\bibnamefont {Weiss}}, \bibinfo {author} {\bibfnamefont {V.}~\bibnamefont {Dubourg}}, \bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Vanderplas}}, \bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Passos}}, \bibinfo {author} {\bibfnamefont {D.}~\bibnamefont {Cournapeau}}, \bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Brucher}}, \bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Perrot}}, \ and\ \bibinfo {author} {\bibfnamefont {E.}~\bibnamefont {Duchesnay}},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Journal of Machine Learning Research}\ }\textbf {\bibinfo {volume} {12}},\ \bibinfo {pages} {2825} (\bibinfo {year} {2011})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {{NumPy Developers}}(2023)}]{Numpy}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibnamefont {{NumPy Developers}}},\ }\href@noop {} {\enquote {\bibinfo {title} {{NumPy v1.22 Manual}},}\ }\bibinfo {howpublished} {\url{https://numpy.org/doc/stable/}} (\bibinfo {year} {Accessed: October 2023})\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {{Matplotlib Development Team}}(2023)}]{Matplotlib}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibnamefont {{Matplotlib Development Team}}},\ }\href@noop {} {\enquote {\bibinfo {title} {{Matplotlib: Visualization with Python}},}\ }\bibinfo {howpublished} {\url{https://matplotlib.org/stable/index.html}} (\bibinfo {year} {Accessed: October 2023})\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Patel}(2023)}]{colormaps}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {P.}~\bibnamefont {Patel}},\ }\href@noop {} {\enquote {\bibinfo {title} {Colormaps},}\ }\bibinfo {howpublished} {\url{https://pratiman-91.github.io/colormaps/}} (\bibinfo {year} {Accessed: November 2023})\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Microsoft}(2023{\natexlab{a}})}]{VSCode}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibnamefont {Microsoft}},\ }\href@noop {} {\enquote {\bibinfo {title} {{Visual Studio Code}},}\ }\bibinfo {howpublished} {\url{https://code.visualstudio.com/docs}} (\bibinfo {year} {Accessed: October 2023}{\natexlab{a}})\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Microsoft}(2023{\natexlab{b}})}]{Copilot}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibnamefont {Microsoft}},\ }\href@noop {} {\enquote {\bibinfo {title} {{GitHub Copilot}},}\ }\bibinfo {howpublished} {\url{https://copilot.github.com/}} (\bibinfo {year} {Accessed: October 2023}{\natexlab{b}})\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Hamano}(2023)}]{Git}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Hamano}},\ }\href@noop {} {\enquote {\bibinfo {title} {Git},}\ }\bibinfo {howpublished} {\url{https://git-scm.com/doc}} (\bibinfo {year} {Accessed: October 2023})\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Microsoft}(2023{\natexlab{c}})}]{GitHub}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibnamefont {Microsoft}},\ }\href@noop {} {\enquote {\bibinfo {title} {Github},}\ }\bibinfo {howpublished} {\url{https://docs.github.com/en}} (\bibinfo {year} {Accessed: October 2023}{\natexlab{c}})\BibitemShut {NoStop}%
+\end{thebibliography}%

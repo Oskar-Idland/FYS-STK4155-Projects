@@ -472,7 +472,7 @@ The resulting MSE and $R^2$ scores were plotted as functions of both $\lambda$ a
 \subsection{Bias-Variance Tradeoff}
 
 \colorbox{magenta}{we expect MSE=bias+var for data since noise var is 0}
-To showcase the bias-variance trade-off and validate our implementation, we imitated the analysis illustrated in \cref[fig:Hastie]{Fig. 2.11 from Hastie, Tibshirani, and Friedman}. Specifically, we plotted the MSE for both the training and test sets of the Franke data using OLS regression. We varied the polynomial degree from 1 to 82 in steps of 4. \colorbox{magenta}{Link to our result?}
+To showcase the bias-variance trade-off and validate our implementation, we imitated the analysis illustrated in \cref[fig:Hastie]{Fig. 2.11 from Hastie, Tibshirani, and Friedman}. Specifically, we plotted the MSE for both the training and test sets of the Franke data using OLS regression. We varied the polynomial degree from 1 to 81 in steps of 4. \colorbox{magenta}{Link to our result?}
 
 The generation and splitting of the Franke data were conducted as described previously. \\
 
@@ -505,7 +505,7 @@ For the cosmological simulation data, we only did a single scenario with 100 boo
 \colorbox{magenta}{include Ridge and Lasso}
 
 % TODO: Write
-For our cross-validation analysis, we used the \verb|KFold| function from the scikit-learn library to split the data into $k$ folds, with the integer $k ∈ [5, 15]$. We iterated over a 
+For our cross-validation analysis, we used the \verb|KFold| function from the scikit-learn library to split the data into $k$ folds, with the integer $k \in [5, 15]$. We iterated over a 
 
 \subsection{The Program}\label{subsec:program}
 \subsubsection{Code Structure}\label{subsubsec:codestructure}
