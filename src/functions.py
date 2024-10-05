@@ -25,36 +25,36 @@ def FrankeFunction(x,y):
     term4 = -0.2*np.exp(-(9*x-4)**2 - (9*y-7)**2)
     return term1 + term2 + term3 + term4
 
-def MSE(y: np.ndarray, y_pred: np.ndarray) -> float:
+def MSE(z: np.ndarray, z_pred: np.ndarray) -> float:
     """
     Calculates the Mean Squared Error (MSE) between the true and predicted values.
 
     Parameters:
-    y (np.ndarray): The actual data values.
-    y_pred (np.ndarray): The predicted data values from the model.
+    z (np.ndarray): The actual data values.
+    z_pred (np.ndarray): The predicted data values from the model.
 
     Returns:
     float: The Mean Squared Error.
     """
-    y = y.flatten()
-    y_pred = y_pred.flatten()
-    n = len(y)
-    return np.sum((y - y_pred)**2) / n
+    z = z.flatten()
+    z_pred = z_pred.flatten()
+    n = len(z)
+    return np.sum((z - z_pred)**2) / n
 
-def R2(y: np.ndarray, y_pred: np.ndarray) -> float:
+def R2(z: np.ndarray, z_pred: np.ndarray) -> float:
     """
     Calculates the R2 score of the model.
 
     Parameters:
-    y (np.ndarray): The actual data values.
-    y_pred (np.ndarray): The predicted data values from the model.
+    z (np.ndarray): The actual data values.
+    z_pred (np.ndarray): The predicted data values from the model.
 
     Returns:
     float: The R2 score.
     """
-    y = y.flatten()
-    y_pred = y_pred.flatten()
-    return 1 - np.sum((y - y_pred)**2) / np.sum((y - np.mean(y))**2)
+    z = z.flatten()
+    z_pred = z_pred.flatten()
+    return 1 - np.sum((z - z_pred)**2) / np.sum((z - np.mean(z))**2)
 
 
 def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
@@ -62,8 +62,8 @@ def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
     Creates the design matrix X.
 
     Parameters:
-    x (np.ndarray): The independent variable(s).
-    y (np.ndarray): The independent variable(s).
+    x (np.ndarray): Independent variable.
+    y (np.ndarray): Independent variable.
     n (int): The degree of the polynomial features.
 
     Returns:
@@ -73,11 +73,11 @@ def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
         x = np.ravel(x)
         y = np.ravel(y)
 
-    N_x = len(x); N_y = len(y)
-    l = int((n+1)*(n+2)/2)
-    X = np.ones((int(N_x*N_y), l))
+    N = int(len(x)*len(y))            # Number of rows in the design matrix
+    l = int((n+1)*(n+2)/2)            # Number of columns in the design matrix
+    X = np.ones((N, l))
     
-    xx, yy = np.meshgrid(x, y)          # Make a meshgrid to get all possible combinations of x and y values
+    xx, yy = np.meshgrid(x, y)        # Make a meshgrid to get all possible combinations of x and y values
     xx = xx.flatten()
     yy = yy.flatten()
 
@@ -95,8 +95,8 @@ def OLS(x: np.ndarray, y: np.ndarray, z: np.ndarray[np.ndarray, np.ndarray], deg
     Performs Ordinary Least Squares (OLS) regression.
 
     Parameters:
-    x (array-like): The independent variable(s).
-    y (array-like): The independent variable(s).
+    x (array-like): Independent variable.
+    y (array-like): Independent variable.
     z (array-like): The dependent variable.
     degree (int): The degree of the polynomial features.
     scale (bool, optional): Whether to scale the data. Default is True.
@@ -146,8 +146,8 @@ def Ridge(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
     Performs Ridge regression.
 
     Parameters:
-    x (np.ndarray): The independent variable(s).
-    y (np.ndarray): The independent variable(s).
+    x (np.ndarray): Independent variable.
+    y (np.ndarray): Independent variable.
     z (np.ndarray): The dependent variable.
     degree (int): The degree of the polynomial features.
     λ (float): The regularization parameter.
@@ -199,8 +199,8 @@ def Lasso(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
     Performs Lasso regression.
 
     Parameters:
-    x (np.ndarray): The independent variable(s).
-    y (np.ndarray): The independent variable(s).
+    x (np.ndarray): Independent variable.
+    y (np.ndarray): Independent variable.
     z (np.ndarray): The dependent variable.
     degree (int): The degree of the polynomial features.
     λ (float): The regularization parameter.
@@ -258,8 +258,8 @@ def Bootstrap(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, n_bootst
     Performs bootstrapping.
 
     Parameters:
-    x (np.ndarray): The independent variable(s).
-    y (np.ndarray): The independent variable(s).
+    x (np.ndarray): Independent variable.
+    y (np.ndarray): Independent variable.
     z (np.ndarray): The dependent variable.
     degree (int): The degree of the polynomial features.
     n_bootstraps (int): The number of bootstraps.
@@ -304,8 +304,8 @@ def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model, d
     Performs k-fold cross-validation.
 
     Parameters:
-    x (np.ndarray): The independent variable(s).
-    y (np.ndarray): The independent variable(s).
+    x (np.ndarray): Independent variable.
+    y (np.ndarray): Independent variable.
     z (np.ndarray): The dependent variable.
     k (int): The number of folds in the k-fold cross-validation.
     model (sklearn.linear_model.LinearRegression | sklearn.linear_model.Ridge | sklearn.linear_model.Lasso): The regression model to be used.
@@ -328,8 +328,9 @@ def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model, d
 
     if predict:
         z_pred = cross_val_predict(model, X, z, cv = kfold).reshape(-1, 1)
-        if scale:
-            scaler_z.inverse_transform(z_pred)
+        # if scale:
+            # scaler_z.inverse_transform(z_pred)
+            # print("scaling back")
         return z_pred
     else:
         estimated_mse_folds = cross_val_score(model, X, z, scoring = "neg_mean_squared_error", cv = kfold)
