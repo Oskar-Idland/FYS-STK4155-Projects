@@ -418,7 +418,7 @@ To illustrate the impact of scaling, we plotted the beta coefficients for both a
 Another important preprocessing step was splitting the data into training and test sets. This step enables the evaluation of the model's performance on unseen data and helps in assessing its generalization capabilities. We used the \verb|train_test_split| function from the scikit-learn library to randomly split the data into training and test sets, with a test size of 0.2. This ensured that 20\% of the data was reserved for testing, while the remaining 80\% was used to train the model. By splitting the data in this manner, we could evaluate the model's performance on new data and determine how well it generalized to unseen samples.
 
 \subsubsection{Parameter Dependencies}
-Investigating the dependency on polynomial degree was a critical aspect of understanding how the regression models performed under varying conditions. By increasing the polynomial order, we enhanced the models' capacity to fit more complex patterns in the data. However, this also raised the risk of overfitting, where the model might capture noise along with the underlying signal. To explore this, we evaluated the performance of the models across different polynomial degrees using metrics such as the Mean Squared Error (MSE) and $R^2$ scores mentioned in the previous section. These evaluations allowed us to quantify how well each model balanced bias and variance. \\
+Investigating the dependency on polynomial degree was a critical aspect of understanding how the regression models performed under varying conditions. By increasing the polynomial order, we enhanced the models' capacity to fit more complex patterns in the data. However, this also raised the risk of overfitting, where the model might capture noise along with the underlying signal. To explore this, we evaluated the performance of the models across different polynomial degrees using metrics such as the MSE and $R^2$ scores mentioned in the previous section. These evaluations allowed us to quantify how well each model balanced bias and variance. \\
 
 For the Franke function-generated data, we systematically varied the polynomial degree from 1 to 6 for OLS. We then assessed the model's performance using the MSE and $R^2$ scores, plotting these metrics as a function of model complexity to determine the optimal polynomial degree for the regression method.\\
 
@@ -447,7 +447,6 @@ The generation and splitting of the Franke data were conducted as described prev
   \caption{Fig. 2.11 of Hastie, Tibshirani, and Friedman illustrating bias-variance trade-off as a function of model complexity \colorbox{magenta}{cite}}\label{fig:Hastie}
 \end{figure}
 \subsubsection{Bootstrap With OLS}
-\colorbox{magenta}{model complexity, number of data points}
 Our implementation of the bootstrap technique involved resampling the training data multiple times and fitting an OLS model to each resampled dataset. This was accomplished using the resample function from the scikit-learn library. For each resampled dataset, we computed the MSE, bias, and variance to evaluate the model's performance.
 
 For the Franke function-generated data, we designed four different scenarios, each varying a specific parameter to investigate the influence of the number of bootstraps, data points, model complexity, and test size separately.
@@ -455,21 +454,23 @@ For the Franke function-generated data, we designed four different scenarios, ea
 The default values for each scenario were set as follows: 100 bootstraps, 50 data points, polynomial degree of 5, and a test size of 20\%. The varying parameters for each respective scenario were:
 
 \begin{itemize}
-   \item Number of bootstraps: [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000]
-   \item Number of data points: [10, 20, 30, 40, 50, 100, 150, 200, 300, 400, 500, 1000]
-   \item Polynomial degree: from 1 to 41 with a step of 2
-   \item Test size: ranging from 5\% to 95\% with a step of 5\%
+   \item [-] Number of bootstraps: [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000]
+   \item [-]Number of data points: [10, 20, 30, 40, 50, 100, 150, 200, 300, 400, 500, 1000]
+   \item [-]Polynomial degree: from 1 to 41 with a step of 2
+   \item [-]Test size: ranging from 5\% to 95\% with a step of 5\%
 \end{itemize}
 
-We then plotted these scenarios to assess the influence of each parameter on the model's performance.
+For each scenario we plotted the model evaluation metrics as a function of the varying parameter to analyze how the model's performance changed with different settings. 
 
-
+For the cosmological simulation data, we only did a single scenario with 100 bootstraps, 50 data points, test size of 20\%, and a varying polynomial degree from 1 to 31 with a step of 3. We only plotted the MSE as a function of polynomial degree for this scenario. \colorbox{magenta}{Explain why?}
 
 \subsubsection{Cross-Validation}
 \colorbox{magenta}{go into detail how we implement} \\
 \colorbox{magenta}{compare with bootstrap}\ \
 \colorbox{magenta}{include Ridge and Lasso}
 
+% TODO: Write
+For our cross-validation analysis, we used the \verb|KFold| function from the scikit-learn library to  
 
 \subsection{The Program}\label{subsec:program}
 \subsubsection{Code Structure}\label{subsubsec:codestructure}
