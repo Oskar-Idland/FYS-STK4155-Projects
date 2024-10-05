@@ -447,6 +447,22 @@ The generation and splitting of the Franke data were conducted as described prev
 \end{figure}
 \subsubsection{Bootstrap With OLS}
 \colorbox{magenta}{model complexity, number of data points}
+Our implementation of the bootstrap technique involved resampling the training data multiple times and fitting an OLS model to each resampled dataset. This was accomplished using the resample function from the scikit-learn library. For each resampled dataset, we computed the MSE, bias, and variance to evaluate the model's performance.
+
+For the Franke function-generated data, we designed four different scenarios, each varying a specific parameter to investigate the influence of the number of bootstraps, data points, model complexity, and test size separately.
+
+The default values for each scenario were set as follows: 100 bootstraps, 50 data points, polynomial degree of 5, and a test size of 20\%. The varying parameters for each respective scenario were:
+
+\begin{itemize}
+   \item Number of bootstraps: [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000]
+   \item Number of data points: [10, 20, 30, 40, 50, 100, 150, 200, 300, 400, 500, 1000]
+   \item Polynomial degree: from 1 to 41 with a step of 2
+   \item Test size: ranging from 5\% to 95\% with a step of 5\%
+\end{itemize}
+
+We then plotted these scenarios to assess the influence of each parameter on the model's performance.
+
+
 
 \subsubsection{Cross-Validation}
 \colorbox{magenta}{go into detail how we implement} \\
