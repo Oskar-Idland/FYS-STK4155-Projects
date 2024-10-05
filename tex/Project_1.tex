@@ -101,7 +101,7 @@
 \begin{abstract}
 % EXAMPLE OF HOW AN ABSTRACT COULD BE STRUCTURED
 % This study revolves around the famous double-slit experiment and the wave-nature of particles. By employing the Crank-Nicholson scheme we managed to discretize the Schrödinger equation describing the evolution of a single particle in a two-dimensional box. This was used to perform simulations with single-, double-, and triple-slit configurations, storing the probability values associated with the particle's position within the box at each time step. Visualizing these results proved striking resemblence to the behavior of coherent waves passing through corresponding setups, as expected. Hence, we observed the probability distribution describing the particle's position to evolve and interact with obstacles like a wave packet, which is a clear indicator that a an actual stream of such particles would too. By assuming that the particle eventually hits a detection screen on the other side of the slits, we plotted the probability values versus $y$-position at $x=0.8$ and found that the patterns all agreed with those famously observed during real life experiments. Furthermore, we determined that the real part of the wave packet itself was constantly phase-shifted $\pi/2$ relative to its imaginary part throughout the double-slit simulation. This was expected based on the initial state, hence further validating our methods and results. 
-We have used various regression techniques and resampling methods within the context of machine learning, and tested these on the Franke function, a synthetic benchmark used in numerical analysis, as well as on output data from a cosmological N-body simulation performed with the public G\begin{scriptsize}ASOLINE\end{scriptsize}2 code. The main objective was to analyze and compare the performance of Ordinary Least Squares (OLS), Ridge, and Lasso regression in fitting synthetic and real-world data, focusing on the bias-variance tradeoff and model generalizability. To assess model performance we employed resampling methods such as bootstrap and $k$-fold cross-validation, examining how they help to evaluate model accuracy under different training and test data conditions. Our study provided insights into how model complexity and regularization parameters affect the bias-variance tradeoff and prediction error, enabling us to critically evaluate each regression technique's performance using statistical and resampling approaches. \colorbox{magenta}{rewrite when results are gathered and discussion/conclusion is finished}
+We have explored various regression techniques and resampling methods within the context of machine learning, motivated by the need to develop robust models that can accurately predict and generalize from complex datasets. The main objective was to analyze and compare the performance of Ordinary Least Squares (OLS), Ridge, and Lasso regression in fitting synthetic and real-world data, focusing on the bias-variance tradeoff and model generalizability. We applied these regression techniques to the Franke function, a synthetic benchmark used in numerical analysis, and extended our analysis to cosmological N-body simulation data generated using the public G\begin{scriptsize}ASOLINE\end{scriptsize}2 code SPH code. To assess model performance and generalization, we employed resampling methods such as bootstrap and k-fold cross-validation, examining how they help to evaluate model accuracy under different training and test data conditions. Our study provided insights into how model complexity and regularization parameters affect the bias-variance tradeoff and prediction error, enabling us to critically evaluate each regression technique's performance using statistical and resampling approaches. \colorbox{magenta}{rewrite /remove last part when results are gathered and discussion/conclusion is finished}
 \end{abstract}
 \maketitle
 \onecolumngrid
@@ -119,11 +119,11 @@ We have used various regression techniques and resampling methods within the con
 
 
 \section{Introduction}\label{sec:introduction}
-In this work, we explore regression analysis and resampling methods in the context of machine learning, focusing on both theoretical and practical aspects. The primary goal is to develop a solid understanding of various regression techniques, including Ordinary Least Squares (OLS), Ridge, and Lasso regression, and their application to both synthetic and real-world data. We will also investigate how resampling methods such as bootstrap and cross-validation can help assess model performance.
+In many scientific and practical applications, developing models that can accurately predict outcomes and generalize to new data is a critical challenge. Complex datasets often contain noise and exhibit nonlinear relationships, making it essential to employ robust regression techniques that balance model flexibility with the risk of overfitting. This work is motivated by the need to understand how different regression methods perform when applied to synthetic and real-world data, and how resampling techniques can aid in evaluating model accuracy and generalizability. The primary goal is to develop a solid understanding of the Ordinary Least Squares (OLS), Ridge and Lasso regression techniques, and their application to both synthetic and real-world data. We also intend to investigate how resampling methods such as bootstrap and cross-validation can help assess model performance.
 
-We begin by applying the abovementioned methods to the Franke function, a widely used test function in numerical analysis, and extend the analysis to cosmological N-body simulation data made with the public version of the G\begin{scriptsize}ASOLINE\end{scriptsize}2 Smoothed Particle Hydrodynamics (SPH) code \cite{gasoline}. Our approach involves fitting polynomial regression models of varying complexity to the Franke function as well as the simulation data, and studying the bias-variance tradeoff, an essential concept in machine learning, in both cases. This allows us to evaluate the impact of model complexity, noise, and the size of training data on the accuracy and generalizability of the models. The overarching aim is to gain insights into how different regression methods handle overfitting, model complexity, and data variability, and to develop a framework for critically evaluating model performance using statistical and resampling techniques. \colorbox{magenta}{rewrite?}
+We begin by applying the abovementioned methods to the Franke function, a widely used test function in numerical analysis, and extend the analysis to cosmological N-body simulation data made with the public version of the G\begin{scriptsize}ASOLINE\end{scriptsize}2 Smoothed Particle Hydrodynamics (SPH) code \cite{gasoline}. Our approach involves fitting polynomial regression models of varying complexity to the Franke function as well as the simulation data, and studying the bias-variance tradeoff, an essential concept in machine learning, in both cases. This allows us to evaluate the impact of model complexity, regularization parameters and the size of training data on the accuracy and generalizability of the models. The overarching aim is to gain insights into how different regression methods handle overfitting, model complexity and data variability, and to develop a framework for critically evaluating model performance using statistical and resampling techniques. 
 
-In \cref{sec:theory} we present relevant background theory, including central concepts such as model bias, model variance and the bias-variance tradeoff, as well as the Franke function. The most important expressions introduced here are derived in \cref{appsec:derivations}. Our methodology is explained in \cref{sec:methods}, specifically regression analysis, where we focus on OLS, Ridge and Lasso regression. We also present the advantages and disadvantages of two crucial resampling methods; bootstrapping and cross-validation, both of which will be used in this work. In this section we also present our dataset, specify how we implement the methods and give an overview of our code structure. The results of our analyses are presented in \cref{sec:results}, and in \cref{sec:discussion} we discuss our findings in light of what we would expect from the regression variants and resampling methods implemented \colorbox{magenta}{edit after discussion is written}. Lastly, in \cref{sec:conclusion} we summarize and conclude the main findings of our work \colorbox{magenta}{mention reflection?}. 
+In \cref{sec:theory} we present relevant background theory, including central concepts such as OLS, Ridge and Lasso regression, model bias, variance and the bias-variance tradeoff, as well as two crucial resampling methods; bootstrapping and cross-validation, both of which will be implemented in this work. A few of the most important expressions introduced in this section are derived in \cref{appsec:derivations}. Our methodology is explained in \cref{sec:methods}, specifically how we define the essential design matrix, scale our data and implement the regression and resampling techniques. We also give an overview of our code structure and present the cosmological simulation data. In \cref{sec:results discussion} we present, interpret and discuss the results of our analyses in light of expectations based on our previous knowledge of the implemented regression and resampling methods. Lastly, we summarize and conclude the main findings of our work in \cref{sec:conclusion}, and reflect.
 
 % ===========================================
 \section{Theory}\label{sec:theory}
@@ -188,6 +188,7 @@ This formula provides the best-fitting coefficients $\boldsymbol{\beta}$ that mi
   \text{Var}\big[\hat{\boldsymbol{\beta}}\big] &= \sigma^2\left(\mathbf{X}^\top\mathbf{X}\right)^{-1}.
 \end{align}
 Here $\mathbb{E}\big[\hat{\boldsymbol{\beta}}\big]$ and $\text{Var}\big[\hat{\boldsymbol{\beta}}\big]$ are the expectation value and variance of the OLS estimator, respectively, while $\sigma^2$ is the variance of the error term $\boldsymbol{\epsilon}$. 
+
 
 % To evaluate the performance of the OLS model, we compute two important metrics: the mean-squared error (MSE) and the $R^2$ score. The former measures the average squared difference between the true values and the predicted values, and is defined as
 % \begin{equation}
@@ -323,7 +324,7 @@ The output data includes 128 ``snapshots'' of the box through time, where the ti
 \begin{equation}
   a = \frac{1}{1+z}.
 \end{equation}
-Here $z$ is the cosmological redshift, which is 0 today and thus in the 128th snapshot. We focus on the dark matter density $\rho$, and study a snapshot at redshift $z\approx12.88$ in addition to the snapshot at $z=0$, because the distribution of $\rho$ is smoother at larger $z$. To get a function of two variables we average over one of the three axes so that we get a 2D grid, and because the density is so large and vastly different at different points in the box we take $\ln\rho$ to be our dependent variable instead of $\rho$. The resulting data is shown as intensity plots in figure %\ref{fig:density 2D}. 
+Here $z$ is the cosmological redshift, which is 0 today and thus in the 128th snapshot. We focus on the dark matter density $\rho$, and study a snapshot at redshift $z\approx12.88$ because the distribution of $\rho$ is smoother at larger $z$. To get a function of two variables we average over one of the three axes so that we get a 2D grid, and because the density is so large and vastly different at different points in the box we take $\ln\rho$ to be our dependent variable instead of $\rho$. The resulting data is visualized as a contour plot and a surface plot in figure \ref{fig:density}. \colorbox{magenta}{maybe remove figure}
 
 Because the Universe expands as time goes on the box does as well, and we therefore scale the coordinates of the box by multiplying with $a$. Similarly, space between the dark matter particles also increases with time, which is why the density is scaled by multiplying with $a^{-3}$. G\begin{footnotesize}ASOLINE\end{footnotesize}2 uses the rest of the scaling factors by default. \colorbox{magenta}{move to method? explain better?}
 
@@ -331,7 +332,7 @@ Because the Universe expands as time goes on the box does as well, and we theref
   \vspace*{-5pt}
   \centering %Centers the figure
   \includegraphics[width=0.99\textwidth]{../figs/density.pdf}
-  \caption{Logarithm of dark matter density in the simulation box averaged over one of the three axes at redshift $z\approx12.88$. Plotted as scalar plot on the left and as surface plot on the right.}\label{fig:density 2D}
+  \caption{Logarithm of dark matter density in the simulation box averaged over one of the three axes at redshift $z\approx12.88$. Plotted as contour plot on the left and as surface plot on the right.}\label{fig:density}
   \vspace*{-5pt}
 \end{figure*}
 
@@ -505,7 +506,8 @@ We then plotted these scenarios to assess the influence of each parameter on the
 % MAYBE HAVE THESE TWO SECTIONS GATHERED INSTEAD?
 % \section{Results \& Discussions}\label{sec:results discussion}
 
-\section{Results}\label{sec:results}
+\section{Results \& Discussion}\label{sec:results discussion}
+\subsection{Effects of Data Scaling}
 
 \begin{figure*}
   \vspace*{-5pt}
@@ -523,6 +525,24 @@ We then plotted these scenarios to assess the influence of each parameter on the
   \vspace*{-5pt}
 \end{figure}
 
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.9\textwidth]{../figs/g_error_scaled_vs_raw.pdf}
+  \caption{MSE (upper row) and $R^2$ (lower row) evaluated on the cosmological test set using unscaled (left column) and scaled (right column) values, for polynomial degrees in the interval $[1,41]$.}\label{fig:g error scaled vs raw}
+  \vspace*{-5pt}
+\end{figure*}
+
+\begin{figure}[h!]
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=\columnwidth]{../figs/g_beta_scaled_vs_raw.pdf}
+  \caption{The coefficients $\beta$ for the cosmological fit estimated using unscaled (purple) and scaled (orange) data, plotted for polynomial degrees in the interval $[1,41]$.}\label{fig:g beta scaled vs raw}
+  \vspace*{-5pt}
+\end{figure}
+
+\subsection{Hyperparameter in Ridge and Lasso}
+
 \begin{figure}[h!]
   \vspace*{-5pt}
   \centering %Centers the figure
@@ -535,7 +555,7 @@ We then plotted these scenarios to assess the influence of each parameter on the
   \vspace*{-5pt}
   \centering %Centers the figure
   \includegraphics[width=0.9\textwidth]{../figs/b_MSE_R2.pdf}
-  \caption{MSE (upper row) and $R^2$ (lower row) for Ridge regression evaluated on the Franke test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 21 evenly spaced degrees in the interval $[1, 41]$ and 30 evenly spaced exponents for $\lambda$ in the interval $[-5,1]$. We have cropped away degrees 1 and 3 \colorbox{magenta}{rerun figure to get axis right} and the 15 largest $\lambda$ values purely for visualization purposes.}\label{fig:b MSE R2}
+  \caption{MSE (upper row) and $R^2$ (lower row) for Ridge regression evaluated on the Franke test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 21 evenly spaced degrees in the interval $[1, 41]$ and 30 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$. We have cropped away degrees 1 and 3 and the 15 largest $\lambda$ values purely for visualization purposes.}\label{fig:b MSE R2}
   \vspace*{-5pt}
 \end{figure*}
 
@@ -543,7 +563,7 @@ We then plotted these scenarios to assess the influence of each parameter on the
   \vspace*{-5pt}
   \centering %Centers the figure
   \includegraphics[width=0.9\textwidth]{../figs/c_MSE_R2.pdf}
-  \caption{MSE (upper row) and $R^2$ (lower row) for Lasso regression evaluated on the Franke test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 11 evenly spaced degrees in the interval $[1, 41]$ and 30 evenly spaced exponents for $\lambda$ in the interval $[-5,1]$, but in the right column we have cropped away degrees 1 and 5 and the 20 largest $\lambda$ values.}\label{fig:c MSE R2}
+  \caption{MSE (upper row) and $R^2$ (lower row) for Lasso regression evaluated on the Franke test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 11 evenly spaced degrees in the interval $[1, 41]$ and 30 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$, but in the right column we have cropped away degrees 1 and 5 and the 20 largest $\lambda$ values.}\label{fig:c MSE R2}
   \vspace*{-5pt}
 \end{figure*}
 
@@ -566,24 +586,17 @@ We then plotted these scenarios to assess the influence of each parameter on the
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[width=0.9\textwidth]{../figs/f_OLS_Ridge_Lasso.pdf}
-  \caption{MSE evaluated on Franke test data as function of polynomial degrees in the interval $[1, 11]$ and number of folds $k\in[5, 15]$ used in cross-validation, for OLS (first row), Ridge (second row) and Lasso (third row) regression. The upper left contour plot\colorbox{magenta}{update after running cross-val again}. We have used $\lambda=0.001$ and $\lambda=0.1$ in the left and right columns, respectively, for both Ridge and Lasso regression. \colorbox{magenta}{try using 0.001 and 5 instead?}}\label{fig:f OLS Ridge Lasso}
+  \includegraphics[width=0.9\textwidth]{../figs/f_Ridge_Lasso.pdf}
+  \caption{MSE evaluated on Franke test data as function of polynomial degrees in the interval $[1, 15]$ and number of folds $k\in[5, 15]$ used in cross-validation, for Ridge (upper row) and Lasso (lower row) regression. The upper left contour plot\colorbox{magenta}{update after running cross-val again}. We have used $\lambda=0.001$ and $\lambda=0.5$ in the left and right columns, respectively. \colorbox{magenta}{try using 0.001 and 5 instead?}}\label{fig:f Ridge Lasso}
   \vspace*{-5pt}
 \end{figure*}
 
-\begin{figure*}
-  \vspace*{-5pt}
-  \centering %Centers the figure
-  \includegraphics[width=0.9\textwidth]{../figs/g_error_scaled_vs_raw.pdf}
-  \caption{\colorbox{magenta}{caption}}\label{fig:g error scaled vs raw}
-  \vspace*{-5pt}
-\end{figure*}
 
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
   \includegraphics[width=0.9\textwidth]{../figs/density_complexity.pdf}
-  \caption{\colorbox{magenta}{caption}}\label{fig:density complexity}
+  \caption{Contour plots of the cosmological simulation data (upper left) and the OLS fits for polynomial degrees 5 (upper right), 10 (middle left), 20 (middle right), 30 (lower left) and 50 (lower right).}\label{fig:density complexity}
   \vspace*{-5pt}
 \end{figure*}
 
@@ -591,7 +604,7 @@ We then plotted these scenarios to assess the influence of each parameter on the
   \vspace*{-5pt}
   \centering %Centers the figure
   \includegraphics[width=\textwidth]{../figs/density_surf.pdf}
-  \caption{\colorbox{magenta}{caption}}\label{fig:density surf}
+  \caption{Surface plots of the cosmological simulation data (left) and the OLS fit for polynomial degree 30 (right).}\label{fig:density surf}
   \vspace*{-5pt}
 \end{figure*}
 
@@ -600,7 +613,7 @@ We then plotted these scenarios to assess the influence of each parameter on the
   \vspace*{-5pt}
   \centering %Centers the figure
   \includegraphics[width=0.9\textwidth]{../figs/g_MSE_R2_Ridge.pdf}
-  \caption{\colorbox{magenta}{caption}}\label{fig:g MSE R2 Ridge}
+  \caption{MSE (upper row) and $R^2$ (lower row) for Ridge regression evaluated on the cosmological test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 11 evenly spaced degrees in the interval $[1, 31]$ and 11 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$. In the right column we have cropped away degrees smaller than 19 purely for visualization purposes.}\label{fig:g MSE R2 Ridge}
   \vspace*{-5pt}
 \end{figure*}
 
@@ -608,7 +621,7 @@ We then plotted these scenarios to assess the influence of each parameter on the
   \vspace*{-5pt}
   \centering %Centers the figure
   \includegraphics[width=0.9\textwidth]{../figs/g_MSE_R2_Lasso.pdf}
-  \caption{\colorbox{magenta}{caption}}\label{fig:g MSE R2 Lasso}
+  \caption{MSE (upper row) and $R^2$ (lower row) for Lasso regression evaluated on the cosmological test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 11 evenly spaced degrees in the interval $[1, 31]$ and 11 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$, but in the right column we have cropped away degrees smaller than 19 and the 3 largest $\lambda$ values.}\label{fig:g MSE R2 Lasso}
   \vspace*{-5pt}
 \end{figure*}
 
@@ -617,22 +630,33 @@ We then plotted these scenarios to assess the influence of each parameter on the
   \vspace*{-5pt}
   \centering %Centers the figure
   \includegraphics[width=\textwidth]{../figs/g_kfold_vs_bootstrap.pdf}
-  \caption{\colorbox{magenta}{caption}}\label{fig:g kfold vs bootstrap}
+  \caption{MSE evaluated on cosmological test data as function of polynomial degrees in the interval $[1, 31]$ and number of folds $k\in[5, 15]$ used in cross-validation (contour plot on the left). On the right we have plotted the MSE purely as function of complexity when using the bootstrap resampling method with 100 steps.}\label{fig:g kfold vs bootstrap}
   \vspace*{-5pt}
 \end{figure*}
 
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.9\textwidth]{../figs/g_Ridge_Lasso.pdf}
+  \caption{MSE evaluated on cosmological test data as function of polynomial degrees in the interval $[1, 31]$ and number of folds $k\in[5, 15]$ used in cross-validation, for Ridge (upper row) and Lasso (lower row) regression. The upper left contour plot\colorbox{magenta}{update after running cross-val again}. We have used $\lambda=0.001$ and $\lambda=0.5$ in the left and right columns, respectively. \colorbox{magenta}{try using 0.001 and 5 instead?}}\label{fig:g Ridge Lasso}
+  \vspace*{-5pt}
+\end{figure*}
 
-\section{Discussion}\label{sec:discussion}
+% \begin{figure*}
+%   \vspace*{-5pt}
+%   \centering %Centers the figure
+%   \includegraphics[width=0.9\textwidth]{../figs/density_OLS_Ridge_Lasso.pdf}
+%   \caption{Contour plots of the cosmological simulation data (upper left) and OLS (upper right), Ridge (lower left) and Lasso (lower right) regression fits for polynomial degree 31 and $k=15$ number of folds in cross-validation. For Ridge regression we used \colorbox{magenta}{lambda} and for Lasso we used \colorbox{magenta}{lambda}.}\label{fig:density OLS Ridge Lasso}
+%   \vspace*{-5pt}
+% \end{figure*}
 
 
 \section{Conclusion}\label{sec:conclusion}
 
 
-\section{Reflection}\label{sec:reflection}
-% MAYBE JUST INCLUDE SOME REFLECTION IN THE CONCLUSION INSTEAD OF HAVING AS OWN SECTION
 
-\section*{Acknowledgements}\label{sec:cknowledgements}
-% MAYBE REMOVE
+% \section*{Acknowledgements}\label{sec:cknowledgements}
+% % MAYBE REMOVE
 
 \Urlmuskip=0mu plus 1mu\relax
 \onecolumngrid
@@ -642,8 +666,8 @@ We then plotted these scenarios to assess the influence of each parameter on the
 % ===========================================
 \appendix
 \section{Derivations}\label{appsec:derivations}
-\subsection{Expectation Value and Variance of \texorpdfstring{$\boldsymbol{\beta}_\text{OLS}$}{Lg}}\label{subapp:beta OLS}
-\colorbox{magenta}{rewrite to fit report. use hats instead of OLS. change T}
+\subsection{Expectation value and variance of the OLS estimator \texorpdfstring{$\boldsymbol{\hat{\beta}}$}{Lg}}\label{subapp:beta OLS}
+\colorbox{magenta}{rewrite to fit report?}
 
 Since the error in $\mathbf{y}$ is normal distributed as $\boldsymbol{\varepsilon}\sim N(0,\sigma^2)$ we know that the expectation value and variance of the $i$'th element of $\boldsymbol{\varepsilon}$ is $\mathbb{E}(\varepsilon_i)=0$ and $\textrm{Var}(\varepsilon_i)=\sigma^2$. Thus, since we approximate $f(\mathbf{x})$ with $\mathbf{\tilde{y}}=\mathbf{X}\boldsymbol{\beta}$ the expectation value of $\mathbf{y}$ becomes 
 \begin{equation}
@@ -653,7 +677,7 @@ which gives us the expectation value of $\mathbf{y}$ for a given element $i$:
 \begin{equation}
 \mathbb{E}(y_i) = \mathbb{E}\left(\sum_jX_{ij}\beta_j\right) = \sum_jX_{ij}\beta_j = \mathbf{X}_{i,*}\boldsymbol{\beta}.
 \end{equation}
-Here we have used that the sum $\sum_jX_{ij}\beta_j$ is known to be the value of $\tilde{y}_i$, hence its expectation value is itself. Moreover, we can similarly find the variance of $\mathbf{y}$ for a given element $i$ by using that the aforementioned sum is known to be $\tilde{y}_i$ for all $i$, i.e. $\textrm{Var}(\mathbf{X}_{i,*}\boldsymbol{\beta})=0$. Thus, we have
+Here we have used that the sum $\sum_jX_{ij}\beta_j$ is known to be the value of $\tilde{y}_i$, hence its expectation value is itself. Moreover, we can similarly find the variance of $\mathbf{y}$ for a given element $i$ by using that the terms in the aforementioned sum are known to be $\tilde{y}_i$ for all $i$, i.e. $\textrm{Var}(\mathbf{X}_{i,*}\boldsymbol{\beta})=0$. Thus, we have
 \begin{equation}
 \textrm{Var}(y_i) = \textrm{Var}(\mathbf{X}_{i,*}\boldsymbol{\beta}) + \textrm{Var}(\varepsilon_i) = \sigma^2,
 \end{equation}
@@ -661,9 +685,9 @@ and consequently
 \begin{equation}
   y_i\sim N(\mathbf{X}_{i,*}\boldsymbol{\beta},\sigma^2).
 \end{equation}
-Now, using that the optimal parameters in OLS are given by $\boldsymbol{\beta}_\textrm{OLS}=\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\mathbf{y}$, their expectation values become
+Now, using that the OLS estimator is given by $\boldsymbol{\hat{\beta}}=\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\mathbf{y}$, its expectation values become
 \begin{align*}
-  \mathbb{E}(\boldsymbol{\beta}_\textrm{OLS})&=\mathbb{E}\left\{ \left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\mathbf{y} \right\} \\
+  \mathbb{E}(\boldsymbol{\hat{\beta}})&=\mathbb{E}\left\{ \left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\mathbf{y} \right\} \\
   &= \mathbb{E}\left\{\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\right\} \mathbb{E}(\mathbf{y}) \\
   &= \left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\mathbf{X}\boldsymbol{\beta} \\
   &= \boldsymbol{\beta}. \numberthis \label{appeq:expect beta OLS}
@@ -680,9 +704,9 @@ Furthermore, if $x$ and $y$ are two independent variables, the variance of their
 \\
 &= \textrm{Var}(x)\textrm{Var}(y) + \textrm{Var}(x)(\mathbb{E}(y))^2 + \textrm{Var}(y)(\mathbb{E}(x))^2,
 \end{align*}
-so if we now set $x=\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}$ and $y=\mathbf{y}$ we find that the variance of $\boldsymbol{\beta}_\textrm{OLS}$ is
+so if we now set $x=\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}$ and $y=\mathbf{y}$ we find that the variance of $\boldsymbol{\hat{\beta}}$ is
 \begin{align*}
-\textrm{Var}(\boldsymbol{\beta}_\textrm{OLS}) 
+\textrm{Var}(\boldsymbol{\hat{\beta}}) 
 &= \underbrace{\textrm{Var}\left[\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\right]\textrm{Var}(\mathbf{y})}_0 
 + \underbrace{\textrm{Var}\left[\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\right](\mathbb{E}(\mathbf{y}))^2}_{0} 
 + \textrm{Var}(\mathbf{y})\left(\mathbb{E}\left[\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\right]\right)^2,
@@ -696,9 +720,11 @@ so if we now set $x=\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^
 &= \sigma^2\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}. \numberthis \label{appeq:var beta OLS}
 \end{align*}
 Here we have used that the transpose of $\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}$ is itself since it is square and symmetric.
+\colorbox{magenta}{mention that sigma is zero in cosmo case, so variance is zero}
 
-\subsection{Alternative Expression for MSE}\label{subapp:cost}
-\colorbox{magenta}{rewrite to fit report}
+
+\subsection{MSE expressed in terms of model bias, model variance and noise variance}\label{subapp:cost}
+\colorbox{magenta}{rewrite to fit report?}
 
 Substituting $\mathbf{y}$ with $f(\mathbf{x}) + \boldsymbol{\epsilon}$, and adding and subtracting $\mathbb{E}\left[\mathbf{\tilde{y}}\right]$, we find that
 \begin{align*}
@@ -723,7 +749,7 @@ Substituting $\mathbf{y}$ with $f(\mathbf{x}) + \boldsymbol{\epsilon}$, and addi
 \\
 &\hspace{10pt} +\mathbb{E}\Big[-\mathbf{f}\mathbf{\tilde{y}}- \boldsymbol{\epsilon}\mathbf{\tilde{y}} + \mathbf{f}\mathbb{E}\left[\mathbf{\tilde{y}} \right]+ \boldsymbol{\epsilon}\mathbb{E}\left[\mathbf{\tilde{y}} \right]  - \mathbf{\tilde{y}}\mathbf{f}- \mathbf{\tilde{y}}\boldsymbol{\epsilon} + \mathbf{\tilde{y}}\mathbb{E}\left[\mathbf{\tilde{y}}\right] + \mathbb{E}\left[\mathbf{\tilde{y}}\right]\mathbf{f}+ \mathbb{E}\left[\mathbf{\tilde{y}}\right]\boldsymbol{\epsilon} + \mathbb{E}\left[\mathbf{\tilde{y}}\right]\mathbf{\tilde{y}} - 2\left(\mathbb{E}\left[\mathbf{\tilde{y}}\right]\right)^2\Big].
 \end{align*}
-Before we move further we may note that the exact function $f(\mathbf{x})$ generally is not known, and we may therefore assume that our data is a good representation and replace $\mathbf{f}$ with $\mathbf{y}$ in the expression above. In practise this $\mathbf{y}$ is then the part of the data set that we have chosen as test set, while the model is made with the remaining data set (the training set). \colorbox{magenta}{correct?} Thus, using that $\mathbb{E}[\mathbb{E}[\mathbf{x}]]= \mathbb{E}[\mathbf{x}]$, $\mathbb{E}[(\mathbb{E}[\mathbf{x}])^2] = (\mathbb{E}[\mathbf{x}])^2$ and $\mathbb{E}[\mathbf{x},\mathbf{y}]=\mathbb{E}[\mathbf{x}]\mathbb{E}[\mathbf{y}]$ for any statistically independent $\mathbf{x}$ and $\mathbf{y}$, and that $\mathbb{E}[\boldsymbol{\epsilon}]=0$ so that we can remove all first order terms in $\boldsymbol{\epsilon}$, we get
+Before we move further we may note that the exact function $f(\mathbf{x})$ generally is not known, and we may therefore assume that our data is a good representation and replace $\mathbf{f}$ with $\mathbf{y}$ in the expression above. In practise this $\mathbf{y}$ is then the part of the data set that we have chosen as test set, while the model is trained with the remaining data set (the training set). Thus, using that $\mathbb{E}[\mathbb{E}[\mathbf{x}]]= \mathbb{E}[\mathbf{x}]$, $\mathbb{E}[(\mathbb{E}[\mathbf{x}])^2] = (\mathbb{E}[\mathbf{x}])^2$ and $\mathbb{E}[\mathbf{x},\mathbf{y}]=\mathbb{E}[\mathbf{x}]\mathbb{E}[\mathbf{y}]$ for any statistically independent $\mathbf{x}$ and $\mathbf{y}$, and that $\mathbb{E}[\boldsymbol{\epsilon}]=0$ so that we can remove all first order terms in $\boldsymbol{\epsilon}$, we get
 \begin{align*}
 \mathbb{E}\left[(\mathbf{y}-\mathbf{\tilde{y}})^2 \right] 
 &= \mathbb{E}\Big[\mathbf{y}^2 + \boldsymbol{\epsilon}^2 - \mathbf{y}\mathbb{E}\left[\mathbf{\tilde{y}}\right] -\mathbb{E}\left[\mathbf{\tilde{y}}\right]\mathbf{y}  + \left(\mathbb{E}\left[\mathbf{\tilde{y}}\right]\right)^2\Big]

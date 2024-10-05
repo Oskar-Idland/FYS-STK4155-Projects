@@ -4,7 +4,7 @@ from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import numpy as np
 from random import random, seed
 import sklearn
-from sklearn.model_selection import train_test_split, KFold, cross_val_score
+from sklearn.model_selection import train_test_split, KFold, cross_val_score, cross_val_predict
 from sklearn.linear_model import LinearRegression
 from sklearn import linear_model
 from sklearn.preprocessing import StandardScaler, PolynomialFeatures
@@ -299,7 +299,7 @@ def Bootstrap(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, n_bootst
     return error, bias, variance
 
 
-def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model, degree: int, scale: bool = True) -> float:
+def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model, degree: int, scale: bool = True, predict: bool = False) -> float | np.ndarray:
     """
     Performs k-fold cross-validation.
 
@@ -310,25 +310,31 @@ def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model, d
     k (int): The number of folds in the k-fold cross-validation.
     model (sklearn.linear_model.LinearRegression | sklearn.linear_model.Ridge | sklearn.linear_model.Lasso): The regression model to be used.
     degree (int): The degree of the polynomial features.
+    scale (bool, optional): Whether to scale the data. Default is True.
+    predict (bool, optional): Whether to return the predicted values instead of the score. Default is False.
 
     Returns:
-    float: The estimated Mean Squared Error (MSE) from the k-fold cross-validation.
+    float | np.ndarray: The estimated Mean Squared Error (MSE) from the k-fold cross-validation if predict is passed as False, and the predicted values if predict is passed as True.
     """
 
-    kfold = KFold(n_splits=k, shuffle=True) 
+    kfold = KFold(n_splits = k, shuffle = True) 
 
     X = create_X(x, y, degree)
-
     if scale:
         scaler_X = StandardScaler().fit(X)
         scaler_z = StandardScaler().fit(z)
         X = scaler_X.transform(X)
         z = scaler_z.transform(z)
 
-    estimated_mse_folds = cross_val_score(model, X, z, scoring='neg_mean_squared_error', cv=kfold)
-    estimated_mse = np.mean(-estimated_mse_folds)
-    
-    return estimated_mse
+    if predict:
+        z_pred = cross_val_predict(model, X, z, cv = kfold).reshape(-1, 1)
+        if scale:
+            scaler_z.inverse_transform(z_pred)
+        return z_pred
+    else:
+        estimated_mse_folds = cross_val_score(model, X, z, scoring = "neg_mean_squared_error", cv = kfold)
+        estimated_mse = np.mean(-estimated_mse_folds)
+        return estimated_mse
 
 
 if __name__ == "__main__":
