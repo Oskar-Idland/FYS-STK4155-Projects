@@ -100,7 +100,7 @@
 
 \begin{abstract}
 % EXAMPLE OF HOW AN ABSTRACT COULD BE STRUCTURED
-% This study revolves around the famous double-slit experiment and the wave-nature of particles. By employing the Crank-Nicholson scheme we managed to discretize the Schrödinger equation describing the evolution of a single particle in a two-dimensional box. This was used to perform simulations with single-, double-, and triple-slit configurations, storing the probability values associated with the particle's position within the box at each time step. Visualizing these results proved striking resemblence to the behavior of coherent waves passing through corresponding setups, as expected. Hence, we observed the probability distribution describing the particle's position to evolve and interact with obstacles like a wave packet, which is a clear indicator that a an actual stream of such particles would too. By assuming that the particle eventually hits a detection screen on the other side of the slits, we plotted the probability values versus $y$-position at $x=0.8$ and found that the patterns all agreed with those famously observed during real life experiments. Furthermore, we determined that the real part of the wave packet itself was constantly phase-shifted $\pi/2$ relative to its imaginary part throughout the double-slit simulation. This was expected based on the initial state, hence further validating our methods and results. 
+This study revolves around the famous double-slit experiment and the wave-nature of particles. By employing the Crank-Nicholson scheme we managed to discretize the Schrödinger equation describing the evolution of a single particle in a two-dimensional box. This was used to perform simulations with single-, double-, and triple-slit configurations, storing the probability values associated with the particle's position within the box at each time step. Visualizing these results proved striking resemblence to the behavior of coherent waves passing through corresponding setups, as expected. Hence, we observed the probability distribution describing the particle's position to evolve and interact with obstacles like a wave packet, which is a clear indicator that a an actual stream of such particles would too. By assuming that the particle eventually hits a detection screen on the other side of the slits, we plotted the probability values versus $y$-position at $x=0.8$ and found that the patterns all agreed with those famously observed during real life experiments. Furthermore, we determined that the real part of the wave packet itself was constantly phase-shifted $\pi/2$ relative to its imaginary part throughout the double-slit simulation. This was expected based on the initial state, hence further validating our methods and results. 
 We have explored various regression techniques and resampling methods within the context of machine learning, motivated by the need to develop robust models that can accurately predict and generalize from complex datasets. The main objective was to analyze and compare the performance of Ordinary Least Squares (OLS), Ridge, and Lasso regression in fitting synthetic and real-world data, focusing on the bias-variance tradeoff and model generalizability. We applied these regression techniques to the Franke function, a synthetic benchmark used in numerical analysis, and extended our analysis to cosmological N-body simulation data generated using the public G\begin{scriptsize}ASOLINE\end{scriptsize}2 code SPH code. To assess model performance and generalization, we employed resampling methods such as bootstrap and k-fold cross-validation, examining how they help to evaluate model accuracy under different training and test data conditions. Our study provided insights into how model complexity and regularization parameters affect the bias-variance tradeoff and prediction error, enabling us to critically evaluate each regression technique's performance using statistical and resampling approaches. \colorbox{magenta}{rewrite /remove last part when results are gathered and discussion/conclusion is finished}
 \end{abstract}
 \maketitle
@@ -437,7 +437,7 @@ The resulting MSE and $R^2$ scores were plotted as functions of both $\lambda$ a
 \subsection{Bias-Variance Tradeoff}
 
 \colorbox{magenta}{we expect MSE=bias+var for data since noise var is 0}
-To showcase the bias-variance trade-off and validate our implementation, we imitated the analysis illustrated in \hyperref[fig:Hastie]{Fig. 2.11 from Hastie, Tibshirani, and Friedman}. Specifically, we plotted the MSE for both the training and test sets of the Franke data using OLS regression. We varied the polynomial degree from 1 to 82 in steps of 4. \colorbox{magenta}{Link to our result?}
+To showcase the bias-variance trade-off and validate our implementation, we imitated the analysis illustrated in \cref[fig:Hastie]{Fig. 2.11 from Hastie, Tibshirani, and Friedman}. Specifically, we plotted the MSE for both the training and test sets of the Franke data using OLS regression. We varied the polynomial degree from 1 to 82 in steps of 4. \colorbox{magenta}{Link to our result?}
 
 The generation and splitting of the Franke data were conducted as described previously. \\
 
@@ -470,14 +470,25 @@ For the cosmological simulation data, we only did a single scenario with 100 boo
 \colorbox{magenta}{include Ridge and Lasso}
 
 % TODO: Write
-For our cross-validation analysis, we used the \verb|KFold| function from the scikit-learn library to  
+For our cross-validation analysis, we used the \verb|KFold| function from the scikit-learn library to split the data into $k$ folds, with the integer $k ∈ [5, 15]$. We iterated over a 
 
 \subsection{The Program}\label{subsec:program}
 \subsubsection{Code Structure}\label{subsubsec:codestructure}
 % EXAMPLE OF HOW THIS CAN LOOK
 % Our main program is divided into a series of \verb|.cpp|-files, each containing one or more functions, with \verb|main.cpp| either calling the test functions, or the validating- and error-throwing functions and running the simulations, depending on how the project is built. In the header-file \verb|Simulation.h| we have documented the \verb|Simulation|-class and all its private and public member functions. All test functions are defined in \verb|test.cpp| and documented in \verb|test.h|, while validating- and error-throwing functions are defined in \verb|validate_input.cpp| and documented in \verb|validate.h|. All functions for reading data and visualizing the results are defined in \verb|.py|-files, and are imported and called on in \verb|main.py|. A detailed description of the program structure and how to build and run the program is given in the \verb|README.md|-file linked to \href{https://github.uio.no/oskarei/CompFys-Project5/blob/main/README.md}{here}.
 
+All source code for this project is available on our GitHub repository, linked in \cref{appsec:code}. The \verb|README.md| contains the entire project structure. The code is divided into the following files and notebooks:
+
+\verb|data_analysis.ipynb|: Jupyter notebook containing the analysis of the dark matter density data. This is where we apply our regression models.
+
+\verb|franke.ipynb|: Jupyter notebook containing the analysis of the Franke function-generated data, to validate our implementation.
+
+\verb|functions.py|: Python script containing all the functions used in the notebooks. All properly documented.
+% TODO: Update standard
+
 \subsubsection{Tools}\label{subsubsec:tools}
+Python \cite{Python} is used for creating our models, together with scikit-learn \cite{scikit-learn}. To vectorize our code we use \verb|numpy| \cite{Numpy}, and for visualization we use \verb|matplotlib.pyplot| \cite{Matplotlib}. To make our plots prettier we use the colormaps module \cite{colormaps}. Code completion and debugging is done in Visual Studio Code \cite{VSCode} with additional assistance of GitHub Copilot \cite{Copilot}. We use \verb|git| \cite{Git} for version control, and \verb|GitHub| \cite{GitHub} for remote storage of our code.
+
 % EXAMPLE OF HOW THIS CAN LOOK
 % C++ \cite{C++} is used for all the numerically heavy computations and simulations. The standard library of C++ is used for mathematical and trigonometric functions, and as containers of data and for vectorization we implement Armadillo's \cite{Armadillo} \verb|arma::vec| class, together with other functions the library offer. To parse the \verb|.json| input files we use the json parsing library \cite{json}. Python \cite{Python} is used for plotting and animating our results. To vectorize our code we use \verb|numpy| \cite{Numpy}, and for visualization we use \verb|matplotlib.pyplot| \cite{Matplotlib}. To make our plots prettier we use the colormaps module \cite{colormaps}. Code completion and debugging is done in Visual Studio Code \cite{VSCode} with additional assistance of GitHub Copilot \cite{Copilot}. We use \verb|git| \cite{Git} for version control, and \verb|GitHub| \cite{GitHub} for remote storage of our code.
 
@@ -666,6 +677,9 @@ For our cross-validation analysis, we used the \verb|KFold| function from the sc
 \newpage
 % ===========================================
 \appendix
+\section{Code}\label{appsec:code}
+\href{https://github.com/Oskar-Idland/FYS-STK4155-Projects}{https://github.com/Oskar-Idland/FYS-STK4155-Projects}
+
 \section{Derivations}\label{appsec:derivations}
 \subsection{Expectation value and variance of the OLS estimator \texorpdfstring{$\boldsymbol{\hat{\beta}}$}{Lg}}\label{subapp:beta OLS}
 \colorbox{magenta}{rewrite to fit report?}

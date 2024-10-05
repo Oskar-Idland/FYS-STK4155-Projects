@@ -15,9 +15,12 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-def FrankeFunction(x,y):
+def FrankeFunction(x: float | np.ndarray,y: float | np.ndarray):
     """ 
     Generates a surface plot of the Franke function.
+    # Parameters:
+    x (float | np.ndarray): The x-value(s).
+    y (float | np.ndarray): The y-value(s).
     """
     term1 = 0.75*np.exp(-(0.25*(9*x-2)**2) - 0.25*((9*y-2)**2))
     term2 = 0.75*np.exp(-((9*x+1)**2)/49.0 - 0.1*(9*y+1))
@@ -29,11 +32,11 @@ def MSE(y: np.ndarray, y_pred: np.ndarray) -> float:
     """
     Calculates the Mean Squared Error (MSE) between the true and predicted values.
 
-    Parameters:
+    ## Parameters:
     y (np.ndarray): The actual data values.
     y_pred (np.ndarray): The predicted data values from the model.
 
-    Returns:
+    ## Returns:
     float: The Mean Squared Error.
     """
     y = y.flatten()
@@ -45,11 +48,11 @@ def R2(y: np.ndarray, y_pred: np.ndarray) -> float:
     """
     Calculates the R2 score of the model.
 
-    Parameters:
+    ## Parameters:
     y (np.ndarray): The actual data values.
     y_pred (np.ndarray): The predicted data values from the model.
 
-    Returns:
+    ## Returns:
     float: The R2 score.
     """
     y = y.flatten()
@@ -61,12 +64,12 @@ def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
     """
     Creates the design matrix X.
 
-    Parameters:
+    ## Parameters:
     x (np.ndarray): The independent variable(s).
     y (np.ndarray): The independent variable(s).
     n (int): The degree of the polynomial features.
 
-    Returns:
+    ## Returns:
     np.ndarray: The design matrix X.
     """
     if len(x.shape) > 1:
@@ -94,10 +97,10 @@ def OLS(x: np.ndarray, y: np.ndarray, z: np.ndarray[np.ndarray, np.ndarray], deg
     '''
     Performs Ordinary Least Squares (OLS) regression.
 
-    Parameters:
-    x (array-like): The independent variable(s).
-    y (array-like): The independent variable(s).
-    z (array-like): The dependent variable.
+    ## Parameters:
+    x (np.ndarray): The independent variable(s).
+    y (np.ndarray): The independent variable(s).
+    z (np.ndarray): The dependent variable.
     degree (int): The degree of the polynomial features.
     scale (bool, optional): Whether to scale the data. Default is True.
     test_size (float, optional): The proportion of the dataset to include in the test split. Default is 0.2.
@@ -107,7 +110,7 @@ def OLS(x: np.ndarray, y: np.ndarray, z: np.ndarray[np.ndarray, np.ndarray], deg
     return_scalers (bool, optional): Whether to return the scalers used to scale the data. Default is False.
     return_train_test (bool, optional): Whether to return X_train, X_test, z_train and z_test. Default is False.
 
-    Returns:
+    ## Returns:
     tuple: A tuple containing the Mean Squared Error (MSE) score and the R-squared (R2) score, as well as the beta values (coefficients), the design matrix X, the scalers for X and z, and/or the training and test sets for X and z, depending on the passed arguments.
     '''
     X = create_X(x, y, degree)
@@ -145,7 +148,7 @@ def Ridge(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
     """
     Performs Ridge regression.
 
-    Parameters:
+    ## Parameters:
     x (np.ndarray): The independent variable(s).
     y (np.ndarray): The independent variable(s).
     z (np.ndarray): The dependent variable.
@@ -159,8 +162,8 @@ def Ridge(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
     return_scalers (bool, optional): Whether to return the scalers used to scale the data. Default is False.
     return_train_test (bool, optional): Whether to return X_train, X_test, z_train and z_test. Default is False.
 
-    Returns:
-    tuple: A tuple containing the Mean Squared Error (MSE) score and the R-squared (R2) score, as well as the beta values (coefficients), the design matrix X, the scalers for X and z, and/or the training and test sets for X and z, depending on the passed arguments.
+    ## Returns:
+    tuple: A tuple containing of length 2-10, containing the Mean Squared Error (MSE) score and the R-squared (R2) score, as well as the beta values (coefficients), the design matrix X, the scalers for X and z, and/or the training and test sets for X and z, depending on the passed arguments.
     """
 
     X = create_X(x, y, degree)
@@ -198,7 +201,7 @@ def Lasso(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
     """
     Performs Lasso regression.
 
-    Parameters:
+    ## Parameters:
     x (np.ndarray): The independent variable(s).
     y (np.ndarray): The independent variable(s).
     z (np.ndarray): The dependent variable.
@@ -213,8 +216,8 @@ def Lasso(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
     return_scalers (bool, optional): Whether to return the scalers used to scale the data. Default is False.
     return_train_test (bool, optional): Whether to return X_train, X_test, z_train and z_test. Default is False.
 
-    Returns:
-    tuple: A tuple containing the Mean Squared Error (MSE) score and the R-squared (R2) score, as well as the beta values (coefficients), the design matrix X, the scalers for X and z, and/or the training and test sets for X and z, depending on the passed arguments.
+    ## Returns:
+    tuple: A tuple of length 2-10, containing the Mean Squared Error (MSE) score and the R-squared (R2) score, as well as the beta values (coefficients), the design matrix X, the scalers for X and z, and/or the training and test sets for X and z, depending on the passed arguments.
     """
 
     X = create_X(x, y, degree)  
@@ -257,7 +260,7 @@ def Bootstrap(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, n_bootst
     """
     Performs bootstrapping.
 
-    Parameters:
+    ## Parameters:
     x (np.ndarray): The independent variable(s).
     y (np.ndarray): The independent variable(s).
     z (np.ndarray): The dependent variable.
@@ -267,8 +270,8 @@ def Bootstrap(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, n_bootst
     test_size (float, optional): The proportion of the dataset to include in the test split. Default is 0.2.
     seed (int, optional): The random seed for reproducibility. Default is None.   
 
-    Returns:
-    tuple: A tuple containing the Mean Squared Error (MSE) score, bias, and variance
+    ## Returns:
+    tuple: A tuple of length 3 containing the Mean Squared Error (MSE) score, bias, and variance
     """
 
     X = create_X(x, y, degree)
@@ -303,7 +306,7 @@ def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model, d
     """
     Performs k-fold cross-validation.
 
-    Parameters:
+    ## Parameters:
     x (np.ndarray): The independent variable(s).
     y (np.ndarray): The independent variable(s).
     z (np.ndarray): The dependent variable.
@@ -313,7 +316,7 @@ def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model, d
     scale (bool, optional): Whether to scale the data. Default is True.
     predict (bool, optional): Whether to return the predicted values instead of the score. Default is False.
 
-    Returns:
+    ## Returns:
     float | np.ndarray: The estimated Mean Squared Error (MSE) from the k-fold cross-validation if predict is passed as False, and the predicted values if predict is passed as True.
     """
 
