@@ -269,9 +269,9 @@ We see from the expression \eqref{eq:Var} for the model variance that it represe
 \subsubsection{Bias-Variance Tradeoff}
 Measures of a predictive model's total error and how well it is likely to predict future samples are commonly expressed in terms of the mean-squared error (MSE) and the score function, respectively. These are given by
 \begin{align}
-  \text{MSE}(\mathbf{y},\mathbf{\tilde{y}}) &= \frac{1}{n}\sum_{i=0}^{n-1}\left(y_i-\tilde{y}_i\right)^2,
+  \text{MSE}(\mathbf{y},\mathbf{\tilde{y}}) &= \frac{1}{n}\sum_{i=0}^{n-1}\left(y_i-\tilde{y}_i\right)^2, \label{eq:MSE}
   \\
-  R^2(\mathbf{y},\mathbf{\tilde{y}}) &= 1 -\frac{\sum_{i=0}^{n-1}\left(y_i-\tilde{y}_i\right)^2}{\sum_{i=0}^{n-1}\left(y_i-\overline{y}\right)^2},
+  R^2(\mathbf{y},\mathbf{\tilde{y}}) &= 1 -\frac{\sum_{i=0}^{n-1}\left(y_i-\tilde{y}_i\right)^2}{\sum_{i=0}^{n-1}\left(y_i-\overline{y}\right)^2}, \label{eq:R2}
 \end{align}
 where $\overline{y}$ is the mean value of $\mathbf{y}$ and $n$ is the number of data points. In \cref{subapp:cost} \colorbox{magenta}{maybe move up here?} we show that the MSE alternatively can be expressed in terms of the model bias, model variance and noise variance as 
 \begin{equation}
@@ -306,35 +306,7 @@ The Franke function is a widely used two-dimensional synthetic function in numer
 &+ \frac{1}{2} \exp{\left( -\frac{(9x - 7)^2}{4} - \frac{(9y - 3)^2}{4} \right)} \\
 &- \frac{1}{5} \exp{\left( -(9x - 4)^2 - (9y - 7)^2 \right)}, \numberthis\label{eq:Franke}
 \end{align*}
-which leads to the surface shown in fig. \ref{fig:Franke}. We will use the function multiple times throughout this work, as it produces a surface with both smooth and non-smooth regions, making it an excellent benchmark for testing regression and resampling algorithms. It simulates real-world data that may contain both complex variations and noise, mimicking scenarios that we will encounter as we move on to implementing the algorithms on actual simulation data.
-
-\begin{figure}[h!]
-  \vspace*{-5pt}
-  \centering %Centers the figure
-  \includegraphics[trim=2.8cm 0.5cm 1.0cm 0.5cm,clip,width=\columnwidth,keepaspectratio]{../figs/a_Franke_surf.pdf}
-  \caption{Visualization of the two-dimensional Franke function expressed in \eqref{eq:Franke}.}\label{fig:Franke}
-  \vspace*{-5pt}
-\end{figure}
-
-\subsection{Cosmological Simulation Data}\label{subsec:simulation}
-% MAYBE EXPLAIN THE DATA HERE, WHAT WE EXPECT FOR THE DATA FOR EXAMPLE
-After implementing regression analysis and resampling methods using the Franke function we repeat the process using data from an N-body simulation of dark matter structure formation made with the public G\begin{footnotesize}ASOLINE\end{footnotesize}2 SPH code \cite{gasoline}, as mentioned in \cref{sec:introduction}. The initial conditions for the simulation were generated with MUSIC (MUlti-Scale Initial Conditions) \cite{music}, and standard Planck cosmology parameters $\Omega_\text{m}=0.3077$, $\Omega_{\Lambda}=0.6923$ and $H_0=67.81\:\text{km/s/Mpc}$ were used. The simulation box has length, width and height $L=20\:\text{Mpc}$, corresponding to a $500\times500\times500$ grid, and contains $64^3$ dark matter particles. 
-
-The output data includes 128 ``snapshots'' of the box through time, where the time paramater in the simulation is the scale factor, defined as
-\begin{equation}
-  a = \frac{1}{1+z}.
-\end{equation}
-Here $z$ is the cosmological redshift, which is 0 today and thus in the 128th snapshot. We focus on the dark matter density $\rho$, and study a snapshot at redshift $z\approx12.88$ because the distribution of $\rho$ is smoother at larger $z$. To get a function of two variables we average over one of the three axes so that we get a 2D grid, and because the density is so large and vastly different at different points in the box we take $\ln\rho$ to be our dependent variable instead of $\rho$. The resulting data is visualized as a contour plot and a surface plot in figure \ref{fig:density}. \colorbox{magenta}{maybe remove figure}
-
-Because the Universe expands as time goes on the box does as well, and we therefore scale the coordinates of the box by multiplying with $a$. Similarly, space between the dark matter particles also increases with time, which is why the density is scaled by multiplying with $a^{-3}$. G\begin{footnotesize}ASOLINE\end{footnotesize}2 uses the rest of the scaling factors by default. \colorbox{magenta}{move to method? explain better?}
-
-\begin{figure*}
-  \vspace*{-5pt}
-  \centering %Centers the figure
-  \includegraphics[width=0.99\textwidth]{../figs/density.pdf}
-  \caption{Logarithm of dark matter density in the simulation box averaged over one of the three axes at redshift $z\approx12.88$. Plotted as contour plot on the left and as surface plot on the right.}\label{fig:density}
-  \vspace*{-5pt}
-\end{figure*}
+We will use the function multiple times throughout this work, as it produces a surface with both smooth and non-smooth regions, making it an excellent benchmark for testing regression and resampling algorithms. It simulates real-world data that may contain both complex variations and noise, mimicking scenarios that we will encounter as we move on to implementing the algorithms on actual simulation data.
 
 
 \section{Methods \& Implementation}\label{sec:methods}
@@ -397,16 +369,79 @@ Because the Universe expands as time goes on the box does as well, and we theref
 % % EXPLAIN THE TYPE OF DATA WE ARE IMPLEMENTING OUR ALGORITHM TO ANALYZE AND HOW WE ARE DOING IT
 % % THIS COULD POSSIBLY BE PART OF THE IMPLEMENTATION SECTION INSTEAD, WITH AN INTRODUCTION TO THE DATA SET IN THE BEGINNING
 % \colorbox{magenta}{show raw 2D intensity plots first}
+\subsection{Generating the Data}
+\subsubsection{Synthetic Data}
+The Franke function generated data used in this study was created by sampling the function on a grid of $N\times N$ points, where $N=50$. A visualization of the function as a surface is shown in fig. \ref{fig:Franke}. Furthermore, to emulate inherent variability and uncertainty in real-world data we added a gaussian noise component with a zero mean and standard deviation of $\sigma = 0.1$. The noise was added to simulate the inherent variability and uncertainty in real-world data.
+
+\begin{figure}[h!]
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[trim=2.8cm 0.5cm 1.0cm 0.5cm,clip,width=\columnwidth,keepaspectratio]{../figs/a_Franke_surf.pdf}
+  \caption{Visualization of the two-dimensional Franke function expressed in \eqref{eq:Franke}.}\label{fig:Franke}
+  \vspace*{-5pt}
+\end{figure}
+
+\subsubsection{Cosmological Simulation Data}
+After implementing regression analysis and resampling methods using the Franke function we repeated the process using data from an N-body simulation of dark matter structure formation made with the public G\begin{footnotesize}ASOLINE\end{footnotesize}2 SPH code \cite{gasoline}. The initial conditions for the simulation were generated with MUSIC (MUlti-Scale Initial Conditions) \cite{music}, and standard Planck cosmology parameters $\Omega_\text{m}=0.3077$, $\Omega_{\Lambda}=0.6923$ and $H_0=67.81\:\text{km/s/Mpc}$ were used. The simulation box has length, width and height $L=20\:\text{Mpc}$, corresponding to a $500\times500\times500$ grid, and contains $64^3$ dark matter particles. 
+
+The output data includes 128 ``snapshots'' of the box through time, where the time paramater in the simulation is the scale factor, defined as
+\begin{equation*}
+  a = \frac{1}{1+z}.
+\end{equation*}
+Here $z$ is the cosmological redshift, which is 0 today and thus in the 128th snapshot. We focused on the dark matter density $\rho$, and studied a snapshot at redshift $z\approx12.88$ because the distribution of $\rho$ is smoother at larger $z$. To get a function of two variables we averaged over one of the three axes so that we get a 2D grid, and because the density is so large and vastly different at different points in the box we took $\ln\rho$ to be our dependent variable instead of $\rho$. The resulting data is visualized as a contour plot and a surface plot in figure \ref{fig:density}. We did not add a synthetic noise component to this data, i.e. $\sigma=0$ in this case, since the simulation output can be interpreted as the true data if we were to perform real observations of dark matter density.
+
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.99\textwidth]{../figs/density.pdf}
+  \caption{Logarithm of dark matter density in the simulation box averaged over one of the three axes at redshift $z\approx12.88$. Plotted as contour plot on the left and as surface plot on the right. Because the Universe expands as time goes on the box does as well, and we therefore scale the coordinates of the box by multiplying with $a$. Similarly, space between the dark matter particles also increases with time, which is why the density is scaled by multiplying with $a^{-3}$. G\begin{footnotesize}ASOLINE\end{footnotesize}2 uses the rest of the scaling factors by default.}\label{fig:density}
+  \vspace*{-5pt}
+\end{figure*}
+
+
 
 \subsection{Regression Analysis}
 \colorbox{magenta}{explain implementation on both Franke and data}
 \subsubsection{Creating the Design Matrix}
-\colorbox{magenta}{small paragraph, Håvard explain logic}
+Our first step when performing regression analyses on our data was to extend the design matrix $\mathbf{X}$ to the situation when we have two independent variables $\mathbf{x}$ and $\mathbf{y}$ instead of one $\mathbf{x}$. We then use $\mathbf{z}$ to denote our dependent variable. In the case of polynomial regression of degree $p$ with one independent variable vector $\mathbf{x}=\begin{pmatrix} x_0 &\ldots&x_{n}\end{pmatrix}^\top$ the design matrix has the form
+\begin{equation*}
+  \mathbf{X} = \begin{bmatrix}
+    1 & x_0 & x_0^2 & \ldots & x_0^p
+    \\
+    1 & x_1 & x_1^2 & \ldots & x_1^p
+    \\
+    \vdots&\vdots&\vdots&\ddots&\vdots&
+    \\
+    1 & x_{n} & x_{n}^2 & \ldots&x_{n}^p
+  \end{bmatrix}.
+\end{equation*}
+The feature vector in this case is $\boldsymbol{\beta}=\begin{pmatrix} \beta_0 &\ldots&\beta_{p}\end{pmatrix}^\top$, hence it is a column vector of length $p+1$, while our design matrix has dimensions $(n+1)\times (p+1)$
 
-\subsubsection{Generating the data}
-The Franke function generated data used in this study was created by sampling the function on a grid of $N\times N$ points, where $N=50$. The data was then augmented with an gaussian noise component with a zero mean and standard deviation of $\sigma = 0.1$. To match the $N\times N$ grid of the data,  the noise was flattened into a $(N^2, 1)$ array. The noise was added to simulate the inherent variability and uncertainty in real-world data.
+When we have two independent variables representing physical coordinates in a grid each combination of $x_i$ and $y_j$ corresponds to a unique component $z_{ij}$ in $\mathbf{z}$. If $\mathbf{x}$ and $\mathbf{y}$ contain $n_x+1$ and $n_y+1$ components, respectively, the design matrix for polynomial degree $p$ then becomes
+\begin{equation*}
+  \mathbf{X} \hspace{-2pt}=\hspace{-3pt}\begin{bmatrix}
+    1 & x_0 & y_0 & \ldots&x_0^p & x_0^{p-1}y_0 &\ldots& x_0y_0^{p-1}&y_0^p
+    \\
+    1 & x_1 & y_0 & \ldots & x_1^p & x_1^{p-1}y_0 &\ldots& x_1y_0^{p-1}&y_0^p
+    \\
+    \vdots&\vdots&\vdots&\ddots&\vdots&\vdots&\ddots&\vdots&\vdots
+    \\
+    1 & x_{n_x} & y_{0} & \ldots&x_{n_x}^p & x_{n_x}^{p-1}y_0 &\ldots& x_{n_x}y_0^{p-1}&y_0^p
+    \\
+    1 & x_0 & y_1 & \ldots& x_0^p & x_0^{p-1}y_1 &\ldots& x_0y_1^{p-1}&y_1^p
+    \\
+    \vdots&\vdots&\vdots&\ddots&\vdots&\vdots&\ddots&\vdots&\vdots
+    \\
+    1 & x_{n_x} & y_{n_y} & \ldots& x_{n_x}^p & x_{n_x}^{p-1}y_{n_y} &\ldots& x_{n_x}y_{n_y}^{p-1}&y_{n_y}^p
+  \end{bmatrix}.
+\end{equation*}
+We thus see that for polynomial degree 0 we have one column, three columns for first degree, six for second, ten for third, etc. This is a well known series of numbers, and we can express the number of features $l$ in terms of the polynomial degree $p$ as
+\begin{equation*}
+  l = \frac{1}{2}(p+1)(p+2).
+\end{equation*}
+Our design matrix thus has dimensions $N\times l$ where $N=(n_x+1)\times(n_y+1)$.
+\colorbox{magenta}{move to theory?}
 
-\colorbox{magenta}{Håvard explain cosmo data?}
 
 \subsubsection{Preprocessing}
 For this study, data scaling was essential to ensure that the features were on a similar scale, which is critical for many machine learning algorithms. By utilizing the \verb|StandardScaler| function from the scikit-learn library \colorbox{magenta}{cite}, we standardized our datasets by subtracting the mean and dividing the standard deviation over the data set, for each feature. Although the data generated by the Franke function and the cosmological simulation data used in subsequent analyses are inherently two-dimensional and may not exhibit significant variation in scale between features, scaling still provides consistent benefits.
@@ -519,42 +554,58 @@ Python \cite{Python} is used for creating our models, together with scikit-learn
 % \section{Results \& Discussions}\label{sec:results discussion}
 
 \section{Results \& Discussion}\label{sec:results discussion}
-\subsection{Effects of Data Scaling}
+\subsection{Effects of Data Scaling}\label{subsec:scaling effect}
+In \cref{fig:a error scaled vs raw} we have plotted the estimated MSE and $R^2$ scores evaluated on the Franke function test for polynomial degrees $\in[1,6]$. The left and right columns show the scores computed for the raw and scaled data, respectively. As expected there looks to be a constant factor between the raw and scaled MSE's, while the $R^2$ scores are equal in both cases. This is because $y_i$, $\tilde{y}_i$ and $\overline{y}$ (or in our case, $z_i$, $\tilde{z}_i$ and $\overline{z}$) are scaled equally, and from eq. \eqref{eq:R2} we thus see that the scaling cancels out from the numerator and denominator in the second term. 
 
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[width=0.9\textwidth]{../figs/a_error_scaled_vs_raw.pdf}
+  \includegraphics[width=0.8\textwidth]{../figs/a_error_scaled_vs_raw.pdf}
   \caption{MSE (upper row) and $R^2$ (lower row) evaluated on the Franke function test set using unscaled (left column) and scaled (right column) values, for polynomial degrees in the interval $[1,6]$.}\label{fig:a error scaled vs raw}
   \vspace*{-5pt}
 \end{figure*}
 
-\begin{figure}[h!]
-  \vspace*{-5pt}
-  \centering %Centers the figure
-  \includegraphics[width=\columnwidth]{../figs/a_beta_scaled_vs_raw.pdf}
-  \caption{The coefficients $\beta$ for the Franke function fit estimated using unscaled (blue) and scaled (red) data, plotted for polynomial degrees in the interval $[1,6]$.}\label{fig:a beta scaled vs raw}
-  \vspace*{-5pt}
-\end{figure}
+One might expect to see the same effects of scaling for the cosmological simulation data, but in \cref{fig:g error scaled vs raw} we see that this is not the case. Here we have plotted the MSE and $R^2$ scores for 21 evenly spaced polynomial degrees in the interval $[1,41]$, and we see that for degrees $\gtrsim9$ the raw scores diverge from the expected trend. Instead of a decreasing MSE and increasing $R^2$ as in the scaled case we get MSE's over 400 and very large, negative $R^2$ scores, a metric that should never be negative in the first place. This clearly shows why it is beneficial to scale the data, since it is safe to assume that the raw data catastrophe occurs due to numerical instability caused by loss of floating point precision. \colorbox{magenta}{correct?} Moreover, we see that we never reach a turning point in the scores where they start to worsen with polynomial degree, which makes sense considering the complexity of our data set.
 
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[width=0.9\textwidth]{../figs/g_error_scaled_vs_raw.pdf}
+  \includegraphics[width=0.8\textwidth]{../figs/g_error_scaled_vs_raw.pdf}
   \caption{MSE (upper row) and $R^2$ (lower row) evaluated on the cosmological test set using unscaled (left column) and scaled (right column) values, for polynomial degrees in the interval $[1,41]$.}\label{fig:g error scaled vs raw}
   \vspace*{-5pt}
 \end{figure*}
+
+In fact, we see from \cref{fig:g beta scaled vs raw} that the scaled coefficients for the fits to the cosmological data (plotted in orange) grow in orders of magnitude with complexity (cirka up until degree $21$, where stay around $10^4$), while the raw coefficients (plotted in purple) fall to zero around polynomial degree 9. The reason for the strong increase in the $\beta_\text{scaled}$'s is that $\mathbf{x}$ and $\mathbf{y}$ (both raw and scaled) are centered at 0, and in the scaled case these are divided by their standard deviations, hence most of the highest order polynomial terms decrease with the degree. We thus need very large coefficients for their contributions to the fit to be noticeable. The $\beta_\text{raw}$'s must be much smaller since the highest order terms grow rapidly with degree at the edges of the box, and eventually we encounter floating point errors. This is contrary to the coefficients estimated for the Franke function, where generally $\beta_\text{raw}\geq\beta_\text{scaled}$, as seen in \cref{appfig:a beta scaled vs raw} in \cref{appsec:figures}. This is because the Franke function is defined over the unit square, hence the raw coefficients grow with polynomial degree as well. \colorbox{magenta}{rewrite?} 
 
 \begin{figure}[h!]
   \vspace*{-5pt}
   \centering %Centers the figure
   \includegraphics[width=\columnwidth]{../figs/g_beta_scaled_vs_raw.pdf}
-  \caption{The coefficients $\beta$ for the cosmological fit estimated using unscaled (purple) and scaled (orange) data, plotted for polynomial degrees in the interval $[1,41]$.}\label{fig:g beta scaled vs raw}
+  \caption{The coefficients $\beta$ for the cosmological fit estimated using unscaled (purple) and scaled (orange) data, plotted for polynomial degrees in the interval $[1,41]$. We have used a logarithmic scale for the $\beta$'s.}\label{fig:g beta scaled vs raw}
   \vspace*{-5pt}
 \end{figure}
 
-\subsection{Hyperparameter in Ridge and Lasso}
+\subsection{Hyperparameter Dependency}
+\subsubsection{Ridge}
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.9\textwidth]{../figs/b_MSE_R2.pdf}
+  \caption{MSE (upper row) and $R^2$ (lower row) for Ridge regression evaluated on the Franke test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 21 evenly spaced degrees in the interval $[1, 41]$ and 30 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$. We have cropped away degrees 1 and 3 and the 15 largest $\lambda$ values purely for visualization purposes.}\label{fig:b MSE R2}
+  \vspace*{-5pt}
+\end{figure*}
 
+\subsubsection{Lasso}
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.9\textwidth]{../figs/c_MSE_R2.pdf}
+  \caption{MSE (upper row) and $R^2$ (lower row) for Lasso regression evaluated on the Franke test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 11 evenly spaced degrees in the interval $[1, 41]$ and 30 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$, but in the right column we have cropped away degrees 1 and 5 and the 20 largest $\lambda$ values.}\label{fig:c MSE R2}
+  \vspace*{-5pt}
+\end{figure*}
+
+
+\subsection{Bias-Variance Tradeoff}
 \begin{figure}[h!]
   \vspace*{-5pt}
   \centering %Centers the figure
@@ -566,27 +617,13 @@ Python \cite{Python} is used for creating our models, together with scikit-learn
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[width=0.9\textwidth]{../figs/b_MSE_R2.pdf}
-  \caption{MSE (upper row) and $R^2$ (lower row) for Ridge regression evaluated on the Franke test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 21 evenly spaced degrees in the interval $[1, 41]$ and 30 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$. We have cropped away degrees 1 and 3 and the 15 largest $\lambda$ values purely for visualization purposes.}\label{fig:b MSE R2}
-  \vspace*{-5pt}
-\end{figure*}
-
-\begin{figure*}
-  \vspace*{-5pt}
-  \centering %Centers the figure
-  \includegraphics[width=0.9\textwidth]{../figs/c_MSE_R2.pdf}
-  \caption{MSE (upper row) and $R^2$ (lower row) for Lasso regression evaluated on the Franke test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 11 evenly spaced degrees in the interval $[1, 41]$ and 30 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$, but in the right column we have cropped away degrees 1 and 5 and the 20 largest $\lambda$ values.}\label{fig:c MSE R2}
-  \vspace*{-5pt}
-\end{figure*}
-
-\begin{figure*}
-  \vspace*{-5pt}
-  \centering %Centers the figure
   \includegraphics[width=\textwidth]{../figs/e_bias_variance.pdf}
   \caption{MSE (orange), bias (blue) and variance (pink) for OLS regression evaluated on Franke test dta and plotted as functions of polynomial degree (upper left), number of data points (upper right), number of bootstrap steps (lower left) and test size fraction (lower right). When these are not varied we have used degree 5, 50 data points in one direction (i.e. $2\:500$ in the grid), 100 bootstrap steps and a test size fraction of 0.2. Note that some axes are scaled logarithmically and some have a linear scale.}\label{fig:e bias variance}
   \vspace*{-5pt}
 \end{figure*}
 
+\subsection{Resampling Methods}
+\subsubsection{OLS: Cross-Validation VS Bootstrap}
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
@@ -598,12 +635,26 @@ Python \cite{Python} is used for creating our models, together with scikit-learn
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[width=0.9\textwidth]{../figs/f_Ridge_Lasso.pdf}
-  \caption{MSE evaluated on Franke test data as function of polynomial degrees in the interval $[1, 15]$ and number of folds $k\in[5, 15]$ used in cross-validation, for Ridge (upper row) and Lasso (lower row) regression. The upper left contour plot\colorbox{magenta}{update after running cross-val again}. We have used $\lambda=0.001$ and $\lambda=0.5$ in the left and right columns, respectively. \colorbox{magenta}{try using 0.001 and 5 instead?}}\label{fig:f Ridge Lasso}
+  \includegraphics[width=\textwidth]{../figs/g_kfold_vs_bootstrap.pdf}
+  \caption{MSE evaluated on cosmological test data as function of polynomial degrees in the interval $[1, 31]$ and number of folds $k\in[5, 15]$ used in cross-validation (contour plot on the left). On the right we have plotted the MSE purely as function of complexity when using the bootstrap resampling method with 100 steps.}\label{fig:g kfold vs bootstrap}
   \vspace*{-5pt}
 \end{figure*}
 
+\subsubsection{Cross-Validation With Ridge and Lasso}
 
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.9\textwidth]{../figs/g_Ridge_Lasso.pdf}
+  \caption{MSE evaluated on cosmological test data as function of polynomial degrees in the interval $[1, 31]$ and number of folds $k\in[5, 15]$ used in cross-validation, for Ridge (upper row) and Lasso (lower row) regression. We have used $\lambda=0.001$ and $\lambda=0.5$ in the left and right columns, respectively.}\label{fig:g Ridge Lasso}
+  \vspace*{-5pt}
+\end{figure*}
+
+\subsection{Fits to the Cosmological Data}
+\subsubsection{Complexity Dependency for OLS}
+In \cref{fig:density complexity} we have plotted OLS fits to the cosmological data using polynomial degrees 5, 10, 20, 30 and 50 to further examine the effects of increasing model complexity. From degree 30 to 50 the fit actually seems to worsen, looking more smudged in the center, while ripple-like structures near the edges become more prominent. These are already visible for degree 30, but compared to the data it arguably doesn't make the fit look less accurate than for degree 20. 
+
+To explain the reason for the ripple effect, and why the smaller scale structures in the data don't show up more clearly as we continue increasing the model complexity we need to consider the columns of the scaled design matrix. As mentioned in \cref{subsec:scaling effect} most of the scaled box coordinates are less than 1. They are in fact close to zero in the center region and slightly larger than 1 in magnitude near the edges. Thus, as we move to higher order polynomials the elements of the rightmost columns in $\mathbf{X}_\text{scaled}$ (corresponding to the highest order terms) diverge, some tend to zero while others grow in magnitude. To minimize the model error the coefficients cannot continue increasing because then the fit worsens in the edges, but they cannot decrease too much either as this leads to a less accurate fit in the center. EXPLAIN THE RIPPLE EFFECT
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
@@ -612,55 +663,16 @@ Python \cite{Python} is used for creating our models, together with scikit-learn
   \vspace*{-5pt}
 \end{figure*}
 
+
+\subsubsection{Comparing Regression Variants}
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[width=\textwidth]{../figs/density_surf.pdf}
-  \caption{Surface plots of the cosmological simulation data (left) and the OLS fit for polynomial degree 30 (right).}\label{fig:density surf}
+  \includegraphics[width=0.9\textwidth]{../figs/density_OLS_Ridge_Lasso.pdf}
+  \caption{Contour plots of the cosmological simulation data (upper left) and OLS (upper right), Ridge (lower left) and Lasso (lower right) regression fits for polynomial degree 31 and $k=15$ number of folds in cross-validation. For Ridge regression we used \colorbox{magenta}{lambda} and for Lasso we used \colorbox{magenta}{lambda}.}\label{fig:density OLS Ridge Lasso}
   \vspace*{-5pt}
 \end{figure*}
 
-
-\begin{figure*}
-  \vspace*{-5pt}
-  \centering %Centers the figure
-  \includegraphics[width=0.9\textwidth]{../figs/g_MSE_R2_Ridge.pdf}
-  \caption{MSE (upper row) and $R^2$ (lower row) for Ridge regression evaluated on the cosmological test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 11 evenly spaced degrees in the interval $[1, 31]$ and 11 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$. In the right column we have cropped away degrees smaller than 19 purely for visualization purposes.}\label{fig:g MSE R2 Ridge}
-  \vspace*{-5pt}
-\end{figure*}
-
-\begin{figure*}
-  \vspace*{-5pt}
-  \centering %Centers the figure
-  \includegraphics[width=0.9\textwidth]{../figs/g_MSE_R2_Lasso.pdf}
-  \caption{MSE (upper row) and $R^2$ (lower row) for Lasso regression evaluated on the cosmological test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 11 evenly spaced degrees in the interval $[1, 31]$ and 11 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$, but in the right column we have cropped away degrees smaller than 19 and the 3 largest $\lambda$ values.}\label{fig:g MSE R2 Lasso}
-  \vspace*{-5pt}
-\end{figure*}
-
-
-\begin{figure*}
-  \vspace*{-5pt}
-  \centering %Centers the figure
-  \includegraphics[width=\textwidth]{../figs/g_kfold_vs_bootstrap.pdf}
-  \caption{MSE evaluated on cosmological test data as function of polynomial degrees in the interval $[1, 31]$ and number of folds $k\in[5, 15]$ used in cross-validation (contour plot on the left). On the right we have plotted the MSE purely as function of complexity when using the bootstrap resampling method with 100 steps.}\label{fig:g kfold vs bootstrap}
-  \vspace*{-5pt}
-\end{figure*}
-
-\begin{figure*}
-  \vspace*{-5pt}
-  \centering %Centers the figure
-  \includegraphics[width=0.9\textwidth]{../figs/g_Ridge_Lasso.pdf}
-  \caption{MSE evaluated on cosmological test data as function of polynomial degrees in the interval $[1, 31]$ and number of folds $k\in[5, 15]$ used in cross-validation, for Ridge (upper row) and Lasso (lower row) regression. The upper left contour plot\colorbox{magenta}{update after running cross-val again}. We have used $\lambda=0.001$ and $\lambda=0.5$ in the left and right columns, respectively. \colorbox{magenta}{try using 0.001 and 5 instead?}}\label{fig:g Ridge Lasso}
-  \vspace*{-5pt}
-\end{figure*}
-
-% \begin{figure*}
-%   \vspace*{-5pt}
-%   \centering %Centers the figure
-%   \includegraphics[width=0.9\textwidth]{../figs/density_OLS_Ridge_Lasso.pdf}
-%   \caption{Contour plots of the cosmological simulation data (upper left) and OLS (upper right), Ridge (lower left) and Lasso (lower right) regression fits for polynomial degree 31 and $k=15$ number of folds in cross-validation. For Ridge regression we used \colorbox{magenta}{lambda} and for Lasso we used \colorbox{magenta}{lambda}.}\label{fig:density OLS Ridge Lasso}
-%   \vspace*{-5pt}
-% \end{figure*}
 
 
 \section{Conclusion}\label{sec:conclusion}
@@ -700,11 +712,11 @@ and consequently
 \begin{equation}
   y_i\sim N(\mathbf{X}_{i,*}\boldsymbol{\beta},\sigma^2).
 \end{equation}
-Now, using that the OLS estimator is given by $\boldsymbol{\hat{\beta}}=\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\mathbf{y}$, its expectation values become
+Now, using that the OLS estimator is given by $\boldsymbol{\hat{\beta}}=\left(\mathbf{X}^\top\mathbf{X}\right)^{-1}\mathbf{X}^\top\mathbf{y}$, its expectation values become
 \begin{align*}
-  \mathbb{E}(\boldsymbol{\hat{\beta}})&=\mathbb{E}\left\{ \left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\mathbf{y} \right\} \\
-  &= \mathbb{E}\left\{\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\right\} \mathbb{E}(\mathbf{y}) \\
-  &= \left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\mathbf{X}\boldsymbol{\beta} \\
+  \mathbb{E}(\boldsymbol{\hat{\beta}})&=\mathbb{E}\left\{ \left(\mathbf{X}^\top\mathbf{X}\right)^{-1}\mathbf{X}^\top\mathbf{y} \right\} \\
+  &= \mathbb{E}\left\{\left(\mathbf{X}^\top\mathbf{X}\right)^{-1}\mathbf{X}^\top\right\} \mathbb{E}(\mathbf{y}) \\
+  &= \left(\mathbf{X}^\top\mathbf{X}\right)^{-1}\mathbf{X}^\top\mathbf{X}\boldsymbol{\beta} \\
   &= \boldsymbol{\beta}. \numberthis \label{appeq:expect beta OLS}
 \end{align*}
 Furthermore, if $x$ and $y$ are two independent variables, the variance of their product is given by
@@ -719,22 +731,22 @@ Furthermore, if $x$ and $y$ are two independent variables, the variance of their
 \\
 &= \textrm{Var}(x)\textrm{Var}(y) + \textrm{Var}(x)(\mathbb{E}(y))^2 + \textrm{Var}(y)(\mathbb{E}(x))^2,
 \end{align*}
-so if we now set $x=\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}$ and $y=\mathbf{y}$ we find that the variance of $\boldsymbol{\hat{\beta}}$ is
+so if we now set $x=\left(\mathbf{X}^\top\mathbf{X}\right)^{-1}\mathbf{X}^\top$ and $y=\mathbf{y}$ we find that the variance of $\boldsymbol{\hat{\beta}}$ is
 \begin{align*}
 \textrm{Var}(\boldsymbol{\hat{\beta}}) 
-&= \underbrace{\textrm{Var}\left[\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\right]\textrm{Var}(\mathbf{y})}_0 
-+ \underbrace{\textrm{Var}\left[\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\right](\mathbb{E}(\mathbf{y}))^2}_{0} 
-+ \textrm{Var}(\mathbf{y})\left(\mathbb{E}\left[\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\right]\right)^2,
+&= \underbrace{\textrm{Var}\left[\left(\mathbf{X}^\top\mathbf{X}\right)^{-1}\mathbf{X}^\top\right]\textrm{Var}(\mathbf{y})}_0 
++ \underbrace{\textrm{Var}\left[\left(\mathbf{X}^\top\mathbf{X}\right)^{-1}\mathbf{X}^\top\right](\mathbb{E}(\mathbf{y}))^2}_{0} 
++ \textrm{Var}(\mathbf{y})\left(\mathbb{E}\left[\left(\mathbf{X}^\top\mathbf{X}\right)^{-1}\mathbf{X}^\top\right]\right)^2,
 \\
-&= \sigma^2\left[\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\right]^2,
+&= \sigma^2\left[\left(\mathbf{X}^\top\mathbf{X}\right)^{-1}\mathbf{X}^\top\right]^2,
 \\
-&= \sigma^2\left[\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\right]\left[\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\right]^\textrm{T},
+&= \sigma^2\left[\left(\mathbf{X}^\top\mathbf{X}\right)^{-1}\mathbf{X}^\top\right]\left[\left(\mathbf{X}^\top\mathbf{X}\right)^{-1}\mathbf{X}^\top\right]^\top,
 \\
-&= \sigma^2\left[\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\mathbf{X}^\textrm{T}\right]\left[\mathbf{X}\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}\right],
+&= \sigma^2\left[\left(\mathbf{X}^\top\mathbf{X}\right)^{-1}\mathbf{X}^\top\right]\left[\mathbf{X}\left(\mathbf{X}^\top\mathbf{X}\right)^{-1}\right],
 \\
-&= \sigma^2\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}. \numberthis \label{appeq:var beta OLS}
+&= \sigma^2\left(\mathbf{X}^\top\mathbf{X}\right)^{-1}. \numberthis \label{appeq:var beta OLS}
 \end{align*}
-Here we have used that the transpose of $\left(\mathbf{X}^\textrm{T}\mathbf{X}\right)^{-1}$ is itself since it is square and symmetric.
+Here we have used that the transpose of $\left(\mathbf{X}^\top\mathbf{X}\right)^{-1}$ is itself since it is square and symmetric.
 \colorbox{magenta}{mention that sigma is zero in cosmo case, so variance is zero}
 
 
@@ -782,6 +794,59 @@ Before we move further we may note that the exact function $f(\mathbf{x})$ gener
 
 
 \section{Additional Figures}\label{appsec:figures}
+
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.6\textwidth]{../figs/a_beta_scaled_vs_raw.pdf}
+  \caption{The coefficients $\beta$ for the Franke function fit estimated using unscaled (blue) and scaled (red) data, plotted for polynomial degrees in the interval $[1,6]$.}\label{appfig:a beta scaled vs raw}
+  \vspace*{-5pt}
+\end{figure*}
+
+
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.9\textwidth]{../figs/g_MSE_R2_Ridge.pdf}
+  \caption{MSE (upper row) and $R^2$ (lower row) for Ridge regression evaluated on the cosmological test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 11 evenly spaced degrees in the interval $[1, 31]$ and 11 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$. In the right column we have cropped away degrees smaller than 19 purely for visualization purposes.}\label{appfig:g MSE R2 Ridge}
+  \vspace*{-5pt}
+\end{figure*}
+
+
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.9\textwidth]{../figs/g_MSE_R2_Lasso.pdf}
+  \caption{MSE (upper row) and $R^2$ (lower row) for Lasso regression evaluated on the cosmological test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 11 evenly spaced degrees in the interval $[1, 31]$ and 11 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$, but in the right column we have cropped away degrees smaller than 19 and the 3 largest $\lambda$ values.}\label{appfig:g MSE R2 Lasso}
+  \vspace*{-5pt}
+\end{figure*}
+
+
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.9\textwidth]{../figs/f_Ridge_Lasso.pdf}
+  \caption{MSE evaluated on Franke test data as function of polynomial degrees in the interval $[1, 15]$ and number of folds $k\in[5, 15]$ used in cross-validation, for Ridge (upper row) and Lasso (lower row) regression. We have used $\lambda=0.001$ and $\lambda=0.5$ in the left and right columns, respectively.}\label{appfig:f Ridge Lasso}
+  \vspace*{-5pt}
+\end{figure*}
+
+
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=\textwidth]{../figs/density_surf.pdf}
+  \caption{Surface plots of the cosmological simulation data (left) and the OLS fit for polynomial degree 30 (right).}\label{appfig:density surf}
+  \vspace*{-5pt}
+\end{figure*}
+
+
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[width=0.9\textwidth]{../figs/density_pieces.pdf}
+  \caption{Contour plots of the cosmological simulation data (upper left) and the OLS fits for the entire data (upper right), 4 separate pieces stitched back together (lower left) and 100 separate pieces stitched back together (lower right). We have used a polynomial degree of 30 for all fits.}\label{appfig:density pieces}
+  \vspace*{-5pt}
+\end{figure*}
 % MAYBE REMOVE
 
 % LINK WITH SPECIFIC NAME
