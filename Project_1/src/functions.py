@@ -1,21 +1,18 @@
 import matplotlib.pyplot as plt
 from matplotlib import cm
-from matplotlib.ticker import LinearLocator, FormatStrFormatter
+from matplotlib.ticker import FormatStrFormatter
 import numpy as np
-from random import random, seed
-import sklearn
+from random import seed
 from sklearn.model_selection import train_test_split, KFold, cross_val_score, cross_val_predict
 from sklearn.linear_model import LinearRegression
 from sklearn import linear_model
-from sklearn.preprocessing import StandardScaler, PolynomialFeatures
-from sklearn.metrics import mean_squared_error
-from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 from sklearn.utils import resample
 import warnings
 warnings.filterwarnings("ignore")
 
 
-def FrankeFunction(x: float | np.ndarray,y: float | np.ndarray):
+def FrankeFunction(x: float | np.ndarray,y: float | np.ndarray) -> float | np.ndarray:
     """ 
     Generates a surface plot of the Franke function.
     # Parameters:
@@ -93,7 +90,7 @@ def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
     return X
 
 
-def OLS(x: np.ndarray, y: np.ndarray, z: np.ndarray[np.ndarray, np.ndarray], degree: int, scale: bool = True, test_size: float =0.2, seed: int =None, return_beta: bool = False, return_X: bool = False, return_scalers: bool = False, return_train_test: bool = False) -> tuple:
+def OLS(x: np.ndarray, y: np.ndarray, z: np.ndarray[np.ndarray, np.ndarray], degree: int, scale: bool = True, test_size: float =0.2, seed: int =None, return_beta: bool = False, return_X: bool = False, return_scalers: bool = False, return_train_test: bool = False) -> tuple[np.ndarray]:
     '''
     Performs Ordinary Least Squares (OLS) regression.
 
@@ -144,7 +141,7 @@ def OLS(x: np.ndarray, y: np.ndarray, z: np.ndarray[np.ndarray, np.ndarray], deg
     return tuple(quantities)
 
 
-def Ridge(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, scale: bool = True, test_size: float = 0.2, seed: int = None, return_beta: bool = False, return_X: bool = False, return_scalers: bool = False, return_train_test: bool = False) -> tuple:
+def Ridge(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, scale: bool = True, test_size: float = 0.2, seed: int = None, return_beta: bool = False, return_X: bool = False, return_scalers: bool = False, return_train_test: bool = False) -> tuple[np.ndarray]:
     """
     Performs Ridge regression.
 
@@ -197,7 +194,7 @@ def Ridge(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
     return tuple(quantities)
 
 
-def Lasso(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, scale: bool = True, test_size: float = 0.2, seed: int = None, intercept: bool = False, return_beta: bool = False, return_X: bool = False, return_scalers: bool = False, return_train_test: bool = False) -> tuple:
+def Lasso(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, scale: bool = True, test_size: float = 0.2, seed: int = None, intercept: bool = False, return_beta: bool = False, return_X: bool = False, return_scalers: bool = False, return_train_test: bool = False) -> tuple[np.ndarray]:
     """
     Performs Lasso regression.
 
@@ -422,7 +419,7 @@ if __name__ == "__main__":
 
     plt.show()
 
-    """Bootystrap example"""
+    """Bootstrap example"""
 
     degrees = range(1, 52, 2)
 
