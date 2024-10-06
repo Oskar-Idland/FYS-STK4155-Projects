@@ -331,9 +331,8 @@ def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model, d
 
     if predict:
         z_pred = cross_val_predict(model, X, z, cv = kfold).reshape(-1, 1)
-        # if scale:
-            # scaler_z.inverse_transform(z_pred)
-            # print("scaling back")
+        if scale:
+            z_pred = scaler_z.inverse_transform(z_pred)
         return z_pred
     else:
         estimated_mse_folds = cross_val_score(model, X, z, scoring = "neg_mean_squared_error", cv = kfold)

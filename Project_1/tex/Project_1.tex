@@ -100,7 +100,6 @@
 
 \begin{abstract}
 % EXAMPLE OF HOW AN ABSTRACT COULD BE STRUCTURED
-This study revolves around the famous double-slit experiment and the wave-nature of particles. By employing the Crank-Nicholson scheme we managed to discretize the Schrödinger equation describing the evolution of a single particle in a two-dimensional box. This was used to perform simulations with single-, double-, and triple-slit configurations, storing the probability values associated with the particle's position within the box at each time step. Visualizing these results proved striking resemblence to the behavior of coherent waves passing through corresponding setups, as expected. Hence, we observed the probability distribution describing the particle's position to evolve and interact with obstacles like a wave packet, which is a clear indicator that a an actual stream of such particles would too. By assuming that the particle eventually hits a detection screen on the other side of the slits, we plotted the probability values versus $y$-position at $x=0.8$ and found that the patterns all agreed with those famously observed during real life experiments. Furthermore, we determined that the real part of the wave packet itself was constantly phase-shifted $\pi/2$ relative to its imaginary part throughout the double-slit simulation. This was expected based on the initial state, hence further validating our methods and results. 
 We have explored various regression techniques and resampling methods within the context of machine learning, motivated by the need to develop robust models that can accurately predict and generalize from complex datasets. The main objective was to analyze and compare the performance of Ordinary Least Squares (OLS), Ridge, and Lasso regression in fitting synthetic and real-world data, focusing on the bias-variance tradeoff and model generalizability. We applied these regression techniques to the Franke function, a synthetic benchmark used in numerical analysis, and extended our analysis to cosmological N-body simulation data generated using the public G\begin{scriptsize}ASOLINE\end{scriptsize}2 code SPH code. To assess model performance and generalization, we employed resampling methods such as bootstrap and k-fold cross-validation, examining how they help to evaluate model accuracy under different training and test data conditions. Our study provided insights into how model complexity and regularization parameters affect the bias-variance tradeoff and prediction error, enabling us to critically evaluate each regression technique's performance using statistical and resampling approaches. \colorbox{magenta}{rewrite /remove last part when results are gathered and discussion/conclusion is finished}
 \end{abstract}
 \maketitle
@@ -123,7 +122,7 @@ In many scientific and practical applications, developing models that can accura
 
 We begin by applying the abovementioned methods to the Franke function, a widely used test function in numerical analysis, and extend the analysis to cosmological N-body simulation data made with the public version of the G\begin{scriptsize}ASOLINE\end{scriptsize}2 Smoothed Particle Hydrodynamics (SPH) code \cite{gasoline}. Our approach involves fitting polynomial regression models of varying complexity to the Franke function as well as the simulation data, and studying the bias-variance tradeoff, an essential concept in machine learning, in both cases. This allows us to evaluate the impact of model complexity, regularization parameters and the size of training data on the accuracy and generalizability of the models. The overarching aim is to gain insights into how different regression methods handle overfitting, model complexity and data variability, and to develop a framework for critically evaluating model performance using statistical and resampling techniques. 
 
-In \cref{sec:theory} we present relevant background theory, including central concepts such as OLS, Ridge and Lasso regression, model bias, variance and the bias-variance tradeoff, as well as two crucial resampling methods; bootstrapping and cross-validation, both of which will be implemented in this work. A few of the most important expressions introduced in this section are derived in \cref{appsec:derivations}. Our methodology is explained in \cref{sec:methods}, specifically how we define the essential design matrix, scale our data and implement the regression and resampling techniques. We also give an overview of our code structure and present the cosmological simulation data. In \cref{sec:results discussion} we present, interpret and discuss the results of our analyses in light of expectations based on our previous knowledge of the implemented regression and resampling methods. Lastly, we summarize and conclude the main findings of our work in \cref{sec:conclusion}, and reflect.
+In \cref{sec:theory} we present relevant background theory, including central concepts such as OLS, Ridge and Lasso regression, model bias, variance and the bias-variance tradeoff, as well as two crucial resampling methods; bootstrapping and cross-validation, both of which will be implemented in this work. A few of the most important expressions introduced in this section are derived in \cref{appsec:derivations}. Our methodology is explained in \cref{sec:methods}, specifically how we define the essential design matrix, scale our data and implement the regression and resampling techniques. We also give an overview of our code structure and present the cosmological simulation data. In \cref{sec:results discussion} we present, interpret and discuss the results of our analyses in light of expectations based on our previous knowledge of the implemented regression and resampling methods. In \cref{appsec:figures} we include some additional figures that are not essential to our discussions, yet still referred to in the aforementioned section because they are necessary in reasoning our choice of presented results. Lastly, we summarize and conclude the main findings of our work in \cref{sec:conclusion}, and provide some open questions for further exploration. \colorbox{magenta}{maybe shorten/edit} 
 
 % ===========================================
 \section{Theory}\label{sec:theory}
@@ -470,34 +469,27 @@ The resulting MSE and $R^2$ scores were plotted as functions of both $\lambda$ a
 
 
 \subsection{Bias-Variance Tradeoff}
-
-\colorbox{magenta}{we expect MSE=bias+var for data since noise var is 0}
-To showcase the bias-variance trade-off and validate our implementation, we imitated the analysis illustrated in \cref[fig:Hastie]{Fig. 2.11 from Hastie, Tibshirani, and Friedman}. Specifically, we plotted the MSE for both the training and test sets of the Franke data using OLS regression. We varied the polynomial degree from 1 to 81 in steps of 4. \colorbox{magenta}{Link to our result?}
-
-The generation and splitting of the Franke data were conducted as described previously. \\
+To showcase the bias-variance trade-off and validate our implementation, we imitated the analysis illustrated in \cref[fig:Hastie]{Fig. 2.11 from Hastie, Tibshirani, and Friedman}. Specifically, we implemented OLS regression for polynomial degrees $\in[1,81]$ in steps of 4, and computed the MSE evaluated on both the training and test portions of the Franke data each time. The generation and splitting of the Franke data were conducted as described previously. \\
 
 \begin{figure}[h!]
   \centering %Centers the figure
   \includegraphics[width=\columnwidth]{../figs/hastie_bias_variance_tradeoff.jpg}
   \caption{Fig. 2.11 of Hastie, Tibshirani, and Friedman illustrating bias-variance trade-off as a function of model complexity \colorbox{magenta}{cite}}\label{fig:Hastie}
 \end{figure}
+
 \subsubsection{Bootstrap With OLS}
 Our implementation of the bootstrap technique involved resampling the training data multiple times and fitting an OLS model to each resampled dataset. This was accomplished using the resample function from the scikit-learn library. For each resampled dataset, we computed the MSE, bias, and variance to evaluate the model's performance.
 
-For the Franke function-generated data, we designed four different scenarios, each varying a specific parameter to investigate the influence of the number of bootstraps, data points, model complexity, and test size separately.
-
-The default values for each scenario were set as follows: 100 bootstraps, 50 data points, polynomial degree of 5, and a test size of 20\%. The varying parameters for each respective scenario were:
-
+For the Franke function-generated data we designed four different cases, each varying a specific parameter to investigate the influence of the number of bootstraps, data points, model complexity, and test size separately. The default values we used were 100 bootstraps, 50 data points, polynomial degree of 5, and a test size of 20\%. When varying the parameters in each respective scenario we used the following: 
 \begin{itemize}
-   \item [-] Number of bootstraps: [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000]
-   \item [-]Number of data points: [10, 20, 30, 40, 50, 100, 150, 200, 300, 400, 500, 1000]
-   \item [-]Polynomial degree: from 1 to 41 with a step of 2
-   \item [-]Test size: ranging from 5\% to 95\% with a step of 5\%
+   \item [-] Polynomial degree: from 1 to 41 with a step of 2
+   \item [-] Number of data points (elements in $\mathbf{x}$ and $\mathbf{y}$):\hspace{10pt} [10, 20, 30, 40, 50, 100, 150, 200, 300, 400, 500, 1000]
+   \item [-] Number of bootstraps steps: [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000]
+   \item [-] Test size: ranging from 5\% of the entire set to 95\% with a step of 5\%
 \end{itemize}
+For each case we computed the model evaluation metrics as a function of the varying parameter to analyze how the model's performance changed with different settings. 
 
-For each scenario we plotted the model evaluation metrics as a function of the varying parameter to analyze how the model's performance changed with different settings. 
-
-For the cosmological simulation data, we only did a single scenario with 100 bootstraps, 50 data points, test size of 20\%, and a varying polynomial degree from 1 to 31 with a step of 3. We only plotted the MSE as a function of polynomial degree for this scenario. \colorbox{magenta}{Explain why?}
+For the cosmological simulation data, we only did a single scenario with 100 bootstraps, 50 data points, test size of 20\%, and a varying polynomial degree from 1 to 31 with a step of 3. We only computed the MSE as a function of polynomial degree for this scenario. \colorbox{magenta}{Explain why, mostly to save time}
 
 \subsubsection{Cross-Validation}
 \colorbox{magenta}{go into detail how we implement} \\
@@ -512,41 +504,22 @@ For our cross-validation analysis, we used the \verb|KFold| function from the sc
 % EXAMPLE OF HOW THIS CAN LOOK
 % Our main program is divided into a series of \verb|.cpp|-files, each containing one or more functions, with \verb|main.cpp| either calling the test functions, or the validating- and error-throwing functions and running the simulations, depending on how the project is built. In the header-file \verb|Simulation.h| we have documented the \verb|Simulation|-class and all its private and public member functions. All test functions are defined in \verb|test.cpp| and documented in \verb|test.h|, while validating- and error-throwing functions are defined in \verb|validate_input.cpp| and documented in \verb|validate.h|. All functions for reading data and visualizing the results are defined in \verb|.py|-files, and are imported and called on in \verb|main.py|. A detailed description of the program structure and how to build and run the program is given in the \verb|README.md|-file linked to \href{https://github.uio.no/oskarei/CompFys-Project5/blob/main/README.md}{here}.
 
-All source code for this project is available on our GitHub repository, linked in \cref{appsec:code}. The \verb|README.md| contains the entire project structure. The code is divided into the following files and notebooks:
+All the source code that we used to produce our results is available on our GitHub repository, linked in \cref{appsec:code}. The \verb|README.md| file contains the entire project structure. Our code is divided into the following files and notebooks:
 
-\verb|data_analysis.ipynb|: Jupyter notebook containing the analysis of the dark matter density data. This is where we apply our regression models.
+\verb|franke.ipynb|: Jupyter notebook containing the analysis of the Franke function data, which we used to to validate our implementation.
 
-\verb|franke.ipynb|: Jupyter notebook containing the analysis of the Franke function-generated data, to validate our implementation.
+\verb|data_analysis.ipynb|: Jupyter notebook containing the analysis of the dark matter density data. Here we have applied and further tested our regression models.
 
-\verb|functions.py|: Python script containing all the functions used in the notebooks. All properly documented.
+\verb|functions.py|: Python script containing all the functions used in the notebooks, all properly documented.
 % TODO: Update standard
 
 \subsubsection{Tools}\label{subsubsec:tools}
-Python \cite{Python} is used for creating our models, together with scikit-learn \cite{scikit-learn}. To vectorize our code we use \verb|numpy| \cite{Numpy}, and for visualization we use \verb|matplotlib.pyplot| \cite{Matplotlib}. To make our plots prettier we use the colormaps module \cite{colormaps}. Code completion and debugging is done in Visual Studio Code \cite{VSCode} with additional assistance of GitHub Copilot \cite{Copilot}. We use \verb|git| \cite{Git} for version control, and \verb|GitHub| \cite{GitHub} for remote storage of our code.
+All our code is written in Python \cite{Python}, and we used scikit-learn \cite{scikit-learn} to create most of our models. To vectorize our code we used \verb|numpy| \cite{Numpy}, and for visualization we used \verb|matplotlib.pyplot| \cite{Matplotlib}. Code completion and debugging was done in Visual Studio Code \cite{VSCode} with additional assistance of GitHub Copilot \cite{Copilot}. We used \verb|git| \cite{Git} for version control, and \verb|GitHub| \cite{GitHub} for remote storage of our code.
 
 % EXAMPLE OF HOW THIS CAN LOOK
 % C++ \cite{C++} is used for all the numerically heavy computations and simulations. The standard library of C++ is used for mathematical and trigonometric functions, and as containers of data and for vectorization we implement Armadillo's \cite{Armadillo} \verb|arma::vec| class, together with other functions the library offer. To parse the \verb|.json| input files we use the json parsing library \cite{json}. Python \cite{Python} is used for plotting and animating our results. To vectorize our code we use \verb|numpy| \cite{Numpy}, and for visualization we use \verb|matplotlib.pyplot| \cite{Matplotlib}. To make our plots prettier we use the colormaps module \cite{colormaps}. Code completion and debugging is done in Visual Studio Code \cite{VSCode} with additional assistance of GitHub Copilot \cite{Copilot}. We use \verb|git| \cite{Git} for version control, and \verb|GitHub| \cite{GitHub} for remote storage of our code.
 
 
-
-
-\colorbox{magenta}{raw and smoothed surfaces, explain reason/method}
-
-% \begin{figure*}
-%   \vspace*{-5pt}
-%   \centering %Centers the figure
-%   \includegraphics[width=0.99\textwidth]{../figs/density_surf_all.pdf}
-%   \caption{\colorbox{magenta}{caption} \colorbox{magenta}{maybe ignore smoothing, crop out a piece instead?}}\label{fig:density surf}
-%   \vspace*{-5pt}
-% \end{figure*}
-
-% \begin{figure*}
-%   \vspace*{-5pt}
-%   \centering %Centers the figure
-%   \includegraphics[width=0.9\textwidth]{../figs/density_surf.pdf}
-%   \caption{\colorbox{magenta}{caption}}\label{fig:density surf}
-%   \vspace*{-5pt}
-% \end{figure*}
 
 
 % ===========================================
@@ -555,25 +528,27 @@ Python \cite{Python} is used for creating our models, together with scikit-learn
 
 \section{Results \& Discussion}\label{sec:results discussion}
 \subsection{Effects of Data Scaling}\label{subsec:scaling effect}
-In \cref{fig:a error scaled vs raw} we have plotted the estimated MSE and $R^2$ scores evaluated on the Franke function test for polynomial degrees $\in[1,6]$. The left and right columns show the scores computed for the raw and scaled data, respectively. As expected there looks to be a constant factor between the raw and scaled MSE's, while the $R^2$ scores are equal in both cases. This is because $y_i$, $\tilde{y}_i$ and $\overline{y}$ (or in our case, $z_i$, $\tilde{z}_i$ and $\overline{z}$) are scaled equally, and from eq. \eqref{eq:R2} we thus see that the scaling cancels out from the numerator and denominator in the second term. 
+In the upper part of \cref{fig:error scaled vs raw} we have plotted the estimated MSE and $R^2$ scores evaluated on the Franke function test for polynomial degrees $\in[1,6]$. The left and right columns show the scores computed for the raw and scaled data, respectively. As expected there looks to be a constant factor between the raw and scaled MSE's, while the $R^2$ scores are equal in both cases. This is because $y_i$, $\tilde{y}_i$ and $\overline{y}$ (or in our case, $z_i$, $\tilde{z}_i$ and $\overline{z}$) are scaled equally, and from eq. \eqref{eq:R2} we thus see that the scaling cancels out from the numerator and denominator in the second term. 
+
+One might expect to see the same effects of scaling for the cosmological simulation data, but in the lower part of \cref{fig:error scaled vs raw} we see that this is not the case. Here we have plotted the MSE and $R^2$ scores for 21 evenly spaced polynomial degrees in the interval $[1,41]$, and we see that for degrees $\gtrsim9$ the raw scores diverge from the expected trend. Instead of a decreasing MSE and increasing $R^2$ as in the scaled case we get MSE's over 400 and very large, negative $R^2$ scores, a metric that should never be negative in the first place. This clearly shows why it is beneficial to scale the data, since it is safe to assume that the raw data catastrophe occurs due to numerical instability caused by loss of floating point precision. \colorbox{magenta}{correct?} Moreover, we see that we never reach a turning point in the scores where they start to worsen with polynomial degree, which makes sense considering the complexity of our data set.
 
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[width=0.8\textwidth]{../figs/a_error_scaled_vs_raw.pdf}
-  \caption{MSE (upper row) and $R^2$ (lower row) evaluated on the Franke function test set using unscaled (left column) and scaled (right column) values, for polynomial degrees in the interval $[1,6]$.}\label{fig:a error scaled vs raw}
-  \vspace*{-5pt}
-\end{figure*}
-
-One might expect to see the same effects of scaling for the cosmological simulation data, but in \cref{fig:g error scaled vs raw} we see that this is not the case. Here we have plotted the MSE and $R^2$ scores for 21 evenly spaced polynomial degrees in the interval $[1,41]$, and we see that for degrees $\gtrsim9$ the raw scores diverge from the expected trend. Instead of a decreasing MSE and increasing $R^2$ as in the scaled case we get MSE's over 400 and very large, negative $R^2$ scores, a metric that should never be negative in the first place. This clearly shows why it is beneficial to scale the data, since it is safe to assume that the raw data catastrophe occurs due to numerical instability caused by loss of floating point precision. \colorbox{magenta}{correct?} Moreover, we see that we never reach a turning point in the scores where they start to worsen with polynomial degree, which makes sense considering the complexity of our data set.
-
-\begin{figure*}
-  \vspace*{-5pt}
-  \centering %Centers the figure
+  \includegraphics[trim = 0 0.8cm 0 0,clip,width=0.8\textwidth,keepaspectratio]{../figs/a_error_scaled_vs_raw.pdf}
+  \centering
   \includegraphics[width=0.8\textwidth]{../figs/g_error_scaled_vs_raw.pdf}
-  \caption{MSE (upper row) and $R^2$ (lower row) evaluated on the cosmological test set using unscaled (left column) and scaled (right column) values, for polynomial degrees in the interval $[1,41]$.}\label{fig:g error scaled vs raw}
+  \caption{MSE (upper rows) and $R^2$ (lower rows) evaluated on the Franke function test set (upper section) and the cosmological simulation test set (lower section) using unscaled (left column) and scaled (right column) values. For the Franke function we have used polynomial degrees in the interval $[1,6]$, while for the cosmological data we have used every other degree in the interval $[1,41]$.}\label{fig:error scaled vs raw}
   \vspace*{-5pt}
 \end{figure*}
+
+% \begin{figure*}
+%   \vspace*{-5pt}
+%   \centering %Centers the figure
+%   \includegraphics[width=0.8\textwidth]{../figs/g_error_scaled_vs_raw.pdf}
+%   \caption{MSE (upper row) and $R^2$ (lower row) evaluated on the cosmological test set using unscaled (left column) and scaled (right column) values, for polynomial degrees in the interval $[1,41]$.}\label{fig:g error scaled vs raw}
+%   \vspace*{-5pt}
+% \end{figure*}
 
 In fact, we see from \cref{fig:g beta scaled vs raw} that the scaled coefficients for the fits to the cosmological data (plotted in orange) grow in orders of magnitude with complexity (cirka up until degree $21$, where stay around $10^4$), while the raw coefficients (plotted in purple) fall to zero around polynomial degree 9. The reason for the strong increase in the $\beta_\text{scaled}$'s is that $\mathbf{x}$ and $\mathbf{y}$ (both raw and scaled) are centered at 0, and in the scaled case these are divided by their standard deviations, hence most of the highest order polynomial terms decrease with the degree. We thus need very large coefficients for their contributions to the fit to be noticeable. The $\beta_\text{raw}$'s must be much smaller since the highest order terms grow rapidly with degree at the edges of the box, and eventually we encounter floating point errors. This is contrary to the coefficients estimated for the Franke function, where generally $\beta_\text{raw}\geq\beta_\text{scaled}$, as seen in \cref{appfig:a beta scaled vs raw} in \cref{appsec:figures}. This is because the Franke function is defined over the unit square, hence the raw coefficients grow with polynomial degree as well. \colorbox{magenta}{rewrite?} 
 
@@ -606,6 +581,8 @@ In fact, we see from \cref{fig:g beta scaled vs raw} that the scaled coefficient
 
 
 \subsection{Bias-Variance Tradeoff}
+\colorbox{magenta}{we expected MSE=bias+var for data since noise var is 0}
+
 \begin{figure}[h!]
   \vspace*{-5pt}
   \centering %Centers the figure
@@ -624,19 +601,15 @@ In fact, we see from \cref{fig:g beta scaled vs raw} that the scaled coefficient
 
 \subsection{Resampling Methods}
 \subsubsection{OLS: Cross-Validation VS Bootstrap}
-\begin{figure*}
-  \vspace*{-5pt}
-  \centering %Centers the figure
-  \includegraphics[width=\textwidth]{../figs/f_kfold_vs_bootstrap.pdf}
-  \caption{MSE evaluated on Franke test data as function of polynomial degrees in the interval $[1, 15]$ and number of folds $k\in[5, 15]$ used in cross-validation (contour plot on the left). On the right we have plotted the MSE purely as function of complexity when using the bootstrap resampling method with 100 steps.}\label{fig:f kfold vs bootstrap}
-  \vspace*{-5pt}
-\end{figure*}
+
 
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
+  \includegraphics[trim = 0 0.8cm 0 0,clip,width=\textwidth,keepaspectratio]{../figs/f_kfold_vs_bootstrap.pdf}
+  \centering
   \includegraphics[width=\textwidth]{../figs/g_kfold_vs_bootstrap.pdf}
-  \caption{MSE evaluated on cosmological test data as function of polynomial degrees in the interval $[1, 31]$ and number of folds $k\in[5, 15]$ used in cross-validation (contour plot on the left). On the right we have plotted the MSE purely as function of complexity when using the bootstrap resampling method with 100 steps.}\label{fig:g kfold vs bootstrap}
+  \caption{MSE evaluated on Franke (upper row) and cosmological (lower row) test data as function of polynomial degrees in the intervals $[1,15]$ (Franke) and $[1, 31]$ (cosmological) and number of folds $k\in[5, 15]$ used in cross-validation (contour plots on the left). On the right we have plotted the MSE's purely as functions of complexity when using the bootstrap resampling method with 100 steps.}\label{fig:kfold vs bootstrap}
   \vspace*{-5pt}
 \end{figure*}
 
@@ -652,9 +625,10 @@ In fact, we see from \cref{fig:g beta scaled vs raw} that the scaled coefficient
 
 \subsection{Fits to the Cosmological Data}
 \subsubsection{Complexity Dependency for OLS}
-In \cref{fig:density complexity} we have plotted OLS fits to the cosmological data using polynomial degrees 5, 10, 20, 30 and 50 to further examine the effects of increasing model complexity. From degree 30 to 50 the fit actually seems to worsen, looking more smudged in the center, while ripple-like structures near the edges become more prominent. These are already visible for degree 30, but compared to the data it arguably doesn't make the fit look less accurate than for degree 20. 
+In \cref{fig:density complexity} we have plotted OLS fits to the cosmological data using polynomial degrees 5, 10, 20, 30 and 50 to further examine the effects of increasing model complexity. From degree 30 to 50 the fit actually seems to worsen, looking more smudged in the center, while ripple-like structures near the edges become more prominent. These are already visible for degree 30, especially in \cref{appfig:density surf} in \cref{appsec:figures}, where we have surface plotted the fit together with the actual data. However, they arguably don't make the fit look less accurate than that obtained with polynomial degree 20.
 
-To explain the reason for the ripple effect, and why the smaller scale structures in the data don't show up more clearly as we continue increasing the model complexity we need to consider the columns of the scaled design matrix. As mentioned in \cref{subsec:scaling effect} most of the scaled box coordinates are less than 1. They are in fact close to zero in the center region and slightly larger than 1 in magnitude near the edges. Thus, as we move to higher order polynomials the elements of the rightmost columns in $\mathbf{X}_\text{scaled}$ (corresponding to the highest order terms) diverge, some tend to zero while others grow in magnitude. To minimize the model error the coefficients cannot continue increasing because then the fit worsens in the edges, but they cannot decrease too much either as this leads to a less accurate fit in the center. EXPLAIN THE RIPPLE EFFECT
+To explain the reason for the ripple effect, and why the smaller scale structures in the data don't show up more clearly as we continue increasing the model complexity we need to consider the columns of the scaled design matrix. As mentioned in \cref{subsec:scaling effect} most of the scaled box coordinates are less than 1. They are in fact close to zero in the center region and slightly larger than 1 in magnitude near the edges. Thus, as we move to higher order polynomials the elements of the rightmost columns in $\mathbf{X}_\text{scaled}$ (corresponding to the highest order terms) diverge, some tend to zero while others grow in magnitude. To minimize the model error the coefficients cannot continue increasing because then the fit worsens in the edges, but they cannot decrease too much either as this leads to a less accurate fit in the center. As a result we see the fits become increasingly smeared in the center and more complex at the edges as we increase the complexity, hence the ripple effect. \colorbox{magenta}{explain better?} 
+
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
@@ -663,20 +637,28 @@ To explain the reason for the ripple effect, and why the smaller scale structure
   \vspace*{-5pt}
 \end{figure*}
 
+In an attempt to confirm this interpretation we decided to split our simulation data into equally sized pieces, scale each piece and perform fits on them separately, then stitch them back together. That way, we hypothesized that the smearing and ripple effects would be minimized and more evenly distributed through the grid since the complex structure of the data is simpler on smaller, local scales. We did this with 4 pieces and a 100 pieces, using OLS and polynomial degree 30 in both cases, and the result is shown in \cref{appfig:density pieces} in \cref{appsec:figures}. Indeed, we see that the resulting fit with 100 pieces looks nearly identical to the actual data. For the fit with 4 pieces it is very obvious that we have stitched separate fits back together, since we clearly see the ripple effects from each fit meeting at the boundaries.
+
+
 
 \subsubsection{Comparing Regression Variants}
+In \cref{fig:density OLS Ridge Lasso} we have plotted the OLS, Ridge and Lasso fits using polynomial degree 30, hyperparameter  $\lambda=0.001$ and $k=5$ folds together with the actual data to get a feel for the implications of the estimated MSE scores. Here we see that the Lasso fit is significantly worse than both OLS and Ridge, although Ridge is lacking in comparison to OLS as well. This agrees with figs. \cref{fig:kfold vs bootstrap} and \cref{fig:g Ridge Lasso}, since the MSE's for the largest plynomial degrees lie somewhere below 0.1 for OLS, in the interval $[0.1,0.2]$ for Ridge and $[0.2,0.3]$ for Lasso.It also makes sense considering the scores plotted in figs. \ref{appfig:g MSE R2 Ridge} and \ref{appfig:g MSE R2 Lasso} in \cref{appsec:figures}, where we saw that Lasso generally performed poorly compared to Ridge.
+
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
   \includegraphics[width=0.9\textwidth]{../figs/density_OLS_Ridge_Lasso.pdf}
-  \caption{Contour plots of the cosmological simulation data (upper left) and OLS (upper right), Ridge (lower left) and Lasso (lower right) regression fits for polynomial degree 31 and $k=15$ number of folds in cross-validation. For Ridge regression we used \colorbox{magenta}{lambda} and for Lasso we used \colorbox{magenta}{lambda}.}\label{fig:density OLS Ridge Lasso}
+  \caption{Contour plots of the cosmological simulation data (upper left) and OLS (upper right), Ridge (lower left) and Lasso (lower right) regression fits using polynomial degree 30, $\lambda=0.001$ for both Ridge and Lasso, and $k=5$ folds in cross-validation.}\label{fig:density OLS Ridge Lasso}
   \vspace*{-5pt}
 \end{figure*}
+
+It is not surprising that OLS worked best with our chosen polynomial degree, since we are far from reaching the complexity of the actual data. Thus, introducing a penalizing regularization term when computing the estimators $\boldsymbol{\hat{\beta}}$ to account for overfitting is of little use, and the result is instead that the fits become too simplistic. In order to understand why the Lasso fit is so poor compared to the Ridge fit we need to review their cost functions. The $L^1$ norm used in Lasso regression creates a sparser model by shrinking some coefficients entirely to zero, which tends to be more pronounced when dealing with higher polynomial degrees where many coefficients could have minimal or redundant contributions to the model. The $L^2$ norm in Ridge regression penalizes large coefficients as well, but does not drive them to zero. While it still reduces the impact of large polynomial coefficients, it tends to be less severe in its penalization than Lasso, particularly for coefficients that contribute significantly to the model.
 
 
 
 \section{Conclusion}\label{sec:conclusion}
-
+\colorbox{magenta}{open questions} \\
+\colorbox{magenta}{reflections?}
 
 
 % \section*{Acknowledgements}\label{sec:cknowledgements}

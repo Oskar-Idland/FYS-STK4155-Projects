@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.9.24)  5 OCT 2024 21:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.9.24)  6 OCT 2024 05:09
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -742,20 +742,21 @@ Package hyperref Info: Link coloring ON on input line 94.
 Class revtex4-1 Info: Taking \maketitle back from hyperref on input line 94.
 \openout3 = `Project_1Notes.bib'.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 103.
+ [1{/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+LaTeX Font Info:    Trying to load font information for U+msa on input line 144.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 103.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 144.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) [1{/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 6608) in paragraph at lines 145--146
+)
+Underfull \hbox (badness 6608) in paragraph at lines 144--145
 []\OT1/cmr/m/n/10 Given a dataset con-sist-ing of $\OML/cmm/m/it/10 n$ \OT1/cmr/m/n/10 data points
  []
 
 
-Underfull \hbox (badness 1005) in paragraph at lines 183--185
+Underfull \hbox (badness 1005) in paragraph at lines 182--184
 \OT1/cmr/m/n/10 that min-i-mize the sum of squared er-rors. In ap-
  []
 
@@ -763,82 +764,87 @@ Underfull \hbox (badness 1005) in paragraph at lines 183--185
 <../figs/a_Franke_surf.pdf, id=273, 578.16pt x 433.62pt>
 File: ../figs/a_Franke_surf.pdf Graphic file (type pdf)
 <use ../figs/a_Franke_surf.pdf>
-Package pdftex.def Info: ../figs/a_Franke_surf.pdf  used on input line 379.
+Package pdftex.def Info: ../figs/a_Franke_surf.pdf  used on input line 378.
 (pdftex.def)             Requested size: 246.0pt x 212.04831pt.
- [5 <../figs/a_Franke_surf.pdf>]
-<../figs/density.pdf, id=303, 813.0375pt x 361.35pt>
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<../figs/density.pdf, id=280, 813.0375pt x 361.35pt>
 File: ../figs/density.pdf Graphic file (type pdf)
 <use ../figs/density.pdf>
-Package pdftex.def Info: ../figs/density.pdf  used on input line 396.
+Package pdftex.def Info: ../figs/density.pdf  used on input line 395.
 (pdftex.def)             Requested size: 504.9028pt x 224.39859pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 456--457
+[5 <../figs/a_Franke_surf.pdf>] [6 <../figs/density.pdf>]
+Underfull \hbox (badness 10000) in paragraph at lines 455--456
 
  []
 
-[6]
-Underfull \hbox (badness 1616) in paragraph at lines 458--459
+
+Underfull \hbox (badness 1616) in paragraph at lines 457--458
 []\OT1/cmr/m/n/10 For the Franke function-generated data, we sys-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 458--459
+Underfull \hbox (badness 10000) in paragraph at lines 457--458
 
  []
 
 
-Underfull \hbox (badness 1400) in paragraph at lines 460--462
+Underfull \hbox (badness 1400) in paragraph at lines 459--461
 \OT1/cmr/m/n/10 vi-su-al-ize the model's per-for-mance in cap-tur-ing the
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 460--462
+Underfull \hbox (badness 10000) in paragraph at lines 459--461
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 463--464
+Underfull \hbox (badness 10000) in paragraph at lines 462--463
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 465--466
+Underfull \hbox (badness 10000) in paragraph at lines 464--465
 
  []
 
 
-LaTeX Warning: Reference `[' on page 1 undefined on input line 475.
+LaTeX Warning: Reference `[' on page 1 undefined on input line 472.
 
 
-Overfull \hbox (7.3893pt too wide) in paragraph at lines 474--476
-[][][][][][][]
- []
-
-[7 <../figs/density.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 477--478
+Underfull \hbox (badness 10000) in paragraph at lines 472--473
 
  []
 
-<../figs/hastie_bias_variance_tradeoff.jpg, id=337, 704.6325pt x 481.8pt>
+<../figs/hastie_bias_variance_tradeoff.jpg, id=332, 704.6325pt x 481.8pt>
 File: ../figs/hastie_bias_variance_tradeoff.jpg Graphic file (type jpg)
 <use ../figs/hastie_bias_variance_tradeoff.jpg>
-Package pdftex.def Info: ../figs/hastie_bias_variance_tradeoff.jpg  used on input line 481.
+Package pdftex.def Info: ../figs/hastie_bias_variance_tradeoff.jpg  used on input line 476.
 (pdftex.def)             Requested size: 246.0pt x 168.20612pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[7]
+
+LaTeX Warning: A float is stuck (cannot be placed); try class option [floatfix] on input line 485.
+
 [8 <../figs/hastie_bias_variance_tradeoff.jpg>]
 <../figs/a_error_scaled_vs_raw.pdf, id=365, 722.7pt x 433.62pt>
 File: ../figs/a_error_scaled_vs_raw.pdf Graphic file (type pdf)
 <use ../figs/a_error_scaled_vs_raw.pdf>
-Package pdftex.def Info: ../figs/a_error_scaled_vs_raw.pdf  used on input line 563.
-(pdftex.def)             Requested size: 408.00156pt x 244.80388pt.
+Package pdftex.def Info: ../figs/a_error_scaled_vs_raw.pdf  used on input line 538.
+(pdftex.def)             Requested size: 408.00156pt x 231.95323pt.
 <../figs/g_error_scaled_vs_raw.pdf, id=367, 722.7pt x 433.62pt>
 File: ../figs/g_error_scaled_vs_raw.pdf Graphic file (type pdf)
 <use ../figs/g_error_scaled_vs_raw.pdf>
-Package pdftex.def Info: ../figs/g_error_scaled_vs_raw.pdf  used on input line 573.
+Package pdftex.def Info: ../figs/g_error_scaled_vs_raw.pdf  used on input line 540.
 (pdftex.def)             Requested size: 408.00156pt x 244.80388pt.
 <../figs/g_beta_scaled_vs_raw.pdf, id=371, 433.62pt x 289.08pt>
 File: ../figs/g_beta_scaled_vs_raw.pdf Graphic file (type pdf)
 <use ../figs/g_beta_scaled_vs_raw.pdf>
-Package pdftex.def Info: ../figs/g_beta_scaled_vs_raw.pdf  used on input line 583.
+Package pdftex.def Info: ../figs/g_beta_scaled_vs_raw.pdf  used on input line 558.
 (pdftex.def)             Requested size: 246.0pt x 164.00096pt.
 
 
@@ -847,17 +853,22 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 <../figs/b_MSE_R2.pdf, id=372, 813.0375pt x 722.7pt>
 File: ../figs/b_MSE_R2.pdf Graphic file (type pdf)
 <use ../figs/b_MSE_R2.pdf>
-Package pdftex.def Info: ../figs/b_MSE_R2.pdf  used on input line 593.
+Package pdftex.def Info: ../figs/b_MSE_R2.pdf  used on input line 568.
 (pdftex.def)             Requested size: 458.99689pt x 407.99542pt.
 <../figs/c_MSE_R2.pdf, id=373, 813.0375pt x 722.7pt>
 File: ../figs/c_MSE_R2.pdf Graphic file (type pdf)
 <use ../figs/c_MSE_R2.pdf>
-Package pdftex.def Info: ../figs/c_MSE_R2.pdf  used on input line 602.
+Package pdftex.def Info: ../figs/c_MSE_R2.pdf  used on input line 577.
 (pdftex.def)             Requested size: 458.99689pt x 407.99542pt.
+
+Overfull \hbox (17.38931pt too wide) in paragraph at lines 584--585
+[][][][][][][] 
+ []
+
 <../figs/e_MSE_train_test.pdf, id=374, 433.62pt x 289.08pt>
 File: ../figs/e_MSE_train_test.pdf Graphic file (type pdf)
 <use ../figs/e_MSE_train_test.pdf>
-Package pdftex.def Info: ../figs/e_MSE_train_test.pdf  used on input line 612.
+Package pdftex.def Info: ../figs/e_MSE_train_test.pdf  used on input line 589.
 (pdftex.def)             Requested size: 246.0pt x 164.00096pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
@@ -865,70 +876,70 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 <../figs/e_bias_variance.pdf, id=375, 867.24pt x 505.89pt>
 File: ../figs/e_bias_variance.pdf Graphic file (type pdf)
 <use ../figs/e_bias_variance.pdf>
-Package pdftex.def Info: ../figs/e_bias_variance.pdf  used on input line 620.
+Package pdftex.def Info: ../figs/e_bias_variance.pdf  used on input line 597.
 (pdftex.def)             Requested size: 510.0pt x 297.49988pt.
 <../figs/f_kfold_vs_bootstrap.pdf, id=376, 939.51pt x 361.35pt>
 File: ../figs/f_kfold_vs_bootstrap.pdf Graphic file (type pdf)
 <use ../figs/f_kfold_vs_bootstrap.pdf>
-Package pdftex.def Info: ../figs/f_kfold_vs_bootstrap.pdf  used on input line 630.
-(pdftex.def)             Requested size: 510.0pt x 196.15164pt.
-<../figs/g_kfold_vs_bootstrap.pdf, id=377, 939.51pt x 361.35pt>
+Package pdftex.def Info: ../figs/f_kfold_vs_bootstrap.pdf  used on input line 609.
+(pdftex.def)             Requested size: 510.0pt x 183.7956pt.
+<../figs/g_kfold_vs_bootstrap.pdf, id=378, 939.51pt x 361.35pt>
 File: ../figs/g_kfold_vs_bootstrap.pdf Graphic file (type pdf)
 <use ../figs/g_kfold_vs_bootstrap.pdf>
-Package pdftex.def Info: ../figs/g_kfold_vs_bootstrap.pdf  used on input line 638.
+Package pdftex.def Info: ../figs/g_kfold_vs_bootstrap.pdf  used on input line 611.
 (pdftex.def)             Requested size: 510.0pt x 196.15164pt.
-<../figs/g_Ridge_Lasso.pdf, id=378, 813.0375pt x 722.7pt>
+<../figs/g_Ridge_Lasso.pdf, id=379, 813.0375pt x 722.7pt>
 File: ../figs/g_Ridge_Lasso.pdf Graphic file (type pdf)
 <use ../figs/g_Ridge_Lasso.pdf>
-Package pdftex.def Info: ../figs/g_Ridge_Lasso.pdf  used on input line 648.
+Package pdftex.def Info: ../figs/g_Ridge_Lasso.pdf  used on input line 621.
 (pdftex.def)             Requested size: 458.99689pt x 407.99542pt.
-<../figs/density_complexity.pdf, id=381, 867.24pt x 1047.915pt>
+<../figs/density_complexity.pdf, id=384, 867.24pt x 1047.915pt>
 File: ../figs/density_complexity.pdf Graphic file (type pdf)
 <use ../figs/density_complexity.pdf>
-Package pdftex.def Info: ../figs/density_complexity.pdf  used on input line 661.
+Package pdftex.def Info: ../figs/density_complexity.pdf  used on input line 635.
 (pdftex.def)             Requested size: 458.99689pt x 554.62479pt.
-<../figs/density_OLS_Ridge_Lasso.pdf, id=382, 867.24pt x 722.7pt>
+<../figs/density_OLS_Ridge_Lasso.pdf, id=393, 867.24pt x 722.7pt>
 File: ../figs/density_OLS_Ridge_Lasso.pdf Graphic file (type pdf)
 <use ../figs/density_OLS_Ridge_Lasso.pdf>
-Package pdftex.def Info: ../figs/density_OLS_Ridge_Lasso.pdf  used on input line 671.
+Package pdftex.def Info: ../figs/density_OLS_Ridge_Lasso.pdf  used on input line 650.
 (pdftex.def)             Requested size: 458.99689pt x 382.49985pt.
-(out/Project_1.bbl [9] [10 <../figs/a_error_scaled_vs_raw.pdf> <../figs/g_error_scaled_vs_raw.pdf>]) [11 <../figs/g_beta_scaled_vs_raw.pdf>] [12 <../figs/b_MSE_R2.pdf>] [13 <../figs/c_MSE_R2.pdf>] [14 <../figs/e_MSE_train_test.pdf> <../figs/e_bias_variance.pdf>] [15 <../figs/f_kfold_vs_bootstrap.pdf> <../figs/g_kfold_vs_bootstrap.pdf>] [16 <../figs/g_Ridge_Lasso.pdf>] [17 <../figs/density_complexity.pdf>]
-Underfull \hbox (badness 6157) in paragraph at lines 748--751
+[9] (out/Project_1.bbl [10 <../figs/g_error_scaled_vs_raw.pdf> <../figs/a_error_scaled_vs_raw.pdf>]) [11 <../figs/g_beta_scaled_vs_raw.pdf>] [12 <../figs/b_MSE_R2.pdf>] [13 <../figs/c_MSE_R2.pdf>] [14 <../figs/e_MSE_train_test.pdf> <../figs/e_bias_variance.pdf>] [15 <../figs/g_kfold_vs_bootstrap.pdf> <../figs/f_kfold_vs_bootstrap.pdf>]
+Underfull \hbox (badness 6157) in paragraph at lines 730--733
 \OT1/cmr/m/n/10 Here we have used that the trans-pose of $[][]$ is it-self since it is square and sym-met-ric.
  []
 
-[18 <../figs/density_OLS_Ridge_Lasso.pdf>]
-<../figs/a_beta_scaled_vs_raw.pdf, id=783, 433.62pt x 289.08pt>
+[16 <../figs/g_Ridge_Lasso.pdf>] [17 <../figs/density_complexity.pdf>] [18 <../figs/density_OLS_Ridge_Lasso.pdf>]
+<../figs/a_beta_scaled_vs_raw.pdf, id=797, 433.62pt x 289.08pt>
 File: ../figs/a_beta_scaled_vs_raw.pdf Graphic file (type pdf)
 <use ../figs/a_beta_scaled_vs_raw.pdf>
-Package pdftex.def Info: ../figs/a_beta_scaled_vs_raw.pdf  used on input line 801.
+Package pdftex.def Info: ../figs/a_beta_scaled_vs_raw.pdf  used on input line 783.
 (pdftex.def)             Requested size: 306.00311pt x 204.01314pt.
-<../figs/g_MSE_R2_Ridge.pdf, id=784, 813.0375pt x 722.7pt>
+<../figs/g_MSE_R2_Ridge.pdf, id=798, 813.0375pt x 722.7pt>
 File: ../figs/g_MSE_R2_Ridge.pdf Graphic file (type pdf)
 <use ../figs/g_MSE_R2_Ridge.pdf>
-Package pdftex.def Info: ../figs/g_MSE_R2_Ridge.pdf  used on input line 810.
+Package pdftex.def Info: ../figs/g_MSE_R2_Ridge.pdf  used on input line 792.
 (pdftex.def)             Requested size: 458.99689pt x 407.99542pt.
-<../figs/g_MSE_R2_Lasso.pdf, id=785, 813.0375pt x 722.7pt>
+<../figs/g_MSE_R2_Lasso.pdf, id=799, 813.0375pt x 722.7pt>
 File: ../figs/g_MSE_R2_Lasso.pdf Graphic file (type pdf)
 <use ../figs/g_MSE_R2_Lasso.pdf>
-Package pdftex.def Info: ../figs/g_MSE_R2_Lasso.pdf  used on input line 819.
+Package pdftex.def Info: ../figs/g_MSE_R2_Lasso.pdf  used on input line 801.
 (pdftex.def)             Requested size: 458.99689pt x 407.99542pt.
-<../figs/f_Ridge_Lasso.pdf, id=786, 813.0375pt x 722.7pt>
+<../figs/f_Ridge_Lasso.pdf, id=800, 813.0375pt x 722.7pt>
 File: ../figs/f_Ridge_Lasso.pdf Graphic file (type pdf)
 <use ../figs/f_Ridge_Lasso.pdf>
-Package pdftex.def Info: ../figs/f_Ridge_Lasso.pdf  used on input line 828.
+Package pdftex.def Info: ../figs/f_Ridge_Lasso.pdf  used on input line 810.
 (pdftex.def)             Requested size: 458.99689pt x 407.99542pt.
-<../figs/density_surf.pdf, id=787, 939.51pt x 505.89pt>
+<../figs/density_surf.pdf, id=801, 939.51pt x 505.89pt>
 File: ../figs/density_surf.pdf Graphic file (type pdf)
 <use ../figs/density_surf.pdf>
-Package pdftex.def Info: ../figs/density_surf.pdf  used on input line 837.
+Package pdftex.def Info: ../figs/density_surf.pdf  used on input line 819.
 (pdftex.def)             Requested size: 510.0pt x 274.6123pt.
-<../figs/density_pieces.pdf, id=788, 867.24pt x 722.7pt>
+<../figs/density_pieces.pdf, id=802, 867.24pt x 722.7pt>
 File: ../figs/density_pieces.pdf Graphic file (type pdf)
 <use ../figs/density_pieces.pdf>
-Package pdftex.def Info: ../figs/density_pieces.pdf  used on input line 846.
+Package pdftex.def Info: ../figs/density_pieces.pdf  used on input line 828.
 (pdftex.def)             Requested size: 458.99689pt x 382.49985pt.
- [19] [20 <../figs/a_beta_scaled_vs_raw.pdf>] [21 <../figs/g_MSE_R2_Ridge.pdf>] [22 <../figs/g_MSE_R2_Lasso.pdf>] [23 <../figs/f_Ridge_Lasso.pdf>] [24 <../figs/density_surf.pdf>] [25 <../figs/density_pieces.pdf>] (out/Project_1.aux)
+ [19 <../figs/a_beta_scaled_vs_raw.pdf>] [20 <../figs/g_MSE_R2_Ridge.pdf>] [21 <../figs/g_MSE_R2_Lasso.pdf>] [22 <../figs/f_Ridge_Lasso.pdf>] [23 <../figs/density_surf.pdf>] [24 <../figs/density_pieces.pdf>] (out/Project_1.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
@@ -938,21 +949,21 @@ L3 programming layer <2024-02-20>
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `Project_1.out' has not changed.
-(rerunfilecheck)             Checksum: 5AC822EE8A4EC127D441B6E6D7DC5944;7723.
+(rerunfilecheck)             Checksum: 8168CFDF43654A46C3058143C6636145;7723.
  ) 
 Here is how much of TeX's memory you used:
- 28718 strings out of 474116
- 520994 string characters out of 5743682
- 1971187 words of memory out of 5000000
- 50511 multiletter control sequences out of 15000+600000
+ 28706 strings out of 474116
+ 520755 string characters out of 5743682
+ 1960187 words of memory out of 5000000
+ 50503 multiletter control sequences out of 15000+600000
  569197 words of font info for 77 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,17n,93p,1507b,639s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on out/Project_1.pdf (25 pages, 8329577 bytes).
+ 84i,17n,93p,1440b,626s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on out/Project_1.pdf (24 pages, 8323210 bytes).
 PDF statistics:
- 1102 PDF objects out of 1200 (max. 8388607)
+ 1101 PDF objects out of 1200 (max. 8388607)
  833 compressed objects within 9 object streams
- 135 named destinations out of 1000 (max. 500000)
- 524 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 131 named destinations out of 1000 (max. 500000)
+ 536 words of extra memory for PDF output out of 10000 (max. 10000000)
 
