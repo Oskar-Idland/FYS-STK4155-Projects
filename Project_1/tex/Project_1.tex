@@ -392,7 +392,7 @@ Here $z$ is the cosmological redshift, which is 0 today and thus in the 128th sn
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[width=0.99\textwidth]{../figs/density.pdf}
+  \includegraphics[width=0.8\textwidth]{../figs/density.pdf}
   \caption{Logarithm of dark matter density in the simulation box averaged over one of the three axes at redshift $z\approx12.88$. Plotted as contour plot on the left and as surface plot on the right. Because the Universe expands as time goes on the box does as well, and we therefore scale the coordinates of the box by multiplying with $a$. Similarly, space between the dark matter particles also increases with time, which is why the density is scaled by multiplying with $a^{-3}$. G\begin{footnotesize}ASOLINE\end{footnotesize}2 uses the rest of the scaling factors by default.}\label{fig:density}
   \vspace*{-5pt}
 \end{figure*}
@@ -452,16 +452,16 @@ To illustrate the impact of scaling, we plotted the beta coefficients for both a
 Another important preprocessing step was splitting the data into training and test sets. This step enables the evaluation of the model's performance on unseen data and helps in assessing its generalization capabilities. We used the \verb|train_test_split| function from the scikit-learn library to randomly split the data into training and test sets, with a test size of 0.2. This ensured that 20\% of the data was reserved for testing, while the remaining 80\% was used to train the model. By splitting the data in this manner, we could evaluate the model's performance on new data and determine how well it generalized to unseen samples.
 
 \subsubsection{Parameter Dependencies}
-Investigating the dependency on polynomial degree was a critical aspect of understanding how the regression models performed under varying conditions. By increasing the polynomial order, we enhanced the models' capacity to fit more complex patterns in the data. However, this also raised the risk of overfitting, where the model might capture noise along with the underlying signal. To explore this, we evaluated the performance of the models across different polynomial degrees using metrics such as the MSE and $R^2$ scores mentioned in the previous section. These evaluations allowed us to quantify how well each model balanced bias and variance. \\
+Investigating the dependency on polynomial degree was a critical aspect of understanding how the regression models performed under varying conditions. By increasing the polynomial order, we enhanced the models' capacity to fit more complex patterns in the data. However, this also raised the risk of overfitting, where the model might capture noise along with the underlying signal. To explore this, we evaluated the performance of the models across different polynomial degrees using metrics such as the MSE and $R^2$ scores mentioned in the previous section. These evaluations allowed us to quantify how well each model balanced bias and variance. 
 
-For the Franke function-generated data, we systematically varied the polynomial degree from 1 to 6 for OLS. We then assessed the model's performance using the MSE and $R^2$ scores, plotting these metrics as a function of model complexity to determine the optimal polynomial degree for the regression method.\\
+For the Franke function-generated data, we systematically varied the polynomial degree from 1 to 6 for OLS. We then assessed the model's performance using the MSE and $R^2$ scores, plotting these metrics as a function of model complexity to determine the optimal polynomial degree for the regression method.
 
-For the cosmological simulation data, we followed a similar approach. We varied the polynomial degree from 1 to 40, using only every other step, for OLS. The model's performance was evaluated using the same metrics as for the Franke function-generated data. We also plotted the predicted surfaces to visually assess the models' fit to the data and identify any potential overfitting or underfitting issues. Specifically, we analyzed the fits for polynomial degrees 5, 10, 20, 30, and 50. Additionally, a 3D surface plot of a 30-degree polynomial fit was created alongside the raw data to visualize the model's performance in capturing the underlying patterns.\\
+For the cosmological simulation data, we followed a similar approach. We varied the polynomial degree from 1 to 40, using only every other step, for OLS. The model's performance was evaluated using the same metrics as for the Franke function-generated data. We also plotted the predicted surfaces to visually assess the models' fit to the data and identify any potential overfitting or underfitting issues. Specifically, we analyzed the fits for polynomial degrees 5, 10, 20, 30, and 50. Additionally, a 3D surface plot of a 30-degree polynomial fit was created alongside the raw data to visualize the model's performance in capturing the underlying patterns.
 %Our findings indicated that while higher polynomial degrees could improve fit to the training data, there was often a trade-off in terms of generalization to unseen data. Thus, understanding polynomial degree dependency was vital for selecting an optimal degree that achieved the best predictive accuracy while maintaining generalizability across different datasets. 
 
-For both Ridge and Lasso regression on the Franke function-generated data, we explored polynomial degrees ranging from 1 to 41, using every second polynomial degree for Ridge and every fourth polynomial degree for Lasso. These choices were motivated by the runtime constraints of the algorithms. For the cosmological simulation data, the polynomial degree range was from 1 to 42 for Ridge and from 1 to 21 for Lasso, with a step of every fourth polynomial degree for both methods.\\
+For both Ridge and Lasso regression on the Franke function-generated data, we explored polynomial degrees ranging from 1 to 41, using every second polynomial degree for Ridge and every fourth polynomial degree for Lasso. These choices were motivated by the runtime constraints of the algorithms. For the cosmological simulation data, the polynomial degree range was from 1 to 42 for Ridge and from 1 to 21 for Lasso, with a step of every fourth polynomial degree for both methods.
 
-In addition to polynomial degree, we examined the impact of the hyperparameter $\lambda$ on the performance of our Ridge and Lasso regression models. Visualizing the MSE and $R^2$ scores for Ridge and Lasso regression involved not only evaluating polynomial complexity but also varying $\lambda$ values.\\
+In addition to polynomial degree, we examined the impact of the hyperparameter $\lambda$ on the performance of our Ridge and Lasso regression models. Visualizing the MSE and $R^2$ scores for Ridge and Lasso regression involved not only evaluating polynomial complexity but also varying $\lambda$ values.
 
 To thoroughly evaluate the models, we systematically tested a range of $\lambda$ values, from 1e-05 to 1. For the Franke function-generated data, this range included 30 values, evenly spaced on a logarithmic scale, whereas 11 values were tested for the cosmological simulation data. Each $\lambda$ value was tested for every polynomial degree within the ranges mentioned earlier.
 
@@ -469,12 +469,12 @@ The resulting MSE and $R^2$ scores were plotted as functions of both $\lambda$ a
 
 
 \subsection{Bias-Variance Tradeoff}
-To showcase the bias-variance trade-off and validate our implementation, we imitated the analysis illustrated in \cref[fig:Hastie]{Fig. 2.11 from Hastie, Tibshirani, and Friedman}. Specifically, we implemented OLS regression for polynomial degrees $\in[1,81]$ in steps of 4, and computed the MSE evaluated on both the training and test portions of the Franke data each time. The generation and splitting of the Franke data were conducted as described previously. \\
+To showcase the bias-variance trade-off and validate our implementation, we attempted to imitate the analysis illustrated in \cref{fig:Hastie}, which is fig. 2.11 in Hastie et al.\colorbox{magenta}{cite}. Specifically, we implemented OLS regression for polynomial degrees $\in[1,81]$ in steps of 4, and computed the MSE evaluated on both the training and test portions of the Franke data each time. The generation and splitting of the Franke data were conducted as described previously. 
 
 \begin{figure}[h!]
   \centering %Centers the figure
   \includegraphics[width=\columnwidth]{../figs/hastie_bias_variance_tradeoff.jpg}
-  \caption{Fig. 2.11 of Hastie, Tibshirani, and Friedman illustrating bias-variance trade-off as a function of model complexity \colorbox{magenta}{cite}}\label{fig:Hastie}
+  \caption{Illustration of bias-variance trade-off as a function of model complexity, taken from fig. 2.11 in Hastie, Tibshirani, and Friedman \colorbox{magenta}{cite}}\label{fig:Hastie}
 \end{figure}
 
 \subsubsection{Bootstrap With OLS}
@@ -530,58 +530,61 @@ All our code is written in Python \cite{Python}, and we used scikit-learn \cite{
 \subsection{Effects of Data Scaling}\label{subsec:scaling effect}
 In the upper part of \cref{fig:error scaled vs raw} we have plotted the estimated MSE and $R^2$ scores evaluated on the Franke function test for polynomial degrees $\in[1,6]$. The left and right columns show the scores computed for the raw and scaled data, respectively. As expected there looks to be a constant factor between the raw and scaled MSE's, while the $R^2$ scores are equal in both cases. This is because $y_i$, $\tilde{y}_i$ and $\overline{y}$ (or in our case, $z_i$, $\tilde{z}_i$ and $\overline{z}$) are scaled equally, and from eq. \eqref{eq:R2} we thus see that the scaling cancels out from the numerator and denominator in the second term. 
 
-One might expect to see the same effects of scaling for the cosmological simulation data, but in the lower part of \cref{fig:error scaled vs raw} we see that this is not the case. Here we have plotted the MSE and $R^2$ scores for 21 evenly spaced polynomial degrees in the interval $[1,41]$, and we see that for degrees $\gtrsim9$ the raw scores diverge from the expected trend. Instead of a decreasing MSE and increasing $R^2$ as in the scaled case we get MSE's over 400 and very large, negative $R^2$ scores, a metric that should never be negative in the first place. This clearly shows why it is beneficial to scale the data, since it is safe to assume that the raw data catastrophe occurs due to numerical instability caused by loss of floating point precision. \colorbox{magenta}{correct?} Moreover, we see that we never reach a turning point in the scores where they start to worsen with polynomial degree, which makes sense considering the complexity of our data set.
-
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[trim = 0 0.8cm 0 0,clip,width=0.8\textwidth,keepaspectratio]{../figs/a_error_scaled_vs_raw.pdf}
+  \includegraphics[trim = 0 1.5cm 0 0,clip,width=0.7\textwidth,keepaspectratio]{../figs/a_error_scaled_vs_raw.pdf}
   \centering
-  \includegraphics[width=0.8\textwidth]{../figs/g_error_scaled_vs_raw.pdf}
+  \includegraphics[width=0.7\textwidth]{../figs/g_error_scaled_vs_raw.pdf}
   \caption{MSE (upper rows) and $R^2$ (lower rows) evaluated on the Franke function test set (upper section) and the cosmological simulation test set (lower section) using unscaled (left column) and scaled (right column) values. For the Franke function we have used polynomial degrees in the interval $[1,6]$, while for the cosmological data we have used every other degree in the interval $[1,41]$.}\label{fig:error scaled vs raw}
   \vspace*{-5pt}
 \end{figure*}
 
-% \begin{figure*}
-%   \vspace*{-5pt}
-%   \centering %Centers the figure
-%   \includegraphics[width=0.8\textwidth]{../figs/g_error_scaled_vs_raw.pdf}
-%   \caption{MSE (upper row) and $R^2$ (lower row) evaluated on the cosmological test set using unscaled (left column) and scaled (right column) values, for polynomial degrees in the interval $[1,41]$.}\label{fig:g error scaled vs raw}
-%   \vspace*{-5pt}
-% \end{figure*}
+One might expect to see the same effects of scaling for the cosmological simulation data, but in the lower part of \cref{fig:error scaled vs raw} we see that this is not the case. Here we have plotted the MSE and $R^2$ scores for 21 evenly spaced polynomial degrees in the interval $[1,41]$, and we see that for degrees $\gtrsim9$ the raw scores diverge from the expected trend. Instead of a decreasing MSE and increasing $R^2$ as in the scaled case we get MSE's over 400 and very large, negative $R^2$ scores, a metric that should never be negative in the first place. This clearly shows why it is beneficial to scale the data, since it is safe to assume that the raw data catastrophe occurs due to numerical instability caused by loss of floating point precision. \colorbox{magenta}{correct?} Moreover, we see that we never reach a turning point in the scores where they start to worsen with polynomial degree, which makes sense considering the complexity of our data set.
 
-In fact, we see from \cref{fig:g beta scaled vs raw} that the scaled coefficients for the fits to the cosmological data (plotted in orange) grow in orders of magnitude with complexity (cirka up until degree $21$, where stay around $10^4$), while the raw coefficients (plotted in purple) fall to zero around polynomial degree 9. The reason for the strong increase in the $\beta_\text{scaled}$'s is that $\mathbf{x}$ and $\mathbf{y}$ (both raw and scaled) are centered at 0, and in the scaled case these are divided by their standard deviations, hence most of the highest order polynomial terms decrease with the degree. We thus need very large coefficients for their contributions to the fit to be noticeable. The $\beta_\text{raw}$'s must be much smaller since the highest order terms grow rapidly with degree at the edges of the box, and eventually we encounter floating point errors. This is contrary to the coefficients estimated for the Franke function, where generally $\beta_\text{raw}\geq\beta_\text{scaled}$, as seen in \cref{appfig:a beta scaled vs raw} in \cref{appsec:figures}. This is because the Franke function is defined over the unit square, hence the raw coefficients grow with polynomial degree as well. \colorbox{magenta}{rewrite?} 
+In fact, we see from the bottom part of \cref{fig:beta scaled vs raw} that the scaled coefficients for the fits to the cosmological data (plotted in orange) grow in orders of magnitude with complexity (cirka up until degree $21$, where stay around $10^4$), while the raw coefficients (plotted in purple) fall to zero around polynomial degree 9. The reason for the strong increase in the $\beta_\text{scaled}$'s is that $\mathbf{x}$ and $\mathbf{y}$ (both raw and scaled) are centered at 0, and in the scaled case these are divided by their standard deviations, hence most of the highest order polynomial terms decrease with the degree. We thus need very large coefficients for their contributions to the fit to be noticeable. The $\beta_\text{raw}$'s must be much smaller since the highest order terms grow rapidly with degree at the edges of the box, and eventually we encounter floating point errors. This is contrary to the coefficients estimated for the Franke function, where generally $\beta_\text{raw}\geq\beta_\text{scaled}$, as seen in the top part of the figure. This is because the Franke function is defined over the unit square, hence the raw coefficients grow with polynomial degree as well. \colorbox{magenta}{rewrite?} 
 
-\begin{figure}[h!]
+\begin{figure}
   \vspace*{-5pt}
   \centering %Centers the figure
+  \includegraphics[trim = 0 1.3cm 0 0,clip,width=\columnwidth,keepaspectratio]{../figs/a_beta_scaled_vs_raw.pdf}
+  \centering %Centers the figure
   \includegraphics[width=\columnwidth]{../figs/g_beta_scaled_vs_raw.pdf}
-  \caption{The coefficients $\beta$ for the cosmological fit estimated using unscaled (purple) and scaled (orange) data, plotted for polynomial degrees in the interval $[1,41]$. We have used a logarithmic scale for the $\beta$'s.}\label{fig:g beta scaled vs raw}
+  \caption{The coefficients $\beta$ for the Franke (top) and cosmological (bottom) fits estimated using unscaled and scaled data, plotted for polynomial degrees in the intervals $[1,6]$ and $[1,41]$ for Franke and dark matter, respectively. We have used a logarithmic scale for the $\beta$'s in the latter case.}\label{fig:beta scaled vs raw}
   \vspace*{-5pt}
 \end{figure}
 
 \subsection{Hyperparameter Dependency}
-\subsubsection{Ridge}
+% \subsubsection{Ridge}
+In \cref{fig:MSE R2} we have contour plotted MSE and $R^2$ scores evaluated on the test portion of the Franke function data for Ridge (top section) and Lasso (bottom section) regression. Here we see that in both cases it is generally favorable to opt for smaller hyperparameters, although Lasso is much more sensitive to changes in $\lambda$ above a threshold of around 7 than what Ridge is. This is because Lasso regression employs the $L^1$ norm, which means that the coefficients can be driven completely to zero if the hyperparameter is large enough, contrary to the $L^2$ norm used in Ridge egression. Thus, as we continue increasing the value of $\lambda$ in Lasso above a certain value our fits will practically be zero at all points, and the scores will then stay constant.
+
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[width=0.9\textwidth]{../figs/b_MSE_R2.pdf}
-  \caption{MSE (upper row) and $R^2$ (lower row) for Ridge regression evaluated on the Franke test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 21 evenly spaced degrees in the interval $[1, 41]$ and 30 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$. We have cropped away degrees 1 and 3 and the 15 largest $\lambda$ values purely for visualization purposes.}\label{fig:b MSE R2}
+  \includegraphics[width=0.7\textwidth]{../figs/b_MSE_R2.pdf}
+  \centering
+  \includegraphics[width=0.7\textwidth]{../figs/c_MSE_R2.pdf}
+  \caption{MSE (upper rows) and $R^2$ (lower rows) for Ridge (top section) and Lasso (bottom section) regression evaluated on the Franke test data. The scores vary with polynomial degree horizontally and hyperparameter $\lambda$ vertically. In the right columns we have cropped away degrees 1 and 3 (1 and 5) and the 15 (20) largest $\lambda$ values for Ridge (Lasso), purely for visualization purposes.}\label{fig:MSE R2}
   \vspace*{-5pt}
 \end{figure*}
 
-\subsubsection{Lasso}
-\begin{figure*}
-  \vspace*{-5pt}
-  \centering %Centers the figure
-  \includegraphics[width=0.9\textwidth]{../figs/c_MSE_R2.pdf}
-  \caption{MSE (upper row) and $R^2$ (lower row) for Lasso regression evaluated on the Franke test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 11 evenly spaced degrees in the interval $[1, 41]$ and 30 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$, but in the right column we have cropped away degrees 1 and 5 and the 20 largest $\lambda$ values.}\label{fig:c MSE R2}
-  \vspace*{-5pt}
-\end{figure*}
+For Ridge we see that the increased error associated with a large $\lambda$ is smaller as we move to the highest complexities, which makes sense considering that we already had a good fit (low MSE and high $R^2$) for polynomial degrees around 5-6, hence the higher order terms are not as necessary. Since the $L^2$ norm ensures that the coefficients are shrinked uniformly, a large hyperparameter will thus have more severe consequences for the quality of the lower complexity fits. Moreover, we found that the scores' overall trend of the dependencies on polynomial degree and hyperparameter were similar for the cosmological data, for both Ridge and Lasso regression, as can be seen in \cref{appfig:g MSE R2} in \cref{appsec:figures}. \colorbox{magenta}{discuss more?}
+
+In the right columns of figs. \ref{fig:MSE R2} and \ref{appfig:g MSE R2} we have cropped out the smallest polynomial degrees and largest hyperparameters. Here we can see that the scores solely improve as we move towards larger degree and smaller $\lambda$ for the dark matter data, while for the Franke data some combinations of degree and $\lambda$ lead to slightly better scores than others. Although these variations seem to follow some sort of pattern, at least for Ridge, looking at the values on the colorbar axes we see that they are very small, and they might just be random. For future studies this would be worth looking into. \colorbox{magenta}{formulate differently?}
+
+% \subsubsection{Lasso}
+% \begin{figure*}
+%   \vspace*{-5pt}
+%   \centering %Centers the figure
+%   \includegraphics[width=0.8\textwidth]{../figs/c_MSE_R2.pdf}
+%   \caption{MSE (upper row) and $R^2$ (lower row) for Lasso regression evaluated on the Franke test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 11 evenly spaced degrees in the interval $[1, 41]$ and 30 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$, but in the right column we have cropped away degrees 1 and 5 and the 20 largest $\lambda$ values.}\label{fig:c MSE R2}
+%   \vspace*{-5pt}
+% \end{figure*}
 
 
 \subsection{Bias-Variance Tradeoff}
-\colorbox{magenta}{we expected MSE=bias+var for data since noise var is 0}
+\subsubsection{Training and Test Errors}
+In \cref{fig:e train test} we have plotted MSE scores evaluated on the training and test portions of the Franke data as functions of polynomial degrees up to 81. Although our curves are not as smooth as those in fig. 2.11 from Hastie et al., the overall trend is similar. The errors fall much faster with complexity for low degrees than the test set error increases for high degrees, in contrast to their figure, where the decrease is not as abrupt and the test set error follows more of a ``U-shape''. It is worth noting that their figure is an illustration, though, and we can not know how complex the data is assumed to be relative to the Franke function, nor what exactly is meant by a ``high'' model complexity. The former affects how large the error is for the lowest polynomial degrees, and the magnitude of the test error at high complexity depends on both. 
 
 \begin{figure}[h!]
   \vspace*{-5pt}
@@ -591,6 +594,10 @@ In fact, we see from \cref{fig:g beta scaled vs raw} that the scaled coefficient
   \vspace*{-5pt}
 \end{figure}
 
+When studying the complexity and hyperparameter dependence of the Franke function MSE and $R^2$ scores, we saw that they continued to improve with complexity up to degree 41 and that vanishing $\lambda$ was the best option. We found this rather peculiar, as we would expect overfitting and thus a need for regularization at this level, considering the relatively low complexity of the Franke function and that the fits we obtained with polynomial degrees between 5 and 10 already seemed satisfactory score-wise. However, \cref{fig:e train test} offers an explanation to this result, since the test set MSE for OLS regression starts increasing after we surpass polynomial degree 41. Also, since we used $50\times50$ data points for the regression the chance of fitting to the noise is smaller than if we were to use e.g. $10\times10$ points, since the expectation value of true data plus noise converges towards the expectation value of the true data plus the expectation value of the noise as the number of data points increases, and the expectation value of the noise is zero in our case. \colorbox{magenta}{fact check, rewrite}
+
+\subsubsection{Parameter Dependencies of MSE, Bias and Variance}
+
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
@@ -599,6 +606,8 @@ In fact, we see from \cref{fig:g beta scaled vs raw} that the scaled coefficient
   \vspace*{-5pt}
 \end{figure*}
 
+HIGHER ERROR DUE TO BOOTSTRAPPING BECAUSE THE STATISTICAL DISTRIBUTION OF THE NOISE IS IGNORED, I.E. IT IS A HIGHER CHANCE OF FITTING TO THE NOISE?
+
 \subsection{Resampling Methods}
 \subsubsection{OLS: Cross-Validation VS Bootstrap}
 
@@ -606,9 +615,9 @@ In fact, we see from \cref{fig:g beta scaled vs raw} that the scaled coefficient
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[trim = 0 0.8cm 0 0,clip,width=\textwidth,keepaspectratio]{../figs/f_kfold_vs_bootstrap.pdf}
+  \includegraphics[trim = 0 0.8cm 0 0,clip,width=0.9\textwidth,keepaspectratio]{../figs/f_kfold_vs_bootstrap.pdf}
   \centering
-  \includegraphics[width=\textwidth]{../figs/g_kfold_vs_bootstrap.pdf}
+  \includegraphics[width=0.9\textwidth]{../figs/g_kfold_vs_bootstrap.pdf}
   \caption{MSE evaluated on Franke (upper row) and cosmological (lower row) test data as function of polynomial degrees in the intervals $[1,15]$ (Franke) and $[1, 31]$ (cosmological) and number of folds $k\in[5, 15]$ used in cross-validation (contour plots on the left). On the right we have plotted the MSE's purely as functions of complexity when using the bootstrap resampling method with 100 steps.}\label{fig:kfold vs bootstrap}
   \vspace*{-5pt}
 \end{figure*}
@@ -618,13 +627,15 @@ In fact, we see from \cref{fig:g beta scaled vs raw} that the scaled coefficient
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[width=0.9\textwidth]{../figs/g_Ridge_Lasso.pdf}
-  \caption{MSE evaluated on cosmological test data as function of polynomial degrees in the interval $[1, 31]$ and number of folds $k\in[5, 15]$ used in cross-validation, for Ridge (upper row) and Lasso (lower row) regression. We have used $\lambda=0.001$ and $\lambda=0.5$ in the left and right columns, respectively.}\label{fig:g Ridge Lasso}
+  \includegraphics[width=0.7\textwidth]{../figs/f_Ridge_Lasso.pdf}
+  \centering
+  \includegraphics[width=0.7\textwidth]{../figs/g_Ridge_Lasso.pdf}
+  \caption{MSE evaluated on the Franke (top section) and cosmological (bottom section) test sets as function of polynomial degrees and number of $k$-folds used in cross-validation, for Ridge (upper rows) and Lasso (lower rows) regression. We have used $\lambda=0.001$ and $\lambda=0.5$ in the left and right columns, respectively.}\label{fig:g Ridge Lasso}
   \vspace*{-5pt}
 \end{figure*}
 
 \subsection{Fits to the Cosmological Data}
-\subsubsection{Complexity Dependency for OLS}
+\subsubsection{Complexity Dependency in OLS}
 In \cref{fig:density complexity} we have plotted OLS fits to the cosmological data using polynomial degrees 5, 10, 20, 30 and 50 to further examine the effects of increasing model complexity. From degree 30 to 50 the fit actually seems to worsen, looking more smudged in the center, while ripple-like structures near the edges become more prominent. These are already visible for degree 30, especially in \cref{appfig:density surf} in \cref{appsec:figures}, where we have surface plotted the fit together with the actual data. However, they arguably don't make the fit look less accurate than that obtained with polynomial degree 20.
 
 To explain the reason for the ripple effect, and why the smaller scale structures in the data don't show up more clearly as we continue increasing the model complexity we need to consider the columns of the scaled design matrix. As mentioned in \cref{subsec:scaling effect} most of the scaled box coordinates are less than 1. They are in fact close to zero in the center region and slightly larger than 1 in magnitude near the edges. Thus, as we move to higher order polynomials the elements of the rightmost columns in $\mathbf{X}_\text{scaled}$ (corresponding to the highest order terms) diverge, some tend to zero while others grow in magnitude. To minimize the model error the coefficients cannot continue increasing because then the fit worsens in the edges, but they cannot decrease too much either as this leads to a less accurate fit in the center. As a result we see the fits become increasingly smeared in the center and more complex at the edges as we increase the complexity, hence the ripple effect. \colorbox{magenta}{explain better?} 
@@ -632,7 +643,7 @@ To explain the reason for the ripple effect, and why the smaller scale structure
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[width=0.9\textwidth]{../figs/density_complexity.pdf}
+  \includegraphics[width=0.8\textwidth]{../figs/density_complexity.pdf}
   \caption{Contour plots of the cosmological simulation data (upper left) and the OLS fits for polynomial degrees 5 (upper right), 10 (middle left), 20 (middle right), 30 (lower left) and 50 (lower right).}\label{fig:density complexity}
   \vspace*{-5pt}
 \end{figure*}
@@ -642,12 +653,12 @@ In an attempt to confirm this interpretation we decided to split our simulation 
 
 
 \subsubsection{Comparing Regression Variants}
-In \cref{fig:density OLS Ridge Lasso} we have plotted the OLS, Ridge and Lasso fits using polynomial degree 30, hyperparameter  $\lambda=0.001$ and $k=5$ folds together with the actual data to get a feel for the implications of the estimated MSE scores. Here we see that the Lasso fit is significantly worse than both OLS and Ridge, although Ridge is lacking in comparison to OLS as well. This agrees with figs. \cref{fig:kfold vs bootstrap} and \cref{fig:g Ridge Lasso}, since the MSE's for the largest plynomial degrees lie somewhere below 0.1 for OLS, in the interval $[0.1,0.2]$ for Ridge and $[0.2,0.3]$ for Lasso.It also makes sense considering the scores plotted in figs. \ref{appfig:g MSE R2 Ridge} and \ref{appfig:g MSE R2 Lasso} in \cref{appsec:figures}, where we saw that Lasso generally performed poorly compared to Ridge.
+In \cref{fig:density OLS Ridge Lasso} we have plotted the OLS, Ridge and Lasso fits using polynomial degree 30, hyperparameter  $\lambda=0.001$ and $k=5$ folds together with the actual data to get a feel for the implications of the estimated MSE scores. Here we see that the Lasso fit is significantly worse than both OLS and Ridge, although Ridge is lacking in comparison to OLS as well. This agrees with figs. \cref{fig:kfold vs bootstrap} and \cref{fig:g Ridge Lasso}, since the MSE's for the largest plynomial degrees lie somewhere below 0.1 for OLS, in the interval $[0.1,0.2]$ for Ridge and $[0.2,0.3]$ for Lasso. It also makes sense considering the scores plotted in \cref{appfig:g MSE R2} in \cref{appsec:figures}, where we saw that Lasso generally performed poorly compared to Ridge.
 
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[width=0.9\textwidth]{../figs/density_OLS_Ridge_Lasso.pdf}
+  \includegraphics[width=0.8\textwidth]{../figs/density_OLS_Ridge_Lasso.pdf}
   \caption{Contour plots of the cosmological simulation data (upper left) and OLS (upper right), Ridge (lower left) and Lasso (lower right) regression fits using polynomial degree 30, $\lambda=0.001$ for both Ridge and Lasso, and $k=5$ folds in cross-validation.}\label{fig:density OLS Ridge Lasso}
   \vspace*{-5pt}
 \end{figure*}
@@ -777,46 +788,55 @@ Before we move further we may note that the exact function $f(\mathbf{x})$ gener
 
 \section{Additional Figures}\label{appsec:figures}
 
+% \begin{figure*}
+%   \vspace*{-5pt}
+%   \centering %Centers the figure
+%   \includegraphics[width=0.6\textwidth]{../figs/a_beta_scaled_vs_raw.pdf}
+%   \caption{The coefficients $\beta$ for the Franke function fit estimated using unscaled (blue) and scaled (red) data, plotted for polynomial degrees in the interval $[1,6]$.}\label{appfig:a beta scaled vs raw}
+%   \vspace*{-5pt}
+% \end{figure*}
+
+
+% \begin{figure*}
+%   \vspace*{-5pt}
+%   \centering %Centers the figure
+%   \includegraphics[width=0.9\textwidth]{../figs/g_MSE_R2_Ridge.pdf}
+%   \caption{MSE (upper row) and $R^2$ (lower row) for Ridge regression evaluated on the cosmological test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 11 evenly spaced degrees in the interval $[1, 31]$ and 11 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$. In the right column we have cropped away degrees smaller than 19 purely for visualization purposes.}\label{appfig:g MSE R2 Ridge}
+%   \vspace*{-5pt}
+% \end{figure*}
+
+
+% \begin{figure*}
+%   \vspace*{-5pt}
+%   \centering %Centers the figure
+%   \includegraphics[width=0.9\textwidth]{../figs/g_MSE_R2_Lasso.pdf}
+%   \caption{MSE (upper row) and $R^2$ (lower row) for Lasso regression evaluated on the cosmological test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 11 evenly spaced degrees in the interval $[1, 31]$ and 11 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$, but in the right column we have cropped away degrees smaller than 19 and the 3 largest $\lambda$ values.}\label{appfig:g MSE R2 Lasso}
+%   \vspace*{-5pt}
+% \end{figure*}
+
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[width=0.6\textwidth]{../figs/a_beta_scaled_vs_raw.pdf}
-  \caption{The coefficients $\beta$ for the Franke function fit estimated using unscaled (blue) and scaled (red) data, plotted for polynomial degrees in the interval $[1,6]$.}\label{appfig:a beta scaled vs raw}
+  \includegraphics[width=0.7\textwidth]{../figs/g_MSE_R2_Ridge.pdf}
+  \centering
+  \includegraphics[width=0.7\textwidth]{../figs/g_MSE_R2_Lasso.pdf}
+  \caption{MSE (upper rows) and $R^2$ (lower rows) for Ridge (top section) and Lasso (bottom section) regression evaluated on the cosmological test set. The scores vary with polynomial degree horizontally and hyperparameter $\lambda$ vertically. In the right columns we have cropped away degrees smaller than 19, as well as the 3 largest $\lambda$'s only for Lasso, purely for visualization purposes.}\label{appfig:g MSE R2}
   \vspace*{-5pt}
 \end{figure*}
 
-
-\begin{figure*}
-  \vspace*{-5pt}
-  \centering %Centers the figure
-  \includegraphics[width=0.9\textwidth]{../figs/g_MSE_R2_Ridge.pdf}
-  \caption{MSE (upper row) and $R^2$ (lower row) for Ridge regression evaluated on the cosmological test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 11 evenly spaced degrees in the interval $[1, 31]$ and 11 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$. In the right column we have cropped away degrees smaller than 19 purely for visualization purposes.}\label{appfig:g MSE R2 Ridge}
-  \vspace*{-5pt}
-\end{figure*}
-
-
-\begin{figure*}
-  \vspace*{-5pt}
-  \centering %Centers the figure
-  \includegraphics[width=0.9\textwidth]{../figs/g_MSE_R2_Lasso.pdf}
-  \caption{MSE (upper row) and $R^2$ (lower row) for Lasso regression evaluated on the cosmological test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 11 evenly spaced degrees in the interval $[1, 31]$ and 11 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$, but in the right column we have cropped away degrees smaller than 19 and the 3 largest $\lambda$ values.}\label{appfig:g MSE R2 Lasso}
-  \vspace*{-5pt}
-\end{figure*}
+% \begin{figure*}
+%   \vspace*{-5pt}
+%   \centering %Centers the figure
+%   \includegraphics[width=0.7\textwidth]{../figs/f_Ridge_Lasso.pdf}
+%   \caption{MSE evaluated on Franke test data as function of polynomial degrees in the interval $[1, 15]$ and number of folds $k\in[5, 15]$ used in cross-validation, for Ridge (upper row) and Lasso (lower row) regression. We have used $\lambda=0.001$ and $\lambda=0.5$ in the left and right columns, respectively.}\label{appfig:f Ridge Lasso}
+%   \vspace*{-5pt}
+% \end{figure*}
 
 
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[width=0.9\textwidth]{../figs/f_Ridge_Lasso.pdf}
-  \caption{MSE evaluated on Franke test data as function of polynomial degrees in the interval $[1, 15]$ and number of folds $k\in[5, 15]$ used in cross-validation, for Ridge (upper row) and Lasso (lower row) regression. We have used $\lambda=0.001$ and $\lambda=0.5$ in the left and right columns, respectively.}\label{appfig:f Ridge Lasso}
-  \vspace*{-5pt}
-\end{figure*}
-
-
-\begin{figure*}
-  \vspace*{-5pt}
-  \centering %Centers the figure
-  \includegraphics[width=\textwidth]{../figs/density_surf.pdf}
+  \includegraphics[trim = 0 2cm 0 0,clip,width=\textwidth,keepaspectratio]{../figs/density_surf.pdf}
   \caption{Surface plots of the cosmological simulation data (left) and the OLS fit for polynomial degree 30 (right).}\label{appfig:density surf}
   \vspace*{-5pt}
 \end{figure*}
@@ -825,7 +845,7 @@ Before we move further we may note that the exact function $f(\mathbf{x})$ gener
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[width=0.9\textwidth]{../figs/density_pieces.pdf}
+  \includegraphics[width=0.8\textwidth]{../figs/density_pieces.pdf}
   \caption{Contour plots of the cosmological simulation data (upper left) and the OLS fits for the entire data (upper right), 4 separate pieces stitched back together (lower left) and 100 separate pieces stitched back together (lower right). We have used a polynomial degree of 30 for all fits.}\label{appfig:density pieces}
   \vspace*{-5pt}
 \end{figure*}

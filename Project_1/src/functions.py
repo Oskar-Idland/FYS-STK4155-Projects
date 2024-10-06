@@ -93,7 +93,7 @@ def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
     return X
 
 
-def OLS(x: np.ndarray, y: np.ndarray, z: np.ndarray[np.ndarray, np.ndarray], degree: int, scale: bool = True, test_size: float =0.2, seed: int =None, return_beta: bool = False, return_X: bool = False, return_scalers: bool = False, return_train_test: bool = False) -> tuple:
+def OLS(x: np.ndarray, y: np.ndarray, z: np.ndarray[np.ndarray, np.ndarray], degree: int, scale: bool = True, test_size: float =0.2, seed: int | None =None, return_beta: bool = False, return_X: bool = False, return_scalers: bool = False, return_train_test: bool = False) -> tuple:
     '''
     Performs Ordinary Least Squares (OLS) regression.
 
@@ -104,7 +104,7 @@ def OLS(x: np.ndarray, y: np.ndarray, z: np.ndarray[np.ndarray, np.ndarray], deg
     degree (int): The degree of the polynomial features.
     scale (bool, optional): Whether to scale the data. Default is True.
     test_size (float, optional): The proportion of the dataset to include in the test split. Default is 0.2.
-    seed (int, optional): The random seed for reproducibility. Default is None.
+    seed(int | None, optional): The random seed for reproducibility. Default is None.
     return beta (bool, optional): Whether to return the features β. Default is False.
     return_X (bool, optional): Whether to return X. Default is False.
     return_scalers (bool, optional): Whether to return the scalers used to scale the data. Default is False.
@@ -144,7 +144,7 @@ def OLS(x: np.ndarray, y: np.ndarray, z: np.ndarray[np.ndarray, np.ndarray], deg
     return tuple(quantities)
 
 
-def Ridge(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, scale: bool = True, test_size: float = 0.2, seed: int = None, return_beta: bool = False, return_X: bool = False, return_scalers: bool = False, return_train_test: bool = False) -> tuple:
+def Ridge(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, scale: bool = True, test_size: float = 0.2, seed: int | None = None, return_beta: bool = False, return_X: bool = False, return_scalers: bool = False, return_train_test: bool = False) -> tuple:
     """
     Performs Ridge regression.
 
@@ -156,7 +156,7 @@ def Ridge(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
     λ (float): The regularization parameter.
     scale (bool, optional): Whether to scale the data. Default is True.
     test_size (float, optional): The proportion of the dataset to include in the test split. Default is 0.2.
-    seed (int, optional): The random seed for reproducibility. Default is None.
+    seed(int | None, optional): The random seed for reproducibility. Default is None.
     return beta (bool, optional): Whether to return the features β. Default is False.
     return_X (bool, optional): Whether to return X. Default is False.
     return_scalers (bool, optional): Whether to return the scalers used to scale the data. Default is False.
@@ -197,7 +197,7 @@ def Ridge(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
     return tuple(quantities)
 
 
-def Lasso(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, scale: bool = True, test_size: float = 0.2, seed: int = None, intercept: bool = False, return_beta: bool = False, return_X: bool = False, return_scalers: bool = False, return_train_test: bool = False) -> tuple:
+def Lasso(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, scale: bool = True, test_size: float = 0.2, seed: int | None = None, intercept: bool = False, return_beta: bool = False, return_X: bool = False, return_scalers: bool = False, return_train_test: bool = False) -> tuple:
     """
     Performs Lasso regression.
 
@@ -209,7 +209,7 @@ def Lasso(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
     λ (float): The regularization parameter.
     scale (bool, optional): Whether to scale the data. Default is True.
     test_size (float, optional): The proportion of the dataset to include in the test split. Default is 0.2.
-    seed (int, optional): The random seed for reproducibility. Default is None.
+    seed(int | None, optional): The random seed for reproducibility. Default is None.
     intercept (bool, optional): Whether to include an intercept term. Default is False.
     return beta (bool, optional): Whether to return the features β. Default is False.
     return_X (bool, optional): Whether to return X. Default is False.
@@ -256,7 +256,7 @@ def Lasso(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, λ: float, s
     return tuple(quantities)
 
 
-def Bootstrap(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, n_bootstraps: int, scale: bool = True, test_size: float = 0.2, seed: int = None) -> tuple[float, float, float]:
+def Bootstrap(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, n_bootstraps: int, scale: bool = True, test_size: float = 0.2, seed: int | None = None) -> tuple[float, float, float]:
     """
     Performs bootstrapping.
 
@@ -268,7 +268,7 @@ def Bootstrap(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, n_bootst
     n_bootstraps (int): The number of bootstraps.
     scale (bool, optional): Whether to scale the data. Default is True.
     test_size (float, optional): The proportion of the dataset to include in the test split. Default is 0.2.
-    seed (int, optional): The random seed for reproducibility. Default is None.   
+    seed(int | None, optional): The random seed for reproducibility. Default is None.   
 
     ## Returns:
     tuple: A tuple of length 3 containing the Mean Squared Error (MSE) score, bias, and variance
@@ -302,7 +302,7 @@ def Bootstrap(x: np.ndarray, y: np.ndarray, z: np.ndarray, degree: int, n_bootst
     return error, bias, variance
 
 
-def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model, degree: int, scale: bool = True, predict: bool = False) -> float | np.ndarray:
+def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model, degree: int, scale: bool = True, predict: bool = False, seed: int | None = None) -> float | np.ndarray:
     """
     Performs k-fold cross-validation.
 
@@ -313,6 +313,7 @@ def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model, d
     k (int): The number of folds in the k-fold cross-validation.
     model (sklearn.linear_model.LinearRegression | sklearn.linear_model.Ridge | sklearn.linear_model.Lasso): The regression model to be used.
     degree (int): The degree of the polynomial features.
+    seed(int | None, optional): The random seed for reproducibility. Default is None.
     scale (bool, optional): Whether to scale the data. Default is True.
     predict (bool, optional): Whether to return the predicted values instead of the score. Default is False.
 
@@ -320,7 +321,7 @@ def kfold_crossval(x: np.ndarray, y: np.ndarray, z: np.ndarray, k: int, model, d
     float | np.ndarray: The estimated Mean Squared Error (MSE) from the k-fold cross-validation if predict is passed as False, and the predicted values if predict is passed as True.
     """
 
-    kfold = KFold(n_splits = k, shuffle = True) 
+    kfold = KFold(n_splits = k, shuffle = True, random_state = seed) 
 
     X = create_X(x, y, degree)
     if scale:

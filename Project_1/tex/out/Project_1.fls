@@ -341,6 +341,11 @@ INPUT ../figs/g_error_scaled_vs_raw.pdf
 INPUT ../figs/g_error_scaled_vs_raw.pdf
 INPUT ../figs/g_error_scaled_vs_raw.pdf
 INPUT ../figs/g_error_scaled_vs_raw.pdf
+INPUT ../figs/a_beta_scaled_vs_raw.pdf
+INPUT ../figs/a_beta_scaled_vs_raw.pdf
+INPUT ../figs/a_beta_scaled_vs_raw.pdf
+INPUT ../figs/a_beta_scaled_vs_raw.pdf
+INPUT ../figs/a_beta_scaled_vs_raw.pdf
 INPUT ../figs/g_beta_scaled_vs_raw.pdf
 INPUT ../figs/g_beta_scaled_vs_raw.pdf
 INPUT ../figs/g_beta_scaled_vs_raw.pdf
@@ -376,6 +381,11 @@ INPUT ../figs/g_kfold_vs_bootstrap.pdf
 INPUT ../figs/g_kfold_vs_bootstrap.pdf
 INPUT ../figs/g_kfold_vs_bootstrap.pdf
 INPUT ../figs/g_kfold_vs_bootstrap.pdf
+INPUT ../figs/f_Ridge_Lasso.pdf
+INPUT ../figs/f_Ridge_Lasso.pdf
+INPUT ../figs/f_Ridge_Lasso.pdf
+INPUT ../figs/f_Ridge_Lasso.pdf
+INPUT ../figs/f_Ridge_Lasso.pdf
 INPUT ../figs/g_Ridge_Lasso.pdf
 INPUT ../figs/g_Ridge_Lasso.pdf
 INPUT ../figs/g_Ridge_Lasso.pdf
@@ -410,11 +420,6 @@ INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmmib
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmmib6.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy9.tfm
 INPUT /usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm
-INPUT ../figs/a_beta_scaled_vs_raw.pdf
-INPUT ../figs/a_beta_scaled_vs_raw.pdf
-INPUT ../figs/a_beta_scaled_vs_raw.pdf
-INPUT ../figs/a_beta_scaled_vs_raw.pdf
-INPUT ../figs/a_beta_scaled_vs_raw.pdf
 INPUT ../figs/g_MSE_R2_Ridge.pdf
 INPUT ../figs/g_MSE_R2_Ridge.pdf
 INPUT ../figs/g_MSE_R2_Ridge.pdf
@@ -425,11 +430,6 @@ INPUT ../figs/g_MSE_R2_Lasso.pdf
 INPUT ../figs/g_MSE_R2_Lasso.pdf
 INPUT ../figs/g_MSE_R2_Lasso.pdf
 INPUT ../figs/g_MSE_R2_Lasso.pdf
-INPUT ../figs/f_Ridge_Lasso.pdf
-INPUT ../figs/f_Ridge_Lasso.pdf
-INPUT ../figs/f_Ridge_Lasso.pdf
-INPUT ../figs/f_Ridge_Lasso.pdf
-INPUT ../figs/f_Ridge_Lasso.pdf
 INPUT ../figs/density_surf.pdf
 INPUT ../figs/density_surf.pdf
 INPUT ../figs/density_surf.pdf
