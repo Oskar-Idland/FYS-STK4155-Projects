@@ -1,15 +1,15 @@
 # Fdb version 4
-["bibtex out/Project_1"] 1728277749.19881 "out/Project_1.aux" "out/Project_1.bbl" "out/Project_1" 1728277751.7106 0
-  "./references.bib" 1728267829.21855 4472 784d04c106c565da48e3f8f072405d8b ""
+["bibtex out/Project_1"] 1728309331.14985 "out/Project_1.aux" "out/Project_1.bbl" "out/Project_1" 1728309333.70197 0
+  "./references.bib" 1728277807.84634 4472 784d04c106c565da48e3f8f072405d8b ""
   "/usr/local/texlive/2024/texmf-dist/bibtex/bst/revtex4-1/apsrev4-1.bst" 1602107945 71515 e333383ed72bf24aa6de7e8cabb55f84 ""
-  "out/Project_1.aux" 1728277751.12192 24432 3a9d21f1259d495b0ab13aec69f7e40d "pdflatex"
-  "out/Project_1Notes.bib" 1728277751.1247 103 48ad29797468f16e2853d8797278d7af "pdflatex"
+  "out/Project_1.aux" 1728309333.10229 24725 44a231f9c3585a2c19d599ff7a0b8bd9 "pdflatex"
+  "out/Project_1Notes.bib" 1728309333.10543 103 48ad29797468f16e2853d8797278d7af "pdflatex"
   (generated)
   "out/Project_1.bbl"
   "out/Project_1.blg"
   (rewritten before read)
-["pdflatex"] 1728277749.37177 "/Users/paljettrosa/Documents/GitHub/FYS-STK4155-Projects/Project_1/tex/Project_1.tex" "out/Project_1.pdf" "Project_1" 1728277751.71093 0
-  "../figs/a_Franke_surf.pdf" 1728241176.39341 3768512 290e514e12074a653a9edbb1498bae5a ""
+["pdflatex"] 1728309331.38405 "/Users/paljettrosa/Documents/GitHub/FYS-STK4155-Projects/Project_1/tex/Project_1.tex" "out/Project_1.pdf" "Project_1" 1728309333.70231 0
+  "../figs/a_Franke_surf.pdf" 1728305709.58064 227252 9b627090d5a223e00fe6ca861df7ae6d ""
   "../figs/a_beta_scaled_vs_raw.pdf" 1728157726.54738 137307 6ab1f278196c29ac47f42aa2a33204d4 ""
   "../figs/a_error_scaled_vs_raw.pdf" 1728157726.54814 135181 2e079f74464e73bcf698a6305d8a7b29 ""
   "../figs/b_MSE_R2.pdf" 1728184317.03204 116560 e156ea80272e089bfac58ceaa68f998d ""
@@ -21,8 +21,8 @@
   "../figs/density_surf.pdf" 1728157726.55883 1977002 153af0f1c9a635b23bcc0fc6b35b129e ""
   "../figs/e_MSE_train_test.pdf" 1728241176.39411 70231 8e8168160857fd06f4707a02826fd5b5 ""
   "../figs/e_bias_variance.pdf" 1728157726.56033 171504 bca84ca25199f353c30e23c3c6e194d1 ""
-  "../figs/f_Ridge_Lasso.pdf" 1728247067.01251 113223 6e8f668ff4cfe94d99282f8bc34233a3 ""
-  "../figs/f_kfold_vs_bootstrap.pdf" 1728246303.11181 103532 2464d53842de8cea18960c029b9ddc27 ""
+  "../figs/f_Ridge_Lasso.pdf" 1728277807.76714 113223 6e8f668ff4cfe94d99282f8bc34233a3 ""
+  "../figs/f_kfold_vs_bootstrap.pdf" 1728277807.76832 103532 2464d53842de8cea18960c029b9ddc27 ""
   "../figs/g_MSE_R2_Lasso.pdf" 1728157726.56498 113866 38fe70ee9dea9a28349b13a362404a5a ""
   "../figs/g_MSE_R2_Ridge.pdf" 1728157726.56564 113546 344fcf1db57228c2bc53dbc81432bb19 ""
   "../figs/g_Ridge_Lasso.pdf" 1728157726.56665 206544 a2cd5e2c5625c64648fc1fc9d9f55480 ""
@@ -30,7 +30,7 @@
   "../figs/g_error_scaled_vs_raw.pdf" 1728157726.56899 166823 33d665a3ecc5387987bbb13bbd2f492e ""
   "../figs/g_kfold_vs_bootstrap.pdf" 1728157726.5701 103124 8acb589d76d611ccf19bd451102d179c ""
   "../figs/hastie_bias_variance_tradeoff.jpg" 1728157726.57045 24320 078291297516545270d77e3f770dda51 ""
-  "/Users/paljettrosa/Documents/GitHub/FYS-STK4155-Projects/Project_1/tex/Project_1.tex" 1728277742.03025 94684 51bfb9f7262a552cf7281150ec76d80b ""
+  "/Users/paljettrosa/Documents/GitHub/FYS-STK4155-Projects/Project_1/tex/Project_1.tex" 1728309326.66321 95536 155c7391851209635fd2bc7cb650d847 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy5.tfm" 1246382020 1120 1e8878807317373affa7f7bba4cf2f6a ""
   "/usr/local/texlive/2024/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy6.tfm" 1246382020 1124 14ccf5552bc7f77ca02a8a402bea8bfb ""
@@ -237,10 +237,10 @@
   "/usr/local/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1727214568.276 5467645 128b85b7cde5f5edc5cb7f1dd7ff8736 ""
   "/usr/local/texlive/2024/texmf-var/web2c/pdftex/pdflatex.fmt" 1727209366 8221429 db52235156dd1f5fc2399dadb68c726f ""
   "/usr/local/texlive/2024/texmf.cnf" 1710266656 577 e590dabc9e28c5b61546e15f63eebcdf ""
-  "Project_1.tex" 1728277742.03025 94684 51bfb9f7262a552cf7281150ec76d80b ""
-  "out/Project_1.aux" 1728277751.12192 24432 3a9d21f1259d495b0ab13aec69f7e40d "pdflatex"
-  "out/Project_1.bbl" 1728277749.36418 8041 8928d096ffd63bdcedfa10254e14fdc6 "bibtex out/Project_1"
-  "out/Project_1.out" 1728277751.12438 8349 36fb308aec70e0fbc7fced94792b9f12 "pdflatex"
+  "Project_1.tex" 1728309326.66321 95536 155c7391851209635fd2bc7cb650d847 ""
+  "out/Project_1.aux" 1728309333.10229 24725 44a231f9c3585a2c19d599ff7a0b8bd9 "pdflatex"
+  "out/Project_1.bbl" 1728309331.37391 8041 8928d096ffd63bdcedfa10254e14fdc6 "bibtex out/Project_1"
+  "out/Project_1.out" 1728309333.10493 8349 dfc97777715ef9ceedbdeb14a767df32 "pdflatex"
   (generated)
   "out/Project_1.aux"
   "out/Project_1.log"

@@ -99,8 +99,7 @@
 \affiliation{University of Oslo, Department of Physics}
 
 \begin{abstract}
-We have explored various regression techniques and resampling methods within the context of machine learning, motivated by the need to develop robust models that can accurately predict and generalize from complex datasets. The main objective was to analyze and compare the performance of Ordinary Least Squares (OLS), Ridge, and Lasso regression in fitting synthetic and real-world data, focusing on the bias-variance tradeoff and model generalizability. We applied these regression techniques to the Franke function, a synthetic benchmark used in numerical analysis, and extended our analysis to cosmological N-body simulation data generated using the public G\begin{scriptsize}ASOLINE\end{scriptsize}2 SPH code. To assess model performance and generalization, we employed resampling methods such as bootstrap and k-fold cross-validation, examining how they help to evaluate model accuracy under different training and test data conditions. Our study provided insights into how model complexity and regularization parameters affect the bias-variance tradeoff and prediction error, enabling us to critically evaluate each regression technique's performance using statistical and resampling approaches. \colorbox{magenta}{rewrite /remove last part when results are gathered and discussion/conclusion is finished}
-\end{abstract}
+We have explored various regression techniques and resampling methods within the context of machine learning, motivated by the need to develop robust models that can accurately predict and generalize from complex datasets. The main objective was to analyze and compare the performance of Ordinary Least Squares (OLS), Ridge, and Lasso regression in fitting synthetic and real-world data, focusing on the bias-variance tradeoff and model generalizability. We applied these regression techniques to the Franke function, a synthetic benchmark used in numerical analysis, and extended our analysis to cosmological N-body simulation data generated using the public G\begin{scriptsize}ASOLINE\end{scriptsize}2 SPH code. To assess model performance and generalization, we employed resampling methods such as bootstrap and k-fold cross-validation, examining how they help to evaluate model accuracy under different training and test data conditions. We found that data scaling was essential to ensure numerical stability, as the coefficients in the OLS regression model trained with the cosmological simulation data fell to zero if we didn't, resulting in diverging performance metric scores. \colorbox{magenta}{maybe remove this, write other main results}. 
 \maketitle
 \onecolumngrid
 \begin{center}
@@ -264,6 +263,14 @@ Cross-validation is another resampling technique that involves partitioning the 
 Since all observations are used for both training and validation, cross-validation maximizes the use of available data, hence it is especially useful in the case of limited datasets. It also helps in managing the bias-variance tradeoff by evaluating the model's performance on different subsets of data. By averaging the results across multiple folds, cross-validation reduces the variance of the model's predictions, as it minimizes overfitting to any particular subset of the data. Additionally, by testing the model on unseen data, it ensures that the bias is not too high, making it a good indicator of model generalization. It does require multiple model trainings however (e.g., 10-fold cross-validation requires 10 models to be trained), making it computationally expensive for large datasets or complex models.
 \colorbox{magenta}{shorten?}
 
+\begin{figure*}
+  \vspace*{-5pt}
+  \centering %Centers the figure
+  \includegraphics[trim=0 1.4cm 0 2cm,clip,width=0.92\textwidth,keepaspectratio]{../figs/a_Franke_surf.pdf}
+  \caption{Visualization of the two-dimensional Franke function expressed in \eqref{eq:Franke} on a $50\times50$ grid. In the right subplot we have added a noise contribution $\boldsymbol{\varepsilon}$ with standard deviation $\sigma=0.1$.}\label{fig:Franke}
+  \vspace*{-5pt}
+\end{figure*}
+
 
 % EXPLAIN ANALYTICAL EXPRESSIONS ETC., REFER TO DERIVATIONS IN APPENDIX
 % THESE ARE POSSIBLE SUBSECTIONS
@@ -281,15 +288,7 @@ We will use the function multiple times throughout this work, as it produces a s
 \section{Methods \& Implementation}\label{sec:methods}
 \subsection{Generating the Data}
 \subsubsection{Synthetic Data}
-The Franke function generated data used in this study was created by sampling the function on a grid of $N\times N$ points, where $N=50$. A visualization of the function as a surface is shown in fig. \ref{fig:Franke}. Furthermore, to emulate inherent variability and uncertainty in real-world data we added a gaussian noise component with a zero mean and standard deviation of $\sigma = 0.1$. The noise was added to simulate the inherent variability and uncertainty in real-world data.
-
-\begin{figure}
-  \vspace*{-5pt}
-  \centering %Centers the figure
-  \includegraphics[trim=2.8cm 1.4cm 1.0cm 2cm,clip,width=\columnwidth,keepaspectratio]{../figs/a_Franke_surf.pdf}
-  \caption{Visualization of the two-dimensional Franke function expressed in \eqref{eq:Franke}.}\label{fig:Franke}
-  \vspace*{-5pt}
-\end{figure}
+The Franke function generated data used in this study was created by sampling the function on a grid of $N\times N$ points, where $N=50$. Furthermore, to emulate inherent variability and uncertainty in real-world data we added a gaussian noise component with a zero mean and standard deviation of $\sigma = 0.1$. The noise was added to simulate the inherent variability and uncertainty in real-world data. Visualizations of the function with and without added noise are plotted as surfaces in fig. \ref{fig:Franke}.
 
 \subsubsection{Cosmological Simulation Data}
 After implementing regression analysis and resampling methods using the Franke function we repeated the process using data from an N-body simulation of dark matter structure formation made with the public G\begin{footnotesize}ASOLINE\end{footnotesize}2 SPH code \cite{gasoline}. The initial conditions for the simulation were generated with MUSIC (MUlti-Scale Initial Conditions) \cite{music}, and standard Planck cosmology parameters $\Omega_\text{m}=0.3077$, $\Omega_{\Lambda}=0.6923$ and $H_0=67.81\:\text{km/s/Mpc}$ were used. The simulation box has length, width and height $L=20\:\text{Mpc}$, corresponding to a $500\times500\times500$ grid, and contains $64^3$ dark matter particles. 
@@ -568,12 +567,11 @@ It is not surprising that OLS worked best with our chosen polynomial degree, sin
 
 
 \section{Conclusion}\label{sec:conclusion}
-In this study we have implemented and compared three well known regression techniques - Ordinary Least Squares (OLS), Ridge, and Lasso - in the context of both synthetic and real world data. We employed the widely used Franke function to generate the former, which we used to validate our implementations and explore fundamental concepts in machine learning such as the bias-variance tradeoff. Our investigation of Ridge and Lasso regression revealed that adding regularization terms to the cost function either reduced the model performances or left them more or less unchanged, although this is known to be effective in addressing overfitting. We concluded that our data set contained enough points for the models to be able to fit to its underlying structure without overfitting to the noise, even as we increased the model complexity way past what was necessary. This was validated by the application of two well known resampling methods; bootstrap and $k$-fold cross-validation, as these typically minimize model variance due to overfitting, but had minimal obervable effect on our model errors. \colorbox{magenta}{formulate better, include more important discussions}
+In this study we have implemented and compared three well known regression techniques - Ordinary Least Squares (OLS), Ridge, and Lasso - in the context of both synthetic and real world data. We employed the widely used Franke function to generate the former, which we used to validate our implementations and explore fundamental concepts in machine learning such as the bias-variance tradeoff. Our investigation of Ridge and Lasso regression revealed that adding regularization terms to the cost function, which is known to be an effective way to overfitting, either reduced the model performances or left them unchanged. We concluded that our data set contained enough points for the models to be able to fit to its underlying structure without fitting to the noise, even as we increased the model complexity way past what was necessary. This was validated by the application of two well known resampling methods; bootstrap and $k$-fold cross-validation, as these typically minimize model variance due to overfitting, but had minimal obervable effect on our model errors. \colorbox{magenta}{include more important discussions?}
 
-Our analyses were further extended to cosmological N-body simulation data generated with the public version of the G\begin{scriptsize}ASOLINE\end{scriptsize}2 SPH code, which proved insightful to our understanding of complexity dependency, the bias-variance tradeoff and resampling techniques. By fitting \colorbox{magenta}{continue, explain fits}
+Our analyses were further extended to cosmological N-body simulation data generated with the public version of the G\begin{scriptsize}ASOLINE\end{scriptsize}2 SPH code. Due to runtime constraints we repeated the aforementioned analyses only for polynomial degrees $\in[1,31]$, even though the variability of the data indicated that we should explore even more complex models. This revealed that introducing regularization only worsened the model performances, while bootstrapping and cross-validation had negligible visible effect. Based on our previous analyses of the Franke function data we were not surprised by these results, since this was a more complex data set and we did not add any random noise components, hence increased errors due to overfitting with polynomiald degree 31 would be a peculiar result when we observed that this did not happen for the Franke function data before we reached polynomial degrees $\gtrsim70$. \colorbox{magenta}{horrible sentence, rephrase} 
 
-
-Overall, our findings highlight the critical role of regularization in regression analysis for building predictive models that generalize well to unseen data. This work serves as a foundation for applying regression techniques to complex datasets, emphasizing the need for careful selection of model parameters to optimize performance. Future research could explore more advanced regularization techniques or adapt the methods discussed here to other data types and machine learning tasks. \colorbox{magenta}{edit, summarize open questions}
+We observed that the OLS models employing a larger polynomial degree than 20-30 lead to a ripple-like effect near the edges of the grid while still not accounting for the complex structure in the center. Investigating this phenomenon proved insightful to our understanding of the models, and in future work it would be interesting to explore more advanced regularization techniques combined with even larger polynomial degrees to see if we could mitigate the effect. To reduce the limiting computation time we would then attempt to parallellize our code, for example by employing OpenMP. \colorbox{magenta}{last setence, overall...}
 
 
 % \section*{Acknowledgements}\label{sec:cknowledgements}
