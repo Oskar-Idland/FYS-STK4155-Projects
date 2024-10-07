@@ -99,8 +99,7 @@
 \affiliation{University of Oslo, Department of Physics}
 
 \begin{abstract}
-% EXAMPLE OF HOW AN ABSTRACT COULD BE STRUCTURED
-We have explored various regression techniques and resampling methods within the context of machine learning, motivated by the need to develop robust models that can accurately predict and generalize from complex datasets. The main objective was to analyze and compare the performance of Ordinary Least Squares (OLS), Ridge, and Lasso regression in fitting synthetic and real-world data, focusing on the bias-variance tradeoff and model generalizability. We applied these regression techniques to the Franke function, a synthetic benchmark used in numerical analysis, and extended our analysis to cosmological N-body simulation data generated using the public G\begin{scriptsize}ASOLINE\end{scriptsize}2 code SPH code. To assess model performance and generalization, we employed resampling methods such as bootstrap and k-fold cross-validation, examining how they help to evaluate model accuracy under different training and test data conditions. Our study provided insights into how model complexity and regularization parameters affect the bias-variance tradeoff and prediction error, enabling us to critically evaluate each regression technique's performance using statistical and resampling approaches. \colorbox{magenta}{rewrite /remove last part when results are gathered and discussion/conclusion is finished}
+We have explored various regression techniques and resampling methods within the context of machine learning, motivated by the need to develop robust models that can accurately predict and generalize from complex datasets. The main objective was to analyze and compare the performance of Ordinary Least Squares (OLS), Ridge, and Lasso regression in fitting synthetic and real-world data, focusing on the bias-variance tradeoff and model generalizability. We applied these regression techniques to the Franke function, a synthetic benchmark used in numerical analysis, and extended our analysis to cosmological N-body simulation data generated using the public G\begin{scriptsize}ASOLINE\end{scriptsize}2 SPH code. To assess model performance and generalization, we employed resampling methods such as bootstrap and k-fold cross-validation, examining how they help to evaluate model accuracy under different training and test data conditions. Our study provided insights into how model complexity and regularization parameters affect the bias-variance tradeoff and prediction error, enabling us to critically evaluate each regression technique's performance using statistical and resampling approaches. \colorbox{magenta}{rewrite /remove last part when results are gathered and discussion/conclusion is finished}
 \end{abstract}
 \maketitle
 \onecolumngrid
@@ -110,9 +109,6 @@ We have explored various regression techniques and resampling methods within the
   \href{https://github.com/Oskar-Idland/FYS-STK4155-Projects}{https://github.com/Oskar-Idland/FYS-STK4155-Projects}%{GitHub Repository}
   \vspace{5pt}
 \end{center}
-% \tableofcontents % TODO: Fjern hvis stygg
-% \endgroup
-% \phantom{.} \newline 
 \twocolumngrid
 % ===========================================
 
@@ -122,22 +118,10 @@ In many scientific and practical applications, developing models that can accura
 
 We begin by applying the abovementioned methods to the Franke function, a widely used test function in numerical analysis, and extend the analysis to cosmological N-body simulation data made with the public version of the G\begin{scriptsize}ASOLINE\end{scriptsize}2 Smoothed Particle Hydrodynamics (SPH) code \cite{gasoline}. Our approach involves fitting polynomial regression models of varying complexity to the Franke function as well as the simulation data, and studying the bias-variance tradeoff, an essential concept in machine learning, in both cases. This allows us to evaluate the impact of model complexity, regularization parameters and the size of training data on the accuracy and generalizability of the models. The overarching aim is to gain insights into how different regression methods handle overfitting, model complexity and data variability, and to develop a framework for critically evaluating model performance using statistical and resampling techniques. 
 
-In \cref{sec:theory} we present relevant background theory, including central concepts such as OLS, Ridge and Lasso regression, model bias, variance and the bias-variance tradeoff, as well as two crucial resampling methods; bootstrapping and cross-validation, both of which will be implemented in this work. A few of the most important expressions introduced in this section are derived in \cref{appsec:derivations}. Our methodology is explained in \cref{sec:methods}, specifically how we define the essential design matrix, scale our data and implement the regression and resampling techniques. We also give an overview of our code structure and present the cosmological simulation data. In \cref{sec:results discussion} we present, interpret and discuss the results of our analyses in light of expectations based on our previous knowledge of the implemented regression and resampling methods. In \cref{appsec:figures} we include some additional figures that are not essential to our discussions, yet still referred to in the aforementioned section because they are necessary in reasoning our choice of presented results. Lastly, we summarize and conclude the main findings of our work in \cref{sec:conclusion}, and provide some open questions for further exploration. \colorbox{magenta}{maybe shorten/edit} 
+In \cref{sec:theory} we present relevant background theory, the majority of which has been sourced from the lecture notes by Morten Hjorth-Jensen \cite{notes}. Here we go into detail explaining central concepts such as OLS, Ridge and Lasso regression, the bias-variance tradeoff and two crucial resampling methods; bootstrapping and cross-validation, both of which will be implemented in this work. A few of the most important expressions introduced in this section are derived in \cref{appsec:derivations}. Our methodology is explained in \cref{sec:methods}, specifically how we define the essential design matrix, scale our data and implement the regression and resampling techniques. We also give an overview of our code structure and present the cosmological simulation data. In \cref{sec:results discussion} we present, interpret and discuss the results of our analyses in light of expectations based on our previous knowledge of the implemented regression and resampling methods. In \cref{appsec:figures} we include some additional figures that are not essential to our discussions, yet still referred to in the aforementioned section because they are necessary in reasoning our choice of presented results. Lastly, we summarize and conclude the main findings of our work in \cref{sec:conclusion}, and provide some open questions for further exploration. \colorbox{magenta}{maybe shorten/edit} 
 
 % ===========================================
 \section{Theory}\label{sec:theory}
-% \subsection{Bayesian Statistics}
-% \colorbox{magenta}{maybe remove section if not relevant}
-% Bayesian statistics is a branch of statistics that differs from traditional frequentist approaches (like maximum likelihood estimation) by incorporating prior beliefs or knowledge into the analysis. In the Bayesian framework, we update our beliefs about model parameters based on observed data, leading to a more flexible approach to uncertainty quantification. The essence of Bayesian inference is captured by Bayes' theorem, which relates prior beliefs, likelihood, and observed data to produce an updated (posterior) belief about a parameter or model. Bayes' theorem is written as:
-
-% \begin{equation}
-%   P(\boldsymbol{\beta} | \mathbf{y}, \mathbf{X}) = \frac{P(\mathbf{y} | \mathbf{X}, \boldsymbol{\beta}) P(\boldsymbol{\beta})}{P(\mathbf{y})}.
-% \end{equation}
-
-% Here $P(\boldsymbol{\beta} | \mathbf{y}, \mathbf{X})$ is the posterior distribution, representing our updated belief about the model parameters $\boldsymbol{\beta}$, given the data $\mathbf{y}$ and design matrix $\mathbf{X}$. Furthermore, $P(\mathbf{y} | \mathbf{X}, \boldsymbol{\beta})$ is the likelihood function, representing the probability of the data given the model and its parameters. This is the same likelihood function used in maximum likelihood estimation. The prior distribution $P(\boldsymbol{\beta})$ represents our prior beliefs about the parameters $\boldsymbol{\beta}$ before seeing the data, and lastly $P(\mathbf{y})$ is the marginal likelihood, a normalizing constant that ensures the posterior is a valid probability distribution.
-
-% In Bayesian regression, we treat the regression coefficients $\boldsymbol{\beta}$ as random variables with a prior distribution. After observing the data, we update our belief about $\boldsymbol{\beta}$ to obtain a posterior distribution. This provides not only a point estimate for $\boldsymbol{\beta}$, but also an uncertainty estimate (posterior variance) for each parameter. For example, in Ridge regression we effectively place a Gaussian prior on the parameters $\boldsymbol{\beta}$, centered around zero, with variance controlled by the hyperparameter $\lambda$. This discourages large parameter values (regularization), and leads to a tradeoff between fitting the data well and keeping the model coefficients small.
-
 \subsection{Regression Analysis}
 Regression analysis is a fundamental statistical technique used to model the relationship between one or more independent variables (also known as predictors or features) and a dependent variable (or target). The goal of regression analysis is to find the mathematical relationship that best explains the variation in the dependent variable based on the values of the independent variables.
 
@@ -189,17 +173,6 @@ This formula provides the best-fitting coefficients $\boldsymbol{\beta}$ that mi
 Here $\mathbb{E}\big[\hat{\boldsymbol{\beta}}\big]$ and $\text{Var}\big[\hat{\boldsymbol{\beta}}\big]$ are the expectation value and variance of the OLS estimator, respectively, while $\sigma^2$ is the variance of the error term $\boldsymbol{\epsilon}$. 
 
 
-% To evaluate the performance of the OLS model, we compute two important metrics: the mean-squared error (MSE) and the $R^2$ score. The former measures the average squared difference between the true values and the predicted values, and is defined as
-% \begin{equation}
-%   \text{MSE} = \frac{1}{n} \sum_{i=0}^{n-1} \left( y_i - \tilde{y}_i \right)^2.
-% \end{equation}
-% A lower MSE indicates a better fit of the model to the data. Furthermore, the $R^2$ score function, also known as the coefficient of determination, measures the proportion of variance in the dependent variable that is predictable from the independent variables:
-% \begin{equation}
-%   R^2 = 1 - \frac{\sum_{i=0}^{n - 1} (y_i - \tilde{y}_i)^2}{\sum_{i=0}^{n - 1} (y_i - \bar{y})^2}. \label{eq:}
-% \end{equation}
-% Here $\bar{y}$ is the mean of the observed values. An $R^2$ score close to 1 indicates a good fit, while a score near 0 suggests that the model does not explain the variability in the data well.
-
-
 \subsubsection{Ridge}\label{subsubsec:ridge} 
 While OLS provides a foundational method for regression, it can lead to problems when the data has high multicollinearity or when there are more features than data points, leading to overfitting. OLS attempts to minimize the sum of squared errors, but it does not impose any restrictions on the model complexity. This often results in high variance when the model learns to fit noise in the training data, especially when the design matrix $\mathbf{X}$ is poorly conditioned (i.e., when columns of $\mathbf{X}$ are nearly linearly dependent). This is because the matrix $\mathbf{X}^\top \mathbf{X}$ becomes close to singular, making its inverse highly sensitive to small changes in the data. \colorbox{magenta}{remove last sentences?}
 
@@ -226,7 +199,7 @@ where $\mathbf{I}$ is the identity matrix. Notice the term $\lambda \mathbf{I}$ 
 \begin{equation}
   \boldsymbol{\hat{\beta}}_{\text{Ridge}} = (\mathbf{X}^\top \mathbf{X} + \lambda \mathbf{I})^{-1} \mathbf{X}^\top \mathbf{y}.
 \end{equation}
-Here, the regularization term $\lambda$ shrinks the coefficients and prevents them from becoming too large, thereby controlling the model's variance. \colorbox{magenta}{remove this paragraph?}
+Here, the regularization term $\lambda$ shrinks the coefficients and prevents them from becoming too large, thereby controlling the model's variance. 
 
 
 
@@ -241,13 +214,10 @@ This leads to a different form of regularization, since the cost function now ta
 \end{equation}
 
 The difference from Ridge regression has important implications, mainly because the $L^2$ norm makes it impossible for any of the coefficients to vanish completely. \colorbox{magenta}{correct?} This can be problematic in high-dimensional datasets where we might expect many features to be irrelevant. By using the $L^1$ norm, Lasso regression has the unique ability to drive some coefficients to exactly zero, effectively performing both regularization and feature selection. Thus, Lasso regression not only addresses overfitting but also simplifies the model by automatically excluding irrelevant features, making it particularly useful for sparse models where only a subset of features are truly important.
-\colorbox{magenta}{double check, introduce expressions, cite?}
+\colorbox{magenta}{double check, introduce expressions}
 
 
 \subsection{Properties of Predictive Models}\label{subsec:tradeoff}
-% EXPLAIN MODEL BIAS, MODEL VARIANCE, NOISE VARIANCE, THE MEAN SQUARED ERROR, THE R2 SCORE FUNCTION
-\colorbox{magenta}{maybe change structure, avoid repetitiveness}
-
 \subsubsection{Predicted Values}
 In the context of predictive modeling, $\mathbf{\tilde{y}}$ represents the model's predicted values of the target variable $\mathbf{y}$. These predictions are made based on the features and parameters learned from the training data. For new or unseen data, the true target values $\mathbf{y}$ are often unknown, but the model generates an estimate $\mathbf{\tilde{y}}$ that approximates these values.
 
@@ -285,14 +255,14 @@ Resampling methods are statistical techniques used to generate additional data s
 \subsubsection{Bootstrap}
 The bootstrap method is a powerful resampling technique used to estimate the uncertainty and variability of a model by repeatedly drawing random samples, with replacement, from the original dataset. This resampling creates multiple ``bootstrapped'' datasets, each the same size as the original, but with some samples appearing multiple times and others potentially omitted. By computing the average performance of the multiple models created with the bootstrapped datasets it becomes easier to estimate the model's bias and variance.
 
-The process of bootstrap resampling approximates the underlying distribution of a statistic, whether it's model performance, a parameter estimate or prediction error, without requiring strong parametric assumptions about the data. This makes it particularly useful when the theoretical distribution of a statistic is unknown or difficult to calculate. Bootstrap is especially convenient when the dataset is small, or when no explicit train-test split is available, as it makes the most out of the available data. It is also good for understanding the bias-variance tradeoff since it can be used to determine a model's variability, and it allows for the estimation of confidence intervals for predictions and model parameters. The downside is that it involves training a model multiple times, which can be computationally expensive, especially with large datasets or complex models. \colorbox{magenta}{shorten or cite?}
+The process of bootstrap resampling approximates the underlying distribution of a statistic, whether it's model performance, a parameter estimate or prediction error, without requiring strong parametric assumptions about the data. This makes it particularly useful when the theoretical distribution of a statistic is unknown or difficult to calculate. Bootstrap is especially convenient when the dataset is small, or when no explicit train-test split is available, as it makes the most out of the available data. It is also good for understanding the bias-variance tradeoff since it can be used to determine a model's variability, and it allows for the estimation of confidence intervals for predictions and model parameters. The downside is that it involves training a model multiple times, which can be computationally expensive, especially with large datasets or complex models. \colorbox{magenta}{shorten?}
 
 
 \subsubsection{Cross-Validation}
 Cross-validation is another resampling technique that involves partitioning the dataset into several distinct subsets (or ``folds''), and then systematically training the model on one subset while testing it on another. A common form is $k$-fold cross-validation, where the dataset is divided into $k$ equally-sized folds. The model is trained on $k-1$ folds and tested on the remaining fold. This process is repeated $k$ times, with each fold serving as the test set exactly once.
 
 Since all observations are used for both training and validation, cross-validation maximizes the use of available data, hence it is especially useful in the case of limited datasets. It also helps in managing the bias-variance tradeoff by evaluating the model's performance on different subsets of data. By averaging the results across multiple folds, cross-validation reduces the variance of the model's predictions, as it minimizes overfitting to any particular subset of the data. Additionally, by testing the model on unseen data, it ensures that the bias is not too high, making it a good indicator of model generalization. It does require multiple model trainings however (e.g., 10-fold cross-validation requires 10 models to be trained), making it computationally expensive for large datasets or complex models.
-\colorbox{magenta}{shorten or cite?}
+\colorbox{magenta}{shorten?}
 
 
 % EXPLAIN ANALYTICAL EXPRESSIONS ETC., REFER TO DERIVATIONS IN APPENDIX
@@ -309,72 +279,14 @@ We will use the function multiple times throughout this work, as it produces a s
 
 
 \section{Methods \& Implementation}\label{sec:methods}
-% \subsection{Regression Analysis}
-% Regression analysis is a fundamental statistical technique used to model the relationship between one or more independent variables (also known as predictors or features) and a dependent variable (or target). The goal of regression analysis is to find the mathematical relationship that best explains the variation in the dependent variable based on the values of the independent variables.
-
-% At its core, regression analysis seeks to find a mathematical function that relates the independent variables to the dependent variable. In its most basic form, the relationship between a dependent variable $\mathbf{y}$ and an independent variable $\mathbf{x}$ is modeled as
-% \begin{equation}
-%   \mathbf{y} = f(\mathbf{x}) + \boldsymbol{\epsilon},
-% \end{equation}
-% where $f(\mathbf{x})$ is the function we are trying to estimate, which represents the relationship between $\mathbf{x}$ and $\mathbf{y}$, and $\boldsymbol{\epsilon}$ is the error term, representing the part of the variation in $\mathbf{y}$ that is not explained by the model (due to noise or other unobserved factors). 
-% \colorbox{magenta}{move expression to theory?}
-
-% \subsubsection{Ordinary Least Squares}\label{subsubsec:ols}
-% The Ordinary Least Squares (OLS) method is one of the most fundamental and widely used techniques in regression analysis. Its objective is to find the best-fitting line or curve for a given set of data by minimizing the sum of the squared differences between the observed values and the predicted values. These squared differences are called residuals, and minimizing them ensures the best possible fit of the model to the data. \colorbox{magenta}{continue, introduce expressions (week 37), cite?}
-
-% \colorbox{magenta}{mention the cost function, and refer to MSE?}
-
-
-% \subsubsection{Ridge}\label{subsubsec:ridge} 
-% While OLS provides a foundational method for regression, it can lead to problems when the data has high multicollinearity or when there are more features than data points, leading to overfitting. OLS attempts to minimize the sum of squared errors, but it does not impose any restrictions on the model complexity. This often results in high variance when the model learns to fit noise in the training data. To address this, Ridge regression introduces a regularization term to the OLS cost function, penalizing large coefficients and preventing the model from becoming overly complex. By introducing the hyperparameter $\lambda$, Ridge regression balances the trade-off between bias and variance, allowing us to control model complexity and fit the data more effectively. \colorbox{magenta}{double check, introduce expressions (week 37), cite?}
-
-
-% \subsubsection{Lasso}\label{subsubsec:lasso} 
-% Like Ridge regression, Lasso regression (Least Absolute Shrinkage and Selection Operator) is a regularization technique designed to improve the generalizability of the model by introducing a penalty term to the cost function. While Ridge regression uses the L2 norm (squared magnitude of coefficients) for regularization, Lasso regression employs the L1 norm, which leads to a different form of regularization. This difference has important implications, particularly for feature selection and sparse models. \colorbox{magenta}{double check, introduce expressions, cite?}
-
-
-% \subsection{Resampling Methods}
-% Resampling methods are statistical techniques used to generate additional data samples from the available data. These methods are particularly useful in machine learning and data analysis when the dataset is limited, and we want to better assess the performance of a model. The primary goal of resampling is to estimate the accuracy of a model by splitting the data into different subsets or generating new samples of the data, repeatedly fitting the model, and evaluating its performance on different sets of data. In this work we implement two commonly used resampling techniques: bootstrap and cross-validation.
-
-% \subsubsection{Bootstrap}
-% The Bootstrap method is a powerful resampling technique used to estimate the uncertainty and variability of a model by repeatedly drawing random samples, with replacement, from the original dataset. This resampling creates multiple "bootstrapped" datasets, each the same size as the original, but with some samples appearing multiple times and others potentially omitted.
-
-% The process of bootstrap resampling approximates the underlying distribution of a statistic—whether it's model performance, a parameter estimate, or prediction error—without requiring strong parametric assumptions about the data. This makes it particularly useful when the theoretical distribution of a statistic is unknown or difficult to calculate. Bootstrap methods are frequently used to estimate confidence intervals, standard errors, and model variance in both regression and classification tasks. \colorbox{magenta}{week 38, lecture notes, cite?}
-
-
-% \subsubsection{Cross-Validation}
-% Cross-validation is another resampling technique that involves partitioning the dataset into several distinct subsets (or ``folds''), and then systematically training the model on one subset while testing it on another. A common form is $k$-fold cross-validation, where the dataset is divided into $k$ equally-sized folds. The model is trained on $k-1$ folds and tested on the remaining fold. This process is repeated $k$ times, with each fold serving as the test set exactly once.
-
-% The steps used in $k$-fold cross-validation are
-% \begin{enumerate}
-%   \item [1.] Split the dataset into $k$ equal-sized folds (typically $k=5$ or $k=10$). 
-%   \item [2.] Train the model on $k-1$ folds and evaluate it on the remaining fold.
-%   \item [3.] Repeat the process $k$ times, so that each fold is used as a test set exactly once.
-%   \item [4.] Calculate the average performance across all folds.
-% \end{enumerate}
-% \colorbox{magenta}{continue, proof read, cite lecture notes?}
-
-
-% \subsection{Algorithms}\label{subsec:algorithms}
-% % INCLUDE PSEUDOCODE HERE IF IMPLEMENTED
-% % MAYBE FUSE ALGORITHMS INTO IMPLEMENTATION SUBSECTION, OR MOVE TO THEORY
-
-% \subsection{Implementation}\label{subsec:implementation}
-% % THE FRANKE FUNCTION, EXPLAIN WHY. THEN REAL DATA SET. MAYBE PRESENT DATA HERE?
-% \subsubsection{The Franke Function}\label{subsubsec:Franke}
-
-% \subsubsection{Data Analysis}\label{subsubsec:data}
-% % EXPLAIN THE TYPE OF DATA WE ARE IMPLEMENTING OUR ALGORITHM TO ANALYZE AND HOW WE ARE DOING IT
-% % THIS COULD POSSIBLY BE PART OF THE IMPLEMENTATION SECTION INSTEAD, WITH AN INTRODUCTION TO THE DATA SET IN THE BEGINNING
-% \colorbox{magenta}{show raw 2D intensity plots first}
 \subsection{Generating the Data}
 \subsubsection{Synthetic Data}
 The Franke function generated data used in this study was created by sampling the function on a grid of $N\times N$ points, where $N=50$. A visualization of the function as a surface is shown in fig. \ref{fig:Franke}. Furthermore, to emulate inherent variability and uncertainty in real-world data we added a gaussian noise component with a zero mean and standard deviation of $\sigma = 0.1$. The noise was added to simulate the inherent variability and uncertainty in real-world data.
 
-\begin{figure}[h!]
+\begin{figure}
   \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[trim=2.8cm 0.5cm 1.0cm 0.5cm,clip,width=\columnwidth,keepaspectratio]{../figs/a_Franke_surf.pdf}
+  \includegraphics[trim=2.8cm 1.4cm 1.0cm 2cm,clip,width=\columnwidth,keepaspectratio]{../figs/a_Franke_surf.pdf}
   \caption{Visualization of the two-dimensional Franke function expressed in \eqref{eq:Franke}.}\label{fig:Franke}
   \vspace*{-5pt}
 \end{figure}
@@ -437,95 +349,73 @@ We thus see that for polynomial degree 0 we have one column, three columns for f
   l = \frac{1}{2}(p+1)(p+2).
 \end{equation*}
 Our design matrix thus has dimensions $N\times l$ where $N=(n_x+1)\times(n_y+1)$.
-\colorbox{magenta}{move to theory?}
 
 
 \subsubsection{Preprocessing}
-For this study, data scaling was essential to ensure that the features were on a similar scale, which is critical for many machine learning algorithms. By utilizing the \verb|StandardScaler| function from the scikit-learn library \cite{scikit-learn}, we standardized our datasets by subtracting the mean and dividing the standard deviation over the data set, for each feature. Although the data generated by the Franke function and the cosmological simulation data used in subsequent analyses are inherently two-dimensional and may not exhibit significant variation in scale between features, scaling still provides consistent benefits.
+As a first step in our analyses it was essential to employ data scaling in order to ensure numerical stability. By utilizing the \verb|StandardScaler| function from the scikit-learn library \cite{scikit-learn} we standardized our datasets by subtracting the mean and dividing by the standard deviation for each feature. \colorbox{magenta}{correct?} Although the data generated by the Franke function and the cosmological simulation data used in subsequent analyses are inherently two-dimensional and may not exhibit significant variation in scale between features, scaling still provides consistent benefits.
 
-The primary motivation for applying this scaling function is to enhance the performance and stability of our algorithms. Scaling prevents features with larger magnitudes from disproportionately influencing the objective function and helps balance minor discrepancies between features that might affect the learning process. The performance of our regression models is significantly improved when the data is scaled due to ensuring faster convergence and reducing the risk of numerical instability.
+The primary motivation for applying this scaling function was to enhance the performance and stability of our algorithms. Scaling prevents features with larger magnitudes from disproportionately influencing the objective function and helps balance minor discrepancies between features that might affect the learning process. The performance of regression models is generally significantly improved when the data is scaled, as it ensures faster convergence and reducing the risk of numerical instability.
 
-To illustrate the impact of scaling, we calculated the beta coefficients for both a non-scaled and a scaled design matrix as a function of polynomial degree in our OLS model fits on the Franke function-generated data. This visualization allowed us to observe how scaling influenced the coefficients and affected the model's performance.
+Another important preprocessing step was splitting the data into training and test sets, which enables the evaluation of the model's performance on unseen data and helps in assessing its generalization capabilities. We used the \verb|train_test_split| function from the scikit-learn library with a test size of 0.2. This ensured that a random 20\% of the data was reserved for testing, while the remaining 80\% was used to train the model. By splitting the data in this manner we could evaluate the model's performance on ``new'' data and determine how well it generalized to unseen samples.
 
-Another important preprocessing step was splitting the data into training and test sets. This step enables the evaluation of the model's performance on unseen data and helps in assessing its generalization capabilities. We used the \verb|train_test_split| function from the scikit-learn library to randomly split the data into training and test sets, with a test size of 0.2 \colorbox{magenta}{optional: unless something else is specified}. This ensured that 20\% of the data was reserved for testing, while the remaining 80\% was used to train the model. By splitting the data in this manner, we could evaluate the model's performance on new data and determine how well it generalized to unseen samples.
+To illustrate the impact of scaling, we computed the $\beta$-coefficients using non-scaled or ``raw'' and scaled versions of our design matrices when training OLS models on the Franke function-generated data as well as on the cosmological simulation data. We tested polynomial degrees in the intervals $[1,6]$ and $[1,41]$ (skipping every other degree) for the Franke and dark matter data, respectively. Visualizing the resulting coefficients allowed us to observe how scaling influenced the coefficients and affected the models' performances. \colorbox{magenta}{formulate differently?}
 
-\subsubsection{Parameter Dependencies}
-Investigating the dependency on polynomial degree was a critical aspect of understanding how the regression models performed under varying conditions. By increasing the polynomial order, we enhanced the models' capacity to fit more complex patterns in the data. However, this also raised the risk of overfitting, where the model might capture noise along with the underlying signal. To explore this, we evaluated the performance of the models across different polynomial degrees using metrics such as the MSE and $R^2$ scores mentioned in the previous section. These evaluations allowed us to quantify how well each model balanced bias and variance. 
+\subsubsection{Exploring Complexity Dependency Using OLS}
+Investigating the dependency on polynomial degree was a critical aspect of understanding how the regression models performed under varying conditions. By increasing the polynomial order, we enhanced our model's capacity to fit more complex patterns in the data. However, this also raised the risk of overfitting, where the model might capture noise along with the underlying structure. To explore this, we evaluated the performance of the models across different polynomial degrees using metrics such as the MSE and $R^2$ scores mentioned in the previous section. These evaluations allowed us to quantify how well each model balanced bias and variance. 
 
-For the Franke function-generated data, we systematically varied the polynomial degree from 1 to 6 for OLS. We then assessed the model's performance using the MSE and $R^2$ scores, plotting these metrics as a function of model complexity to determine the optimal polynomial degree for the regression method.
+Using OLS we systematically varied the polynomial degree from 1 to 6 when fitting to the Franke function-generated data. For the cosmological simulation data we followed a similar approach, but because of the heightened complexity of this data we varied the polynomial degrees from 1 up to and including 41, using only every other step. The models' performances were then evaluated on the test portions of the data sets using the MSE and $R^2$ metrics. To visually assess the models' fit to the cosmological data and identify any potential overfitting or underfitting issues we also contour plotted and analyzed the fits for polynomial degrees 5, 10, 20, 30, and 50. Additionally, we produced a 3D surface of the 30-degree polynomial fit and plotted this alongside the raw data to visualize the model's performance in capturing the underlying patterns.
 
-For the cosmological simulation data, we followed a similar approach. We varied the polynomial degree from 1 to 40, using only every other step, for OLS. The model's performance was evaluated using the same metrics as for the Franke function-generated data. We also plotted the predicted surfaces to visually assess the models' fit to the data and identify any potential overfitting or underfitting issues. Specifically, we analyzed the fits for polynomial degrees 5, 10, 20, 30, and 50. Additionally, a 3D surface plot of a 30-degree polynomial fit was created alongside the raw data to visualize the model's performance in capturing the underlying patterns.
-%Our findings indicated that while higher polynomial degrees could improve fit to the training data, there was often a trade-off in terms of generalization to unseen data. Thus, understanding polynomial degree dependency was vital for selecting an optimal degree that achieved the best predictive accuracy while maintaining generalizability across different datasets. 
+\subsubsection{Introducing Regularization}
+To further explore complexity dependency we introduced regularization terms through both Ridge and Lasso regression. In both cases we tested polynomial degrees ranging from 1 to 41 when training our models on the Franke function-generated data, using every second degree for Ridge and every fourth for Lasso, to see if we would observe any signs of overfitting. When moving on to the cosmological simulation data we used 11 evenly spaced polynomial degrees $\in[1,31]$ instead. This restricted choice of degrees were motivated by the runtime constraints of the algorithms, as this was a much more prominent issue due to the increased size of the data set.
 
-For both Ridge and Lasso regression on the Franke function-generated data, we explored polynomial degrees ranging from 1 to 41, using every second polynomial degree for Ridge and every fourth polynomial degree for Lasso. These choices were motivated by the runtime constraints of the algorithms. For the cosmological simulation data, the polynomial degree range was from 1 to 42 for Ridge and from 1 to 21 for Lasso, with a step of every fourth polynomial degree for both methods.
-
-In addition to polynomial degree, we examined the impact of the hyperparameter $\lambda$ on the performance of our Ridge and Lasso regression models. Visualizing the MSE and $R^2$ scores for Ridge and Lasso regression involved not only evaluating polynomial complexity but also varying $\lambda$ values.
-
-To thoroughly evaluate the models, we systematically tested a range of $\lambda$ values, from 1e-05 to 1. For the Franke function-generated data, we used 30 values from this range, evenly spaced on a logarithmic scale, whereas 11 values were tested for the cosmological simulation data. Each $\lambda$ value was tested for every polynomial degree within the ranges mentioned earlier.
-
-The resulting MSE and $R^2$ scores were computed as functions of both $\lambda$ and polynomial degree using contour plots. This dual-parameter visualization allowed us to identify the optimal combination of polynomial degree and $\lambda$ for each model, thereby providing a comprehensive view of how model performance changes with varying complexity and regularization strength.
+To thoroughly evaluate the models, we systematically tested a range of values for the hyperparameter $\lambda$, from $10^{-5}$ to 1. For the Franke data we used 30 values in this range, evenly spaced on a logarithmic scale, whereas only 11 values were tested for the cosmological simulation data due to the runtime constraint. Each of the $\lambda$ values were combined with every polynomial degree within the aforementioned ranges. The resulting MSE and $R^2$ scores were computed and contour plotted as functions of both $\lambda$ and polynomial degree. This dual-parameter visualization allowed us to identify the optimal combination of polynomial degree and $\lambda$ for each model, thereby providing a comprehensive view of how model performance changes with varying complexity and regularization strength.
 
 
 \subsection{Bias-Variance Tradeoff}
-To showcase the bias-variance trade-off and validate our implementation, we attempted to imitate the analysis illustrated in \cref{fig:Hastie}, which is fig. 2.11 in Hastie et al.\cite{ESL}. Specifically, we implemented OLS regression for polynomial degrees $\in[1,81]$ in steps of 4, and computed the MSE evaluated on both the training and test portions of the Franke data each time. The generation and splitting of the Franke data were conducted as described previously. 
+As a starting point in our study of the bias-variance tradeoff explained in \cref{subsec:tradeoff} and to validate our implementation we attempted to imitate the analysis illustrated in fig. 2.11 in Hastie et al. \cite{ESL}, which we have included in \cref{fig:Hastie}. Specifically, we implemented OLS regression on the Franke function-generated data for polynomial degrees $\in[1,81]$ in steps of 4, and computed the MSE evaluated on both the training and test portions for each degree. The generation and splitting of the Franke data were conducted as described previously. 
 
-\begin{figure}[h!]
+\begin{figure}
   \centering %Centers the figure
   \includegraphics[width=\columnwidth]{../figs/hastie_bias_variance_tradeoff.jpg}
   \caption{Illustration of bias-variance trade-off as a function of model complexity, taken from fig. 2.11 in Hastie, Tibshirani, and Friedman \cite{ESL}}\label{fig:Hastie}
 \end{figure}
 
 \subsubsection{Bootstrap With OLS}
-Our implementation of the bootstrap technique involved resampling the training data multiple times and fitting an OLS model to each resampled dataset. This was accomplished using the resample function from the scikit-learn library. For each resampled dataset, we computed the MSE, bias, and variance to evaluate the model's performance.
+To further explore the bias-variance tradeoff and study the effects of resampling we implemented the bootstrap technique, which involved resampling the training data multiple times and fitting an OLS model to each resampled dataset. This was accomplished using the \verb|resample| function from the scikit-learn library. To evaluate the model's performance we averaged over the MSE, bias and variance values computed for each resampled dataset.
 
-For the Franke function-generated data we designed four different cases, each varying a specific parameter to investigate the influence of the number of bootstraps, data points, model complexity, and test size separately. The default values we used were 100 bootstraps, 50 data points, polynomial degree of 5, and a test size of 20\%. When varying the parameters in each respective scenario we used the following: 
+For the Franke function-generated data we designed four different cases, each varying a specific parameter to separately investigate the influence of model complexity, the number of data points, bootstrap steps, and test size fraction. The default values we used were polynomial degree 5, 50 data points (i.e. a $50\times50$ grid), 100 bootstraps, and a test size of 20\%. When varying the parameters in each respective scenario we used the following: 
 \begin{itemize}
    \item [-] Polynomial degree: from 1 to 41 with a step of 2
-   \item [-] Number of data points (elements in $\mathbf{x}$ and $\mathbf{y}$):\hspace{10pt} [10, 20, 30, 40, 50, 100, 150, 200, 300, 400, 500, 1000]
-   \item [-] Number of bootstraps steps: [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000]
+   \item [-] Number of data points: [10, 20, 30, 40, 50, 100, 150, 200, 300, 400, 500, 1000]
+   \item [-] Number of bootstraps: [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000]
    \item [-] Test size: ranging from 5\% of the entire set to 95\% with a step of 5\%
 \end{itemize}
-For each case we computed the model evaluation metrics as a function of the varying parameter to analyze how the model's performance changed with different settings. 
+For each case we computed the model's MSE, bias and variance and plotted them against the varying parameter to analyze how its performance changed with different settings. We did not repeat this process using the cosmological simulation data. This was mostly to save time, but also because this part of the analysis involved varying so many parameters that we believed repeating the process on a different set would contribute minimally to our discussions of the bias-variance tradeoff.
 
-For the cosmological simulation data, we only did a single scenario with 100 bootstraps, 50 data points, test size of 20\%, and a varying polynomial degree from 1 to 31 with a step of 3. We only computed the MSE as a function of polynomial degree for this scenario. \colorbox{magenta}{Explain why, mostly to save time}
+\subsection{Cross-Validation}
+After implementing the bootstrap resampling technique we moved on to $k$-fold cross-validation. For this part of the analysis we used the \verb|KFold| function from the scikit-learn library, which generates indices that facilitate the partitioning of a dataset into $k$ equally-sized folds. We employed the shuffle option to randomly shuffle the data before partitioning, which helps ensure that the data distribution is random and reduces potential biases stemming from the original order of the data. 
 
-\subsubsection{Cross-Validation}
+We implemented cross-validation for OLS, Ridge, and Lasso regression by passing the chosen model, the design matrix, and the target variable together with the indices generated by \verb|Kfold| to either \verb|cross_val_predict| or \verb|cross_val_score|, both of which are functions from the scikit-learn library. The former function call provided the predicted values from each partition averaged over the $k$ folds, which we used to evaluate the model's generalization. The latter function returned the negative MSE for each fold, so we averaged these across all folds and adjusted the sign to obtain the final cross-validated MSE for the model.
 
-For our cross-validation analysis, we used the \verb|KFold| function from the scikit-learn library to generate indices that facilitate the partitioning of a dataset into $k$ equally-sized folds. We employed the shuffle option to randomly shuffle the data before partitioning, which helps ensure that the data distribution is random and reduces potential biases stemming from the original order of the data. 
+For the Franke function-generated data we conducted cross-validation with $k \in [5,15]$ for polynomial degrees $\in [1,15]$ and visualized the MSE's as function of both parameters in a contour plot. In order to compare this method with the bootstrap technique we also plotted the estimated MSE's obtained with 100 bootstraps for the same degrees. We repeated this process with the cosmological simulation data as well, this time using polynomial degrees $\in [1, 31]$ with a step of 3.
 
-We then implemented $k$-fold cross-validation for OLS, Ridge, and Lasso regression by passing the chosen model, the design matrix, and the target variable together with the indices generated by \verb|Kfold| to either \verb|cross_val_predict| or \verb|cross_val_score| sciKit function. The former function call provided the predicted values for each observation, averaged over the $k$ folds, which we used to evaluate the model's generalization. The latter function returned the negative MSE for each fold. We then averaged the MSE values across all folds and adjusted the sign to obtain the final cross-validated MSE for the model.
-
-For the Franke function-generated data, we conducted cross-validation for polynomial degrees $ \in [1,16]$ for OLS and $k \in [5,15]$ and computed the MSE as function of both parameters in a contour plot. For Ridge and Lasso we used the same parameters, once with $\lambda = 0.001$ and again with $\lambda = 0.5$ and computed the MSEs' as a function of both polynomial degree and number of k-folds in a contour plot.
-
-For the cosmological simulation data, we conducted cross-validation for polynomial degrees $\in [1, 32]$ with a step of 3, and $k \in [5, 15]$ for OLS and computed the MSE together with a bootstrap OLS with the same polynomial degrees and 100 bootstraps in similar fashion as for the Franke function-generated data. For Ridge and Lasso we used the same parameters, with addition of $\lambda = 0.001$ and $\lambda = 0.5$ and computed the MSEs' as a function of both polynomial degree and polynomial degree in a contour plot. Lastly, we computed the model fits for all three techniques for polynomial degree 30, $ k = 5$ and $\lambda = 0.001$ for Ridge and Lasso to visually assess the models' performance on the cosmological simulation data.
+To study how cross-validation affects the qualities of the fits obtained using Ridge and Lasso regression we repeated the aforementioned process with the same polynomial degrees and $k$'s, once with $\lambda = 0.001$ and again with $\lambda = 0.5$, but excluding bootstrap this time. Lastly, we used \verb|cross_val_predict| to estimate fits to the cosmological simulation data using OLS, Ridge and Lasso with polynomial degree 30, $k = 5$, and $\lambda = 0.001$ for the latter two. We then contour plotted the fits together with the actual data in order to visually assess the models' performances and the effect of cross-validation, and to properly compare the three regression variants.
 
 
 \subsection{The Program}\label{subsec:program}
 \subsubsection{Code Structure}\label{subsubsec:codestructure}
-% EXAMPLE OF HOW THIS CAN LOOK
-% Our main program is divided into a series of \verb|.cpp|-files, each containing one or more functions, with \verb|main.cpp| either calling the test functions, or the validating- and error-throwing functions and running the simulations, depending on how the project is built. In the header-file \verb|Simulation.h| we have documented the \verb|Simulation|-class and all its private and public member functions. All test functions are defined in \verb|test.cpp| and documented in \verb|test.h|, while validating- and error-throwing functions are defined in \verb|validate_input.cpp| and documented in \verb|validate.h|. All functions for reading data and visualizing the results are defined in \verb|.py|-files, and are imported and called on in \verb|main.py|. A detailed description of the program structure and how to build and run the program is given in the \verb|README.md|-file linked to \href{https://github.uio.no/oskarei/CompFys-Project5/blob/main/README.md}{here}.
-
-All the source code that we used to produce our results is available on our GitHub repository, linked in \cref{appsec:code}. The \verb|README.md| file contains the entire project structure. Our code is divided into the following files and notebooks:
+All the source code that we developed and used to produce our results is available on our GitHub repository, linked in \cref{appsec:code}. The \verb|README.md| file contains the entire project structure. Our code is divided into the following files and notebooks:
 
 \verb|franke.ipynb|: Jupyter notebook containing the analysis of the Franke function data, which we used to to validate our implementation.
 
 \verb|data_analysis.ipynb|: Jupyter notebook containing the analysis of the dark matter density data. Here we have applied and further tested our regression models.
 
 \verb|functions.py|: Python script containing all the functions used in the notebooks, all properly documented. The file includes a main block, testing the functions.
-% TODO: Update standard
+
 
 \subsubsection{Tools}\label{subsubsec:tools}
 All our code is written in Python \cite{Python}, and we used scikit-learn \cite{scikit-learn} to create most of our models. To vectorize our code we used \verb|numpy| \cite{Numpy}, and for visualization we used \verb|matplotlib.pyplot| \cite{Matplotlib}. Code completion and debugging was done in Visual Studio Code \cite{VSCode} with additional assistance of GitHub Copilot \cite{Copilot}. We used \verb|git| \cite{Git} for version control, and \verb|GitHub| \cite{GitHub} for remote storage of our code.
 
-% EXAMPLE OF HOW THIS CAN LOOK
-% C++ \cite{C++} is used for all the numerically heavy computations and simulations. The standard library of C++ is used for mathematical and trigonometric functions, and as containers of data and for vectorization we implement Armadillo's \cite{Armadillo} \verb|arma::vec| class, together with other functions the library offer. To parse the \verb|.json| input files we use the json parsing library \cite{json}. Python \cite{Python} is used for plotting and animating our results. To vectorize our code we use \verb|numpy| \cite{Numpy}, and for visualization we use \verb|matplotlib.pyplot| \cite{Matplotlib}. To make our plots prettier we use the colormaps module \cite{colormaps}. Code completion and debugging is done in Visual Studio Code \cite{VSCode} with additional assistance of GitHub Copilot \cite{Copilot}. We use \verb|git| \cite{Git} for version control, and \verb|GitHub| \cite{GitHub} for remote storage of our code.
-
-
-
-
-% ===========================================
-% MAYBE HAVE THESE TWO SECTIONS GATHERED INSTEAD?
-% \section{Results \& Discussions}\label{sec:results discussion}
 
 \section{Results \& Discussion}\label{sec:results discussion}
 \subsection{Effects of Data Scaling}\label{subsec:scaling effect}
@@ -555,7 +445,7 @@ In fact, we see from the bottom part of \cref{fig:beta scaled vs raw} that the s
   \vspace*{-5pt}
 \end{figure}
 
-\subsection{Hyperparameter Dependency}
+\subsection{Hyperparameter Dependency}\label{subsec:hyperparameter}
 % \subsubsection{Ridge}
 In \cref{fig:MSE R2} we have contour plotted MSE and $R^2$ scores evaluated on the test portion of the Franke function data for Ridge (top section) and Lasso (bottom section) regression. Here we see that in both cases it is generally favorable to opt for smaller hyperparameters, although Lasso is much more sensitive to changes in $\lambda$ above a threshold of around 7 than what Ridge is. This is because Lasso regression employs the $L^1$ norm, which means that the coefficients can be driven completely to zero if the hyperparameter is large enough, contrary to the $L^2$ norm used in Ridge egression. Thus, as we continue increasing the value of $\lambda$ in Lasso above a certain value our fits will practically be zero at all points, and the scores will then stay constant.
 
@@ -573,19 +463,10 @@ For Ridge we see that the increased error associated with a large $\lambda$ is s
 
 In the right columns of figs. \ref{fig:MSE R2} and \ref{appfig:g MSE R2} we have cropped out the smallest polynomial degrees and largest hyperparameters. Here we can see that the scores solely improve as we move towards larger degree and smaller $\lambda$ for the dark matter data, while for the Franke data some combinations of degree and $\lambda$ lead to slightly better scores than others. Although these variations seem to follow some sort of pattern, at least for Ridge, looking at the values on the colorbar axes we see that they are very small, and they might just be random. For future studies this would be worth looking into. \colorbox{magenta}{formulate differently?}
 
-% \subsubsection{Lasso}
-% \begin{figure*}
-%   \vspace*{-5pt}
-%   \centering %Centers the figure
-%   \includegraphics[width=0.8\textwidth]{../figs/c_MSE_R2.pdf}
-%   \caption{MSE (upper row) and $R^2$ (lower row) for Lasso regression evaluated on the Franke test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 11 evenly spaced degrees in the interval $[1, 41]$ and 30 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$, but in the right column we have cropped away degrees 1 and 5 and the 20 largest $\lambda$ values.}\label{fig:c MSE R2}
-%   \vspace*{-5pt}
-% \end{figure*}
-
 
 \subsection{Bias-Variance Tradeoff}
 \subsubsection{Training and Test Errors}
-In \cref{fig:e train test} we have plotted MSE scores evaluated on the training and test portions of the Franke data as functions of polynomial degrees up to 81. Although our curves are not as smooth as those in fig. 2.11 from Hastie et al., the overall trend is similar. The errors fall much faster with complexity for low degrees than the test set error increases for high degrees, in contrast to their figure, where the decrease is not as abrupt and the test set error follows more of a ``U-shape''. It is worth noting that their figure is an illustration, though, and we can not know how complex the data is assumed to be relative to the Franke function, nor what exactly is meant by a ``high'' model complexity. The former affects how large the error is for the lowest polynomial degrees, and the magnitude of the test error at high complexity depends on both. 
+In \cref{fig:e train test} we have plotted MSE scores evaluated on the training and test portions of the Franke data as functions of polynomial degrees up to 81. Although our curves are not as smooth as those in fig. 2.11 from Hastie et al., the overall trend is similar. The main difference is that the errors fall much faster with complexity for low degrees, and the test error is very close to the training error for a wide range of polynomial degrees before it abruptly increases as we reach $\sim75$, contrary to the more smooth ``U-shape'' we see in their figure. It is worth noting that theirs is an illustration, though, and we can not know how complex the data is assumed to be relative to the Franke function, nor what exactly is meant by a ``high'' model complexity. The former affects how large the error is for the lowest polynomial degrees, and the magnitude of the test error at high complexity depends on both. 
 
 \begin{figure}[h!]
   \vspace*{-5pt}
@@ -595,22 +476,31 @@ In \cref{fig:e train test} we have plotted MSE scores evaluated on the training 
   \vspace*{-5pt}
 \end{figure}
 
-When studying the complexity and hyperparameter dependence of the Franke function MSE and $R^2$ scores, we saw that they continued to improve with complexity up to degree 41 and that vanishing $\lambda$ was the best option. We found this rather peculiar, as we would expect overfitting and thus a need for regularization at this level, considering the relatively low complexity of the Franke function and that the fits we obtained with polynomial degrees between 5 and 10 already seemed satisfactory score-wise. However, \cref{fig:e train test} offers an explanation to this result, since the test set MSE for OLS regression starts increasing after we surpass polynomial degree 41. Also, since we used $50\times50$ data points for the regression the chance of fitting to the noise is smaller than if we were to use e.g. $10\times10$ points, since the expectation value of true data plus noise converges towards the expectation value of the true data plus the expectation value of the noise as the number of data points increases, and the expectation value of the noise is zero in our case. \colorbox{magenta}{fact check, rewrite}
+When studying the complexity and hyperparameter dependence of the Franke function MSE and $R^2$ scores, we saw that they continued to improve with complexity up to degree 41 and that vanishing $\lambda$ was the best option. We found this rather peculiar, as we would expect overfitting and thus a need for regularization at this level, considering the relatively low complexity of the Franke function and that the fits we obtained with polynomial degrees between 5 and 10 already seemed satisfactory score-wise. However, \cref{fig:e train test} offers an explanation to this result, since the test set MSE for OLS regression starts increasing well after we surpass polynomial degree 41. Also, Since we used $50\times50$ data points for the regression, the likelihood of fitting to random noise is smaller than if we had used, for example, $10\times10$ points. This is because, as the number of data points increases, the average of the true data plus noise approaches the sum of the true data's mean and the noise's mean. In our case, the noise has an expectation value of zero, so with more data points, the overall effect of noise on the model diminishes. 
 
 \subsubsection{Parameter Dependencies of MSE, Bias and Variance}
+In \cref{fig:e bias variance} we have plotted MSE, bias and variance for models trained using generated Franke data with bootstrapping as functions of polynomial degree, number of data points, number of bootstrap steps and test size fraction. Their dependencies on polynomial degree agree well with \eqref{eq:model error}, although we would expect the MSE to be slightly larger than the bias even when the model variance is $\sim0$, due to the contribution from the noise variance. We need to remember that the noise we added to our Franke data was generated using a standard deviation $\sigma=0.1$, hence this contribution $\sigma^2=0.01$ to the error is negligible compared to the bias at the lowest complexities, which lies in the range $[0.1,0.3]$. 
 
 \begin{figure*}
   \vspace*{-5pt}
   \centering %Centers the figure
   \includegraphics[width=\textwidth]{../figs/e_bias_variance.pdf}
-  \caption{MSE (orange), bias (blue) and variance (pink) for OLS regression evaluated on Franke test dta and plotted as functions of polynomial degree (upper left), number of data points (upper right), number of bootstrap steps (lower left) and test size fraction (lower right). When these are not varied we have used degree 5, 50 data points in one direction (i.e. $2\:500$ in the grid), 100 bootstrap steps and a test size fraction of 0.2. Note that some axes are scaled logarithmically and some have a linear scale.}\label{fig:e bias variance}
+  \caption{MSE (orange), bias (blue) and variance (pink) for OLS regression evaluated on Franke test data and plotted as functions of polynomial degree (upper left), number of data points (upper right), number of bootstrap steps (lower left) and test size fraction (lower right). When these are not varied we have used degree 5, $50\times50$ data points, 100 bootstrap steps and a test size fraction of 0.2. Note that some axes are scaled logarithmically and some have a linear scale.}\label{fig:e bias variance}
   \vspace*{-5pt}
 \end{figure*}
 
-HIGHER ERROR DUE TO BOOTSTRAPPING BECAUSE THE STATISTICAL DISTRIBUTION OF THE NOISE IS IGNORED, I.E. IT IS A HIGHER CHANCE OF FITTING TO THE NOISE?
+The bias-variance tradeoff is clearly showcased, since the bias and MSE stabilize at their lowest value of around 0.1 at polynomial degree 7, where the variance is still very low. As we move towards degrees $>19$ the steady increase in variance picks up while the bias remains more or less the same, and as a result the MSE starts increasing again. 
+
+We see that increasing the number of data points in the grid past $50\times50$ has little to no effect on the bias, while the variance falls to zero. This is because the bias is determined by the model's its assumptions about the underlying data structure, i.e. its complexity, and not by the amount of training data. On the other hand, model variance decreases with the number of data points because the model becomes less sensitive to fluctuations in individual data points. This is because the model is trained on a dataset that is more representative of the true underlying data distribution, which reduces the likelihood of the model fitting to random noise or outliers that are not reflective of the true relationship between the features and the target variable. 
+
+Both the bias and the variance increase as we move to the extreme case of reserving more than 90\% of the data for testing, since we then have very few data points to train the model with. This heightens the chance of fitting to random fluctuations due to noise increases, which leads to an increased variance, as well as the probability of not having enough data points to capture the complex nature of the underlying structure og the data, which increases the bias. We suspect that the error would be even larger had it not been for bootstrapping, since this typically minimizes the variance when working with a very small dataset. Moreover, increasing the number of bootstrap steps does not seem to be necessary when using a polynomial degree of 5 and $50\times50$ data points, since the both the bias and variance remain practically constant. This agrees well with the complexity dependency plot, since the variance was negligible for this degree, and bootstrapping generally does not help with decreasing the bias. For future studies on the bias-variance tradeoff it would be interesting to see how the dependency on the number of bootstrap steps would change if we used a polynomial degree of e.g. 40 instead. 
+
+Comparing \cref{fig:e train test} and the top left subplot in \cref{fig:e bias variance} we see that the MSE evaluated on the test set stays more or less constant at $\lesssim0.15$ for polynomial degrees $\in[20,70]$ when not employing bootstrap, while it increases past this value as we move to degrees $>20$ when using 100 bootstrap steps. The reason for this is that bootstrapping actually can lead to an increased model variance if the dataset is already large enough, because in that case the model already captures most of the data's inherent variability. Bootstrapping, which samples with replacement, results in some data points being included multiple times and others being left out in each resampled dataset. This can create redundant patterns that the model may pick up on. In large datasets, these redundant patterns are more likely to differ across bootstrapped samples, potentially leading to fluctuations in the fitted model. Thus, we hypothesize that a $50\times50$ dataset was large enough, and that increasing the polynomial degree to around 40 would lead to an increase in variance and MSE with the number of bootstrap steps.
+
 
 \subsection{Resampling Methods}
 \subsubsection{OLS: Cross-Validation VS Bootstrap}
+In the top (bottom) part of \cref{fig:kfold vs bootstrap} we have plotted OLS model MSE's evaluated on Franke (cosmological) test data against polynomial degrees $\in[1,15]$ ($\in[1,31]$). In the left column we have MSE's estimated from cross-validation, and the number of $k$-folds used vary in integer steps between 5 and 15. In the right column we have plotted their MSE's computed using 100 bootstrap steps. We did not vary the number of steps as we did $k$, because we assumed from \cref{fig:e bias variance} that the dependency on the number of steps would be miniscule. As mentioned in the previous section this might not be the case, though, and in further investigating it may prove insightful to explore this dependency as well.
 
 
 \begin{figure*}
@@ -623,7 +513,13 @@ HIGHER ERROR DUE TO BOOTSTRAPPING BECAUSE THE STATISTICAL DISTRIBUTION OF THE NO
   \vspace*{-5pt}
 \end{figure*}
 
+Assuming our predictions of the bootstrap dependency is correct the observed dependency on the number of $k$-folds is not surprising, since the former would suggest that the models are already robust and relatively insensitive to fluctuations in the training set as is. Cross-validation would then be rather ineffective in further minimizing the model variance, since the dataset is probably large or homogeneous enough that the way it is split does not lead to a substantial difference in the training or validation sets. Furthermore, we see that for the Franke data the MSE fluctuates somewhat with $k$ for polynomial degrees $\gtrsim7$, especially for degrees 8 and 14. The fluctuations are small and seem to follow a somewhat random pattern, however, and are most likely not very telling of the fits' relative qualities. \colorbox{magenta}{valid interpretation?}
+
+For the dark matter simulation data $k$-fold cross-validation appears to be rather ineffective at reducing the model error, since there is no visible dependency on $k$. In fact, the decrease in MSE with complexity seems to be more or less the same for both cross-validation and bootstrap, and the fact that the MSE's flatten out only as we reach degrees $\gtrsim25$ implies that we have not yet reached the model complexity that properly captures the variability of our data. In other words, the main contribution to the model error for the lower polynomial degrees is bias due to underfitting rather than the variance, which neither cross-validation nor bootstrap can minimize to any significant degree. We did not explore higher complexities due to the increasingly long computational time, but this would definitely be a leading topic of further investigation. \colorbox{magenta}{formulate differently?}
+
+
 \subsubsection{Cross-Validation With Ridge and Lasso}
+The blue-green (brown-yellow) contour plots in \cref{fig:kfold Ridge Lasso} show the MSE scores of fits to the Franke generated data as well as the cosmological simulation data using Ridge (Lasso) regression. The MSE's for the Franke and cosmological fits are plotted in the top and bottom sections, respectively, and the plots on the left (right) correspond to $\lambda=0.001$ ($\lambda=0.5$). We have used the same range of polynomial degrees and $k$'s here as for the OLS case plotted in \cref{fig:kfold vs bootstrap}. It is important to note the scale on the bottom right plot, which shows that the MSE scores fluctuate around 1 with an order of magnitude $\lesssim10^{-7}$. 
 
 \begin{figure*}
   \vspace*{-5pt}
@@ -631,9 +527,12 @@ HIGHER ERROR DUE TO BOOTSTRAPPING BECAUSE THE STATISTICAL DISTRIBUTION OF THE NO
   \includegraphics[width=0.7\textwidth]{../figs/f_Ridge_Lasso.pdf}
   \centering
   \includegraphics[width=0.7\textwidth]{../figs/g_Ridge_Lasso.pdf}
-  \caption{MSE evaluated on the Franke (top section) and cosmological (bottom section) test sets as function of polynomial degrees and number of $k$-folds used in cross-validation, for Ridge (upper rows) and Lasso (lower rows) regression. We have used $\lambda=0.001$ and $\lambda=0.5$ in the left and right columns, respectively.}\label{fig:g Ridge Lasso}
+  \caption{MSE evaluated on the Franke (top section) and cosmological (bottom section) test sets as function of polynomial degrees and number of $k$-folds used in cross-validation, for Ridge (upper rows) and Lasso (lower rows) regression. We have used $\lambda=0.001$ and $\lambda=0.5$ in the left and right columns, respectively.}\label{fig:kfold Ridge Lasso}
   \vspace*{-5pt}
 \end{figure*}
+
+Based on our discussions in \cref{subsec:hyperparameter} it is not surprising that the Ridge fits' MSE's are more or less the same for both hyperparameters, while the Lasso MSE's are significantly larger for $\lambda=0.5$ than $\lambda=0.001$. Nor is it suprising that varying the number of $k$-folds have negligible effect on the scores. In fact, by introducing a regularization term as we do with Ridge and Lasso regression we actually undermine the model complexity even further, which is probably why the small MSE fluctuations observed for OLS on the Franke data is not present here. Again, in further analyses it would be interesting to explore how the scores change as we increase the polynomial degrees, specifically at what points introducing a regularization term starts to prove useful and the number of $k$-folds has a visible effect.
+
 
 \subsection{Fits to the Cosmological Data}
 \subsubsection{Complexity Dependency in OLS}
@@ -669,8 +568,12 @@ It is not surprising that OLS worked best with our chosen polynomial degree, sin
 
 
 \section{Conclusion}\label{sec:conclusion}
-\colorbox{magenta}{open questions} \\
-\colorbox{magenta}{reflections?}
+In this study we have implemented and compared three well known regression techniques - Ordinary Least Squares (OLS), Ridge, and Lasso - in the context of both synthetic and real world data. We employed the widely used Franke function to generate the former, which we used to validate our implementations and explore fundamental concepts in machine learning such as the bias-variance tradeoff. Our investigation of Ridge and Lasso regression revealed that adding regularization terms to the cost function either reduced the model performances or left them more or less unchanged, although this is known to be effective in addressing overfitting. We concluded that our data set contained enough points for the models to be able to fit to its underlying structure without overfitting to the noise, even as we increased the model complexity way past what was necessary. This was validated by the application of two well known resampling methods; bootstrap and $k$-fold cross-validation, as these typically minimize model variance due to overfitting, but had minimal obervable effect on our model errors. \colorbox{magenta}{formulate better, include more important discussions}
+
+Our analyses were further extended to cosmological N-body simulation data generated with the public version of the G\begin{scriptsize}ASOLINE\end{scriptsize}2 SPH code, which proved insightful to our understanding of complexity dependency, the bias-variance tradeoff and resampling techniques. By fitting \colorbox{magenta}{continue, explain fits}
+
+
+Overall, our findings highlight the critical role of regularization in regression analysis for building predictive models that generalize well to unseen data. This work serves as a foundation for applying regression techniques to complex datasets, emphasizing the need for careful selection of model parameters to optimize performance. Future research could explore more advanced regularization techniques or adapt the methods discussed here to other data types and machine learning tasks. \colorbox{magenta}{edit, summarize open questions}
 
 
 % \section*{Acknowledgements}\label{sec:cknowledgements}
@@ -681,10 +584,11 @@ It is not surprising that OLS worked best with our chosen polynomial degree, sin
 \bibliography{references}
 
 \newpage
+\newpage
 % ===========================================
 \appendix
 \section{Code}\label{appsec:code}
-\href{https://github.com/Oskar-Idland/FYS-STK4155-Projects}{https://github.com/Oskar-Idland/FYS-STK4155-Projects}
+Link to our GitHub repository: \href{https://github.com/Oskar-Idland/FYS-STK4155-Projects}{https://github.com/Oskar-Idland/FYS-STK4155-Projects}
 
 \section{Derivations}\label{appsec:derivations}
 \subsection{Expectation value and variance of the OLS estimator \texorpdfstring{$\boldsymbol{\hat{\beta}}$}{Lg}}\label{subapp:beta OLS}
@@ -787,51 +691,17 @@ Before we move further we may note that the exact function $f(\mathbf{x})$ gener
 \end{align*}
 
 
-\section{Additional Figures}\label{appsec:figures}
-
-% \begin{figure*}
-%   \vspace*{-5pt}
-%   \centering %Centers the figure
-%   \includegraphics[width=0.6\textwidth]{../figs/a_beta_scaled_vs_raw.pdf}
-%   \caption{The coefficients $\beta$ for the Franke function fit estimated using unscaled (blue) and scaled (red) data, plotted for polynomial degrees in the interval $[1,6]$.}\label{appfig:a beta scaled vs raw}
-%   \vspace*{-5pt}
-% \end{figure*}
-
-
-% \begin{figure*}
-%   \vspace*{-5pt}
-%   \centering %Centers the figure
-%   \includegraphics[width=0.9\textwidth]{../figs/g_MSE_R2_Ridge.pdf}
-%   \caption{MSE (upper row) and $R^2$ (lower row) for Ridge regression evaluated on the cosmological test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 11 evenly spaced degrees in the interval $[1, 31]$ and 11 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$. In the right column we have cropped away degrees smaller than 19 purely for visualization purposes.}\label{appfig:g MSE R2 Ridge}
-%   \vspace*{-5pt}
-% \end{figure*}
-
-
-% \begin{figure*}
-%   \vspace*{-5pt}
-%   \centering %Centers the figure
-%   \includegraphics[width=0.9\textwidth]{../figs/g_MSE_R2_Lasso.pdf}
-%   \caption{MSE (upper row) and $R^2$ (lower row) for Lasso regression evaluated on the cosmological test data and contour plotted as functions of polynomial degree (horizontal axes) and hyperparameter $\lambda$ (vertical axes). We have used 11 evenly spaced degrees in the interval $[1, 31]$ and 11 logarithmically spaced values for $\lambda$ in the interval $[10^{-5},10^{-1}]$, but in the right column we have cropped away degrees smaller than 19 and the 3 largest $\lambda$ values.}\label{appfig:g MSE R2 Lasso}
-%   \vspace*{-5pt}
-% \end{figure*}
-
 \begin{figure*}
   \vspace*{-5pt}
+  \section{Additional Figures}\label{appsec:figures}
+  \vspace*{-5pt}
   \centering %Centers the figure
-  \includegraphics[width=0.7\textwidth]{../figs/g_MSE_R2_Ridge.pdf}
+  \includegraphics[trim = 0 0.75cm 0 0,clip,width=0.7\textwidth,keepaspectratio]{../figs/g_MSE_R2_Ridge.pdf}
   \centering
   \includegraphics[width=0.7\textwidth]{../figs/g_MSE_R2_Lasso.pdf}
   \caption{MSE (upper rows) and $R^2$ (lower rows) for Ridge (top section) and Lasso (bottom section) regression evaluated on the cosmological test set. The scores vary with polynomial degree horizontally and hyperparameter $\lambda$ vertically. In the right columns we have cropped away degrees smaller than 19, as well as the 3 largest $\lambda$'s only for Lasso, purely for visualization purposes.}\label{appfig:g MSE R2}
   \vspace*{-5pt}
 \end{figure*}
-
-% \begin{figure*}
-%   \vspace*{-5pt}
-%   \centering %Centers the figure
-%   \includegraphics[width=0.7\textwidth]{../figs/f_Ridge_Lasso.pdf}
-%   \caption{MSE evaluated on Franke test data as function of polynomial degrees in the interval $[1, 15]$ and number of folds $k\in[5, 15]$ used in cross-validation, for Ridge (upper row) and Lasso (lower row) regression. We have used $\lambda=0.001$ and $\lambda=0.5$ in the left and right columns, respectively.}\label{appfig:f Ridge Lasso}
-%   \vspace*{-5pt}
-% \end{figure*}
 
 
 \begin{figure*}
@@ -850,6 +720,9 @@ Before we move further we may note that the exact function $f(\mathbf{x})$ gener
   \caption{Contour plots of the cosmological simulation data (upper left) and the OLS fits for the entire data (upper right), 4 separate pieces stitched back together (lower left) and 100 separate pieces stitched back together (lower right). We have used a polynomial degree of 30 for all fits.}\label{appfig:density pieces}
   \vspace*{-5pt}
 \end{figure*}
+
+\end{document}
+
 % MAYBE REMOVE
 
 % LINK WITH SPECIFIC NAME
@@ -1018,6 +891,3 @@ Before we move further we may note that the exact function $f(\mathbf{x})$ gener
 %           \end{algorithmic}
 %       \end{algorithm}
 %   \end{figure}
-
-
-\end{document}

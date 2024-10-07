@@ -6,7 +6,7 @@
 %Control: page (0) single
 %Control: year (1) truncated
 %Control: production of eprint (0) enabled
-\begin{thebibliography}{11}%
+\begin{thebibliography}{12}%
 \makeatletter
 \providecommand \@ifxundefined [1]{%
  \@ifx{#1\undefined}
@@ -52,6 +52,9 @@
 \bibitem [{\citenamefont {James W.~Wadsley}(2024)}]{gasoline}%
   \BibitemOpen
   \bibfield  {author} {\bibinfo {author} {\bibfnamefont {T.~R.~Q.}\ \bibnamefont {James W.~Wadsley}, \bibfnamefont {Benjamin W.~Keller}},\ }\href@noop {} {\enquote {\bibinfo {title} {{Gasoline2: A Modern SPH Code}},}\ }\bibinfo {howpublished} {\url{https://arxiv.org/abs/1707.03824}} (\bibinfo {year} {Accessed: September 2024})\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Hjorth-Jensen}(2021)}]{notes}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Hjorth-Jensen}},\ }\href@noop {} {\enquote {\bibinfo {title} {{Applied Data Analysis and Machine Learning}},}\ }\bibinfo {howpublished} {\url{https://compphysics.github.io/MachineLearning/doc/LectureNotes/_build/html/intro.html}} (\bibinfo {year} {2021})\BibitemShut {NoStop}%
 \bibitem [{\citenamefont {Hahn}(2024)}]{music}%
   \BibitemOpen
   \bibfield  {author} {\bibinfo {author} {\bibfnamefont {O.}~\bibnamefont {Hahn}},\ }\href@noop {} {\enquote {\bibinfo {title} {{MUSIC}},}\ }\bibinfo {howpublished} {\url{https://www-n.oca.eu/ohahn/MUSIC/}} (\bibinfo {year} {Accessed: September 2024})\BibitemShut {NoStop}%
@@ -81,5 +84,5 @@
   \bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont {Hamano}},\ }\href@noop {} {\enquote {\bibinfo {title} {Git},}\ }\bibinfo {howpublished} {\url{https://git-scm.com/doc}} (\bibinfo {year} {Accessed: October 2023})\BibitemShut {NoStop}%
 \bibitem [{\citenamefont {Microsoft}(2023{\natexlab{c}})}]{GitHub}%
   \BibitemOpen
-  \bibfield  {author} {\bibinfo {author} {\bibnamefont {Microsoft}},\ }\href@noop {} {\enquote {\bibinfo {title} {Github},}\ }\bibinfo {howpublished} {\url{https://docs.github.com/en}} (\bibinfo {year} {Accessed: October 2023}{\natexlab{c}})\BibitemShut {NoStop}%
+  \bibfield  {author} {\bibinfo {author} {\bibnamefont {Microsoft}},\ }\href@noop {} {\enquote {\bibinfo {title} {{GitHub}},}\ }\bibinfo {howpublished} {\url{https://docs.github.com/en}} (\bibinfo {year} {Accessed: October 2023}{\natexlab{c}})\BibitemShut {NoStop}%
 \end{thebibliography}%
