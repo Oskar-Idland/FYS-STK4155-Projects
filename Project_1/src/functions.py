@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib import cm
-from matplotlib.ticker import FormatStrFormatter
+from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import numpy as np
 from random import seed
 from sklearn.model_selection import train_test_split, KFold, cross_val_score, cross_val_predict
@@ -350,20 +350,49 @@ if __name__ == "__main__":
     y = np.arange(0, 1, 1/N)
     X, Y = np.meshgrid(x, y)
 
-    z = (FrankeFunction(X, Y)).reshape(-1,1)
+    z = (FrankeFunction(X, Y))
+
+    """Franke plot"""
+    fig = plt.figure(figsize = (8, 6))
+    ax = fig.add_subplot(projection="3d")
+    surf = ax.plot_surface(X, Y, z, cmap = cm.coolwarm, linewidth = 0, antialiased = False)
+    fig.colorbar(surf)
+    ax.set_xlabel(r"$x$")
+    ax.set_ylabel(r"$y$")
+    ax.set_title("Franke function")
+    plt.show()
+ 
 
     """"OLS example"""
     degrees = np.arange(1, 6)
+    z = (z + np.random.normal(0, 0.1, (N, N))).reshape(-1, 1) 
 
     MSE_list = []
     R2_list = []
     β_list = []
 
-    for i, degree in enumerate(degrees):
-        β_list.append([])
+    for degree in degrees:
         MSE_i, R2_i, β_i = OLS(x, y, z, degree, seed=seed, return_beta=True)
-        MSE_list.append(MSE_i) ; R2_list.append(R2_i) ; β_list[i].append(β_i)
+        MSE_list.append(MSE_i) ; R2_list.append(R2_i) ; β_list.append(β_i)
 
+    values = [MSE_list, R2_list, β_list]
+    titles = ["MSE", r"$R^2$", r"$\beta$"]
+
+    fig, axs = plt.subplots(1, 3, figsize = (15, 5), constrained_layout = True)
+    
+    for i in range(len(axs)-1): # Plotting MSE and R2
+        axs[i].plot(degrees, values[i], '--o')
+        axs[i].set_title(titles[i]) 
+
+    for i, deg in enumerate(degrees): # Plotting β
+        m = len(β_list[i][:, 0])             
+        plt.scatter([deg]*m, β_list[i][:, 0], c = "blue")
+        plt.title(titles[2])
+        
+    fig.supxlabel('Polynomial degree')
+    fig.supylabel('Values')
+    fig.suptitle("OLS")
+    plt.show()
 
     """Ridge example"""
     degrees = np.arange(1, 6)
@@ -377,7 +406,23 @@ if __name__ == "__main__":
         for lmb in lambdas:
             MSE_i, R2_i = Ridge(x, y, z, degree, lmb, seed=seed)
             MSE_list[i].append(MSE_i) ; R2_list[i].append(R2_i)
-      
+
+    values = ([MSE_list, R2_list])
+    titles = ["MSE", r"$R^2$"]
+    im = []
+
+    fig, axs = plt.subplots(1, 2, figsize = (15, 5), constrained_layout = True)
+    extent = [np.min(degrees), np.max(degrees), np.min(lambdas), np.max(lambdas)]
+
+    for i in range(len(axs)): # Plotting MSE and R2
+        im.append(axs[i].imshow(values[i], cmap = "Reds", extent = extent, aspect = "auto"))
+        axs[i].set_title(titles[i])
+        plt.colorbar(im[i], ax = axs[i])
+
+    fig.supxlabel("Polynomial degree")
+    fig.supylabel(r"Hyperparameter $\lambda$")
+    fig.suptitle("Ridge")
+    plt.show()
 
     """Lasso example"""
     degrees = np.arange(1, 7)
@@ -418,13 +463,14 @@ if __name__ == "__main__":
             ax_1.set_xticks([])
             ax_1.set_xticks([])
 
+    fig.suptitle("Lasso")
     plt.show()
 
     """Bootstrap example"""
 
-    degrees = range(1, 52, 2)
+    degrees = range(1, 41, 4)
 
-    n_bootstraps = 10
+    n_bootstraps = 100
 
     error = np.zeros((len(degrees), 1))
     bias = np.zeros((len(degrees), 1))
@@ -441,6 +487,7 @@ if __name__ == "__main__":
     plt.xticks(degrees[::2])
     plt.xlabel("Polynomial degree")
     plt.ylabel("Error")
+    plt.title("Bootstrap")
     plt.tight_layout()
     plt.show()
 
@@ -450,19 +497,39 @@ if __name__ == "__main__":
     k = [5, 10]
 
     # kfold OLS  
-    OLS_mse_kfold = []
-    OLS = LinearRegression(fit_intercept=False)
-    for k_i in k:
-        for degree in degrees:
-            OLS_mse_kfold.append(kfold_crossval(x, y, z, k_i, OLS, degree))
-  
+    OLS_mse_kfold = np.zeros((len(degrees), len(k)))
+                             
+    for i in range(len(degrees)):
+        for j in range(len(k)):
+            OLS_mse_kfold[i, j] = kfold_crossval(x, y, z, k[j], LinearRegression(fit_intercept = False), degrees[i], seed = seed)
+    
+    plt.imshow(OLS_mse_kfold.T[::-1], cmap = "PuRd", aspect = "auto", extent = [np.min(degrees), np.max(degrees), np.min(k), np.max(k)])
+    plt.colorbar(label = "MSE")
+    plt.title("OLS k-fold cross-validation")
+    plt.xlabel("Polynomial degree")
+    plt.ylabel(r"Number of folds $k$")
+    plt.show()
+
+
     # kfold Ridge
-    lambdas = np.logspace(-4, 4, 6)
-    ridge_mse_kfold = []
+    lambdas = [0.001, 0.5]
+    ridge_mse_kfold = np.zeros((len(degrees), len(k), len(lambdas)))
 
-    for k_i in k:
-        for degree in degrees:
-            for lmb in lambdas:
-                ridge = linear_model.Ridge(alpha=lmb, fit_intercept=False)
-                ridge_mse_kfold.append(kfold_crossval(x, y, z, k_i, ridge, degree))
+    for i in range(len(degrees)):
+        for j in range(len(k)):
+            for l in range(len(lambdas)):
+                ridge_mse_kfold[i, j, l] = kfold_crossval(x, y, z, k[j], linear_model.Ridge(lambdas[l], fit_intercept = False), degrees[i], seed = seed)
 
+    im = []
+
+    fig, axs = plt.subplots(1, 2, figsize = (15, 5), constrained_layout = True)
+
+    for i in range(len(axs)): # Plotting MSE
+        im.append(axs[i].imshow(ridge_mse_kfold[:, :, i].T[::-1], cmap = "PuBu", aspect = "auto", extent = [np.min(degrees), np.max(degrees), np.min(k), np.max(k)]))
+        axs[i].set_title(f"λ = {lambdas[i]}")
+        plt.colorbar(im[-1], ax = axs[i], pad = 0.02, aspect = 10, label = "MSE" if j == 1 else None)
+
+    fig.supxlabel("Polynomial degree")
+    fig.supylabel(r"Number of folds $k$")
+    fig.suptitle("Ridge k-fold cross-validation")
+    plt.show()
