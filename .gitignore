@@ -8,4 +8,5 @@ Project_*/tex/out/*.out
 Project_*/tex/out/*.synctex.gz
 Project_*/src/tempCodeRunnerFile*
 Project_*/src/__pycache__/
+*.DS_Store
 settings.json
