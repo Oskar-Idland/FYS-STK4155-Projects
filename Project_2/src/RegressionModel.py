@@ -6,7 +6,8 @@ from sklearn.utils import resample
 from autograd import grad
 
 
-class Model:
+#TODO edit this class to fit with rest of project code, maybe remove all gradient descent methods
+class RegressionModel:
     def __init__(self, x: list | np.ndarray, y: np.ndarray, degree: int, test_size: float = 0.2, seed: int | None = None):
         """
         Class initializer.
@@ -188,7 +189,7 @@ class Model:
         Uses gradient descent with or without momentum to minimize the cost function. TODO maybe change
 
         ## Parameters:
-        n_iter (int, optional): The number of iterations to perform in gradient descent. Default is 100. 
+        n_iter (int, optional): The number of iterations to perform in gradient descent.
         eta (float | None, optional): The learning rate. Must either be between 0.0 and 1.0 or None. If passed as None, it is computed from the Hessian matrix. Default is None.
         lmbd (float, optional): The regularization parameter in Ridge regression. Passing as zero corresponds to OLS. Default is 0.0.
         gamma (float, optional): The momentum parameter. Must be between 0.0 and 1.0. Passing as zero corresponds to using gradient descent without momentum. Default is 0.0.
@@ -198,9 +199,14 @@ class Model:
         ## Returns:
         tuple: A tuple containing the Mean-Squared Error (MSE) score and the R-squared (R2) score, as well as the theta values (coefficients) if return_theta is passed as True.
         """
-        if eta < 0.0 or eta > 1.0 or eta is None:
-            if eta < 0.0 or eta > 1.0:
-                print("The learning rate eta must be between 0.0 and 1.0! Computing using the Hessian matrix.")
+        #TODO do this in a better way
+        Hessian = False
+        if eta is None:
+            Hessian = True
+        elif eta < 0.0 or eta > 1.0:
+            Hessian = True
+            print("The learning rate eta must be between 0.0 and 1.0! Computing using the Hessian matrix.")
+        if Hessian:
             H = 2.0 * ((1.0 / len(self.y_train)) * self.X_train.T @ self.X_train + lmbd * np.eye(self.X_train.shape[1])) #TODO correct to use len(y_train)? generalize to 2D
             eigvals, eigvecs = np.linalg.eig(H)
             eta = 1.0 / np.max(eigvals)
@@ -218,7 +224,7 @@ class Model:
                 return 2.0 * ((1.0 / len(self.y_train)) * self.X_train.T @ (self.X_train @ theta - self.y_train) + lmbd * theta) #TODO correct to use len(y_train)? generalize to 2D
         
         # Estimating theta's with gradient descent
-        theta = np.random.randn(self.X.shape[0], 1) #TODO correct shape?
+        theta = np.random.randn(self.X.shape[1], 1) #TODO correct shape?
         change = 0.0
         for iter in range(n_iter):
             gradients = training_gradient(theta)
@@ -259,9 +265,14 @@ class Model:
         ## Returns:
         tuple: A tuple containing the Mean-Squared Error (MSE) score and the R-squared (R2) score, as well as the theta values (coefficients) if return_theta is passed as True.
         """
-        if eta < 0.0 or eta > 1.0 or eta is None:
-            if eta < 0.0 or eta > 1.0:
-                print("The learning rate eta must be between 0.0 and 1.0! Computing using the Hessian matrix.")
+        #TODO do this in a better way
+        Hessian = False
+        if eta is None:
+            Hessian = True
+        elif eta < 0.0 or eta > 1.0:
+            Hessian = True
+            print("The learning rate eta must be between 0.0 and 1.0! Computing using the Hessian matrix.")
+        if Hessian:
             H = 2.0 * ((1.0 / len(self.y_train)) * self.X_train.T @ self.X_train + lmbd * np.eye(self.X_train.shape[1])) #TODO correct to use len(y_train)? generalize to 2D
             eigvals, eigvecs = np.linalg.eig(H)
             eta = 1.0 / np.max(eigvals)
@@ -291,7 +302,7 @@ class Model:
         
         # Estimating theta's with gradient descent
         m = int(len(self.y_train) / M) # Number of minibatches TODO correct shape?
-        theta = np.random.randn(self.X.shape[0], 1) #TODO correct shape?
+        theta = np.random.randn(self.X.shape[1], 1) #TODO correct shape?
         change = 0.0
         if tuning_method == "ADAM":
             iter = 0
@@ -382,7 +393,8 @@ class Model:
         return quantities
 
 
-    def kfold_crossval(self, k: int, model: sklearn.linear_model.LinearRegression | sklearn.linear_model.Ridge | sklearn.linear_model.Lasso, predict: bool = False) -> float | np.ndarray:
+    # def kfold_crossval(self, k: int, model: sklearn.linear_model.LinearRegression | sklearn.linear_model.Ridge | sklearn.linear_model.Lasso, predict: bool = False) -> float | np.ndarray:
+    def kfold_crossval(self, k: int, model, predict: bool = False) -> float | np.ndarray:
         """
         Performs k-fold cross-validation.
 
