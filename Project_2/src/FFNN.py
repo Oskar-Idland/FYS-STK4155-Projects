@@ -19,7 +19,7 @@ class FFNN:
 	Description:
 	------------
 		Feed Forward Neural Network with interface enabling flexible design of a
-		nerual networks architecture and the specification of activation function
+		neural networks architecture and the specification of activation function
 		in the hidden layers and output layer respectively. This model can be used
 		for both regression and classification problems, depending on the output function.
 

@@ -21,7 +21,7 @@ class RegressionModel:
         """
         self.x, self.y, self.degree, self.test_size, self.seed = x, y, degree, test_size, seed
 
-        self.X = self.get_X()
+        self.X = self.create_X()
         self.split()
         self.scale()
 
@@ -54,7 +54,7 @@ class RegressionModel:
         self.degree = degree
 
         # Update design matrix, training and test data
-        self.X = self.get_X()
+        self.X = self.create_X()
         self.split()
         self.scale()
 
@@ -65,7 +65,7 @@ class RegressionModel:
         self.test_size = test_size
 
         # Update design matrix, training and test data
-        self.X = self.get_X()
+        self.X = self.create_X()
         self.split()
         self.scale()
 
@@ -76,14 +76,14 @@ class RegressionModel:
         self.seed = seed
 
         # Update design matrix, training and test data
-        self.X = self.get_X()
+        self.X = self.create_X()
         self.split()
         self.scale()
 
     """
     Getters
     """
-    def get_X(self) -> np.ndarray:
+    def create_X(self) -> np.ndarray:
         """
         Creates the design matrix X.
 
@@ -252,7 +252,7 @@ class RegressionModel:
         M (int): Size of each minibatch.
         eta (float | None, optional): The learning rate. Must either be between 0.0 and 1.0 or None. If passed as None, it is computed from the Hessian matrix. Default is None.
         tuning_method (str | None, optional): Which tuning method to implement. The options are "decay", "AdaGrad", "RMSprop", "ADAM" and None. Default is None. #TODO does it make sense to group decaying rate together with the others? how are they tuning methods?
-        tuning_params: (list, optional): List containing the parameters needed for the tuning method. If None, or if tuning_method is passed as None, no tuning is performed. Default is None. The expected signatures for the different metods are:
+        tuning_params: (list, optional): List containing the parameters needed for the tuning method. If None, or if tuning_method is passed as None, no tuning is performed. Default is None. The expected signatures for the different methods are:
             "decay":   [t0: int, t1: int]        
             "AdaGrad": [delta: float]               
             "RMSprop": [delta: float, rho: float]    

@@ -14,7 +14,7 @@ warnings.filterwarnings("ignore")
 from activation_funcs import *
 from cost_funcs import *
 from Schedulers import *
-from ffnn import FFNN
+from FFNN import FFNN
 
 def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
     """
@@ -36,14 +36,14 @@ def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
     l = int((n+1)*(n+2)/2)            # Number of columns in the design matrix
     X = np.ones((N, l))
     
-    xx, yy = np.meshgrid(x, y)        # Make a meshgrid to get all possible combinations of x and y values
-    xx = xx.flatten()
-    yy = yy.flatten()
+    x_mesh, y_mesh = np.meshgrid(x, y)        # Make a meshgrid to get all possible combinations of x and y values
+    x_mesh = x_mesh.flatten()
+    y_mesh = y_mesh.flatten()
 
     idx = 1
     for i in range(1, n+1):
         for j in range(i+1):
-            X[:, idx] = xx**(i-j) * yy**j
+            X[:, idx] = x_mesh**(i-j) * y_mesh**j
             idx += 1
 
     return X
