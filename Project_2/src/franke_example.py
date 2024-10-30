@@ -61,36 +61,37 @@ def FrankeFunction(x: float | np.ndarray,y: float | np.ndarray) -> float | np.nd
     term4 = -0.2*np.exp(-(9*x-4)**2 - (9*y-7)**2)
     return term1 + term2 + term3 + term4
 
-'''
---------
-Example use of FFNN using Franke data
--------- 
-'''
-N  = 1000
-x = np.arange(0, 1, 1/N)
-y = np.arange(0, 1, 1/N)
-X, Y = np.meshgrid(x, y)
+if __name__ == "__main__":
+    '''
+    --------
+    Example use of FFNN using Franke data
+    -------- 
+    '''
+    N  = 1000
+    x = np.arange(0, 1, 1/N)
+    y = np.arange(0, 1, 1/N)
+    X, Y = np.meshgrid(x, y)
 
-z = (FrankeFunction(X, Y) + np.random.normal(0, 0.1, (N, N))).reshape(-1, 1) 
+    z = (FrankeFunction(X, Y) + np.random.normal(0, 0.1, (N, N))).reshape(-1, 1) 
 
-poly_degree = 3
-design_matrix = create_X(x, y, poly_degree)
+    poly_degree = 3
+    design_matrix = create_X(x, y, poly_degree)
 
-X_train, X_test, t_train, t_test = train_test_split(design_matrix, z, test_size=0.2)
+    X_train, X_test, t_train, t_test = train_test_split(design_matrix, z, test_size=0.2)
 
-input_nodes = X_train.shape[1]
-output_nodes = 1
+    input_nodes = X_train.shape[1]
+    output_nodes = 1
 
-linear_regression = FFNN(
-    (input_nodes, output_nodes), 
-    output_func=identity, 
-    cost_func=CostOLS,
-    seed=42069
-    )
+    linear_regression = FFNN(
+        (input_nodes, output_nodes), 
+        output_func=identity, 
+        cost_func=CostOLS,
+        seed=42069
+        )
 
-linear_regression.reset_weights() # reset weitght so that previous training does not affect the new training
+    linear_regression.reset_weights() # reset weitght so that previous training does not affect the new training
 
-scheduler = Constant(eta=1e-3)
-scores = linear_regression.fit(X_train, t_train, scheduler)
+    scheduler = Constant(eta=1e-3)
+    scores = linear_regression.fit(X_train, t_train, scheduler)
 
-print(f"Training score: {scores}")
+    print(f"Training score: {scores}")

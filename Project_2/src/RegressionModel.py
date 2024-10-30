@@ -22,26 +22,26 @@ class RegressionModel:
         self.x, self.y, self.degree, self.test_size, self.seed = x, y, degree, test_size, seed
 
         self.X = self.create_X()
-        self.split()
-        self.scale()
+        self._split()
+        self._scale()
 
-    def split(self):
+    def _split(self):
         """
         Splits stored data into training and test sets.
         """
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, test_size = self.test_size, random_state = self.seed)
 
-    def scale(self):
+    def _scale(self):
         """
         Scales stored training and test data.
         """
         self.scaler_X = StandardScaler().fit(self.X_train)
-        self.X_train = self.scaler_X.transform(self.X_train)
-        self.X_test = self.scaler_X.transform(self.X_test)
+        self.X_train  = self.scaler_X.transform(self.X_train)
+        self.X_test   = self.scaler_X.transform(self.X_test)
 
         self.scaler_y = StandardScaler().fit(self.y_train)
-        self.y_train = self.scaler_y.transform(self.y_train)
-        self.y_test = self.scaler_y.transform(self.y_test)
+        self.y_train  = self.scaler_y.transform(self.y_train)
+        self.y_test   = self.scaler_y.transform(self.y_test)
 
     
     """ 
@@ -55,8 +55,8 @@ class RegressionModel:
 
         # Update design matrix, training and test data
         self.X = self.create_X()
-        self.split()
-        self.scale()
+        self._split()
+        self._scale()
 
     def set_test_size(self, test_size: float):
         """
@@ -66,8 +66,8 @@ class RegressionModel:
 
         # Update design matrix, training and test data
         self.X = self.create_X()
-        self.split()
-        self.scale()
+        self._split()
+        self._scale()
 
     def set_seed(self, seed: int):
         """
@@ -77,8 +77,8 @@ class RegressionModel:
 
         # Update design matrix, training and test data
         self.X = self.create_X()
-        self.split()
-        self.scale()
+        self._split()
+        self._scale()
 
     """
     Getters
@@ -173,7 +173,7 @@ class RegressionModel:
         y_pred = self.X_test @ theta
     
         MSE = self.get_MSE(y_pred)
-        R2 = self.get_R2(y_pred)
+        R2  = self.get_R2(y_pred)
 
         quantities = [MSE, R2]
         if return_theta:
@@ -189,7 +189,7 @@ class RegressionModel:
         Uses gradient descent with or without momentum to minimize the cost function. TODO maybe change
 
         ## Parameters:
-        n_iter (int, optional): The number of iterations to perform in gradient descent.
+        n_iter (int): The number of iterations to perform in gradient descent.
         eta (float | None, optional): The learning rate. Must either be between 0.0 and 1.0 or None. If passed as None, it is computed from the Hessian matrix. Default is None.
         lmbd (float, optional): The regularization parameter in Ridge regression. Passing as zero corresponds to OLS. Default is 0.0.
         gamma (float, optional): The momentum parameter. Must be between 0.0 and 1.0. Passing as zero corresponds to using gradient descent without momentum. Default is 0.0.
@@ -235,7 +235,7 @@ class RegressionModel:
         y_pred = self.X_test @ theta
         
         MSE = self.get_MSE(y_pred)
-        R2 = self.get_R2(y_pred)
+        R2  = self.get_R2(y_pred)
 
         quantities = [MSE, R2]
         if return_theta:
@@ -301,8 +301,8 @@ class RegressionModel:
             delta, beta_1, beta_2 = tuning_params
         
         # Estimating theta's with gradient descent
-        m = int(len(self.y_train) / M) # Number of minibatches TODO correct shape?
-        theta = np.random.randn(self.X.shape[1], 1) #TODO correct shape?
+        m      = int(len(self.y_train) / M) # Number of minibatches TODO correct shape?
+        theta  = np.random.randn(self.X.shape[1], 1) #TODO correct shape?
         change = 0.0
         if tuning_method == "ADAM":
             iter = 0
@@ -316,7 +316,7 @@ class RegressionModel:
                 iter += 1
 
             for i in range(m):
-                k = M*np.random.randint(m) # Pick the k-th minibatch at random
+                k  = M*np.random.randint(m) # Pick the k-th minibatch at random
                 Xi = self.X_train[k:k+M]
                 yi = self.y_train[k:k+M]
 
@@ -349,7 +349,7 @@ class RegressionModel:
         y_pred = self.X_test @ theta
         
         MSE = self.get_MSE(y_pred)
-        R2 = self.get_R2(y_pred)
+        R2  = self.get_R2(y_pred)
 
         quantities = [MSE, R2]
         if return_theta:
@@ -382,8 +382,9 @@ class RegressionModel:
             y_pred[:, i] = (self.X_test @ theta[:, i]).ravel()
 
         #TODO use MSE method instead?
-        MSE = np.mean(np.mean((self.y_test - y_pred)**2, axis = 1, keepdims = True))  
-        bias = np.mean((self.y_test - np.mean(y_pred, axis = 1, keepdims = True))**2)            
+        MSE  = np.mean(np.mean((self.y_test - y_pred)**2, axis = 1, keepdims = True))  
+        bias = np.mean((self.y_test - np.mean(y_pred, axis = 1, keepdims = True))**2) 
+                   
         variance = np.mean(np.var(y_pred, axis = 1, keepdims = True))  
 
         quantities = [MSE, bias, variance]

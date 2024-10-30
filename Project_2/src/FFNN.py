@@ -12,7 +12,7 @@ from activation_funcs import *
 from cost_funcs import *
 from Schedulers import *
 
-warnings.simplefilter("error")
+# warnings.simplefilter("error")
 
 class FFNN:
 	"""
