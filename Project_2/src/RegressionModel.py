@@ -4,6 +4,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, cross_val_score, cross_val_predict, KFold
 from sklearn.utils import resample
 from autograd import grad
+from jax import jit
 
 
 #TODO edit this class to fit with rest of project code, maybe remove all gradient descent methods
@@ -199,6 +200,7 @@ class RegressionModel:
         ## Returns:
         tuple: A tuple containing the Mean-Squared Error (MSE) score and the R-squared (R2) score, as well as the theta values (coefficients) if return_theta is passed as True.
         """
+        np.random.seed(self.seed)
         #TODO do this in a better way
         Hessian = False
         if eta is None:
@@ -221,7 +223,7 @@ class RegressionModel:
             training_gradient = grad(cost_func)
         else:
             def training_gradient(theta):
-                return 2.0 * ((1.0 / len(self.y_train)) * self.X_train.T @ (self.X_train @ theta - self.y_train) + lmbd * theta) #TODO correct to use len(y_train)? generalize to 2D
+                return 2.0 * ((1.0 / len(self.y_train)) * self.X_train.T @ (self.X_train @ theta - self.y_train) + lmbd * theta * 2) #TODO correct to use len(y_train)? generalize to 2D
         
         # Estimating theta's with gradient descent
         theta = np.random.randn(self.X.shape[1], 1) #TODO correct shape?
@@ -265,6 +267,7 @@ class RegressionModel:
         ## Returns:
         tuple: A tuple containing the Mean-Squared Error (MSE) score and the R-squared (R2) score, as well as the theta values (coefficients) if return_theta is passed as True.
         """
+        np.random.seed(self.seed)
         #TODO do this in a better way
         Hessian = False
         if eta is None:
