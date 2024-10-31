@@ -84,6 +84,10 @@ class FFNN:
 		# Creating arrays for score metrics
 		train_errors = np.empty(epochs)
 		train_errors.fill(np.nan)
+
+		R2_scores = np.empty(epochs)
+		R2_scores.fill(np.nan)
+
 		val_errors = np.empty(epochs)
 		val_errors.fill(np.nan)
 	
@@ -96,6 +100,7 @@ class FFNN:
 		self.schedulers_bias = list()
 
 		batch_size = X.shape[0] // batches
+
 
 		X, t = resample(X, t)
 			 
@@ -138,10 +143,13 @@ class FFNN:
 				train_error = cost_function_train(pred_train)
 
 				train_errors[e] = train_error
+				R2_scores[e] = self._R2(pred_train, t) 
+
 				if val_set:
 					pred_val = self.predict(X_val)
 					val_error = cost_function_val(pred_val)
 					val_errors[e] = val_error
+
 
 				if self.classification:
 					train_acc = self._accuracy(self.predict(X), t)
@@ -155,6 +163,7 @@ class FFNN:
 				print_length = self._progress_bar(
 					progression,
 					train_error = train_errors[e],
+					R2_score = R2_scores[e],
 					train_acc = train_accs[e],
 					val_error = val_errors[e],
 					val_acc = val_accs[e],
@@ -169,6 +178,7 @@ class FFNN:
 		self._progress_bar(
 			1,
 			train_error=train_errors[e],
+			R2_score = R2_scores[e],
 			train_acc=train_accs[e],
 			val_error=val_errors[e],
 			val_acc=val_accs[e],
@@ -179,10 +189,11 @@ class FFNN:
 		scores = dict()
 
 		scores["train_errors"] = train_errors
-
+		scores["R2_scores"] = R2_scores
+		
 		if val_set:
 			scores["val_errors"] = val_errors
-
+		
 		if self.classification:
 			scores["train_accs"] = train_accs
 
@@ -312,6 +323,21 @@ class FFNN:
 
 		assert prediction.size == target.size
 		return np.average((target == prediction))
+
+	def _R2(self, prediciton: np.ndarray, target: np.ndarray):
+		"""
+		Calculates the R2 score of the model.
+
+		## Parameters:
+		prediction (np.ndarray): The predicted data values from the model.
+		target (np.ndarray): The actual data values.
+
+		## Returns:
+		float: The R2 score.
+		"""
+		prediciton = prediciton.flatten()
+		target = target.flatten()
+		return 1 - np.sum((target - prediciton)**2) / np.sum((target - np.mean(target))**2)
 	
 	def _set_classification(self):
 

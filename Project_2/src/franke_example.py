@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split, KFold, cross_val_score, cr
 from sklearn.linear_model import LinearRegression
 from sklearn import linear_model
 from sklearn.preprocessing import StandardScaler
+from sklearn.neural_network import MLPRegressor
 from sklearn.utils import resample
 import warnings
 warnings.filterwarnings("ignore")
@@ -85,18 +86,88 @@ if __name__ == "__main__":
     X_train, X_test, t_train, t_test = train_test_split(design_matrix, z, test_size=0.2)
 
     input_nodes = X_train.shape[1]
+    hidden_nodes = 2
     output_nodes = 1
 
+    dims = [input_nodes, hidden_nodes, output_nodes]
+
     linear_regression = FFNN(
-        (input_nodes, output_nodes), 
+        dims, 
         output_func=identity, 
         cost_func=CostOLS,
         seed=42069
         )
 
-    linear_regression.reset_weights() # reset weitght so that previous training does not affect the new training
+    # linear_regression.reset_weights() # reset weitght so that previous training does not affect the new training
 
-    scheduler = Constant(eta=1e-3)
-    scores = linear_regression.fit(X_train, t_train, scheduler)
+    # scheduler = Adam(eta=1e-4, rho=0.9, rho2=0.999)
 
-    print(f"Training score: {scores}")
+    # scores = linear_regression.fit(X_train, t_train, scheduler, X_val=X_test, t_val=t_test, epochs=1000)
+
+    import seaborn as sns
+
+    sns.set_theme()
+
+    eta_vals = np.logspace(-5, 1, 3)
+    lmbd_vals = np.logspace(-5, 1, 3)
+    # store the models for later use
+    # DNN_numpy = np.zeros((len(eta_vals), len(lmbd_vals)), dtype=object)
+    # DNN_MSE = np.zeros((len(eta_vals), len(lmbd_vals), 1000))
+    # DNN_R2 = np.zeros((len(eta_vals), len(lmbd_vals), 1000))
+
+    # # grid search
+    # for i, eta in enumerate(eta_vals):
+    #     for j, lmbd in enumerate(lmbd_vals):
+    #         scheduler = Adagrad(eta)
+
+    #         DNN_numpy[i][j] = linear_regression.fit(X_train, t_train, scheduler, lambd=lmbd , epochs=1000)   
+    #         print(DNN_numpy[i][j]["train_errors"].shape)
+    #         DNN_MSE[i][j] = DNN_numpy[i][j]["train_errors"]
+    #         DNN_R2[i][j] = DNN_numpy[i][j]["R2_scores"]
+
+    # extent = [np.min(lmbd_vals), np.max(lmbd_vals), np.min(eta_vals), np.max(eta_vals)]
+
+    # fig, axs = plt.subplots(1, 2, figsize = (13, 5))
+    # im1 = axs[0].imshow(DNN_MSE.T[::-1], cmap = "YlGn", aspect = "auto", extent = extent)
+    # plt.colorbar(im1, ax = axs[0], pad = 0.02, aspect = 10)
+    # im2 = axs[1].imshow(DNN_R2.T[::-1], cmap = "YlGn", aspect = "auto", extent = extent)
+    # plt.colorbar(im2, ax = axs[1], pad = 0.02, aspect = 10)
+    # axs[0].set_xticks(lmbd_vals[::2])
+    # axs[1].set_xticks(lmbd_vals[::2])
+    # axs[0].set_title("MSE")
+    # axs[1].set_title("R2")
+    # fig.supylabel("Eta")
+    # fig.supxlabel("Lambda")
+    # plt.tight_layout
+    # # plt.savefig("../figs/f_kfold_vs_bootstrap.pdf")
+    # plt.show()
+
+    # DNN_scikit = np.zeros((len(eta_vals), len(lmbd_vals)), dtype=object)
+    # DNN_MSE = np.zeros((len(eta_vals), len(lmbd_vals), 1000))
+    # DNN_R2 = np.zeros((len(eta_vals), len(lmbd_vals), 1000))
+
+    # for i, eta in enumerate(eta_vals):
+    #     for j, lmbd in enumerate(lmbd_vals):
+    #         scheduler = Adagrad(eta)
+    #         dnn = MLPRegressor(hidden_layer_sizes=(2), activation='logistic',
+    #                             alpha=lmbd, learning_rate_init=eta, max_iter=100)
+    #         DNN_scikit[i][j] = linear_regression.fit(X_train, t_train, scheduler, lambd=lmbd , epochs=1000)   
+    #         DNN_MSE[i][j] = DNN_scikit[i][j]["train_errors"]
+    #         DNN_R2[i][j] = DNN_scikit[i][j]["R2_scores"]
+
+
+    # extent = [np.min(lmbd_vals), np.max(lmbd_vals), np.min(eta_vals), np.max(eta_vals)]   
+    # fig, axs = plt.subplots(1, 2, figsize = (13, 5))
+    # im1 = axs[0].imshow(DNN_MSE.T[::-1], cmap = "YlGn", aspect = "auto", extent = extent)
+    # plt.colorbar(im1, ax = axs[0], pad = 0.02, aspect = 10)
+    # im2 = axs[1].imshow(DNN_R2.T[::-1], cmap = "YlGn", aspect = "auto", extent = extent)
+    # plt.colorbar(im2, ax = axs[1], pad = 0.02, aspect = 10)
+    # axs[0].set_xticks(lmbd_vals[::2])
+    # axs[1].set_xticks(lmbd_vals[::2])
+    # axs[0].set_title("MSE")
+    # axs[1].set_title("R2")
+    # fig.supylabel("Eta")
+    # fig.supxlabel("Lambda")
+    # plt.tight_layout
+    # # plt.savefig("../figs/f_kfold_vs_bootstrap.pdf")
+    # plt.show()
