@@ -1,6 +1,27 @@
 import autograd.numpy as np
 from autograd import elementwise_grad
 
+def optimal_parameters(matrix: np.ndarray, x: np.ndarray, y: np.ndarray, max_or_min: str = 'min') -> tuple[np.ndarray, np.ndarray]:
+    """
+    Finds the indices of the minimum value in a matrix.
+
+    ## Parameters:
+    matrix (np.ndarray): The matrix to search.
+    x (np.ndarray): The x-values.
+    y (np.ndarray): The y-values.
+    max_or_min (str ['min' | 'max']): Whether to find the maximum or minimum value. Default is 'min'.
+
+    ## Returns:
+    tuple[np.ndarray, np.ndarray]: The indices of the minimum value.
+    """
+    if max_or_min == 'max':
+        idx = np.unravel_index(np.argmax(matrix), matrix.shape)
+    elif max_or_min == 'min':
+        idx = np.unravel_index(np.argmin(matrix), matrix.shape)
+    else:
+        raise ValueError("max_or_min must be either 'max' or 'min'.")
+    return x[idx[1]], y[idx[0]]
+
 # Activation functions
 def identity(X):
     return X

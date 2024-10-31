@@ -48,18 +48,23 @@ def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
 
     return X
 
-def FrankeFunction(x: float | np.ndarray,y: float | np.ndarray) -> float | np.ndarray:
+def FrankeFunction(x: float | np.ndarray,y: float | np.ndarray, noise: float = 0, seed: int = 42) -> float | np.ndarray:
     """ 
     Generates a surface plot of the Franke function.
     # Parameters:
     x (float | np.ndarray): The x-value(s).
     y (float | np.ndarray): The y-value(s).
+    noise (float): The standard deviation of the noise. Default is 0 (no noise).
+    seed (int): The seed for the random number generator. Default is 42.
     """
     term1 = 0.75*np.exp(-(0.25*(9*x-2)**2) - 0.25*((9*y-2)**2))
     term2 = 0.75*np.exp(-((9*x+1)**2)/49.0 - 0.1*(9*y+1))
     term3 = 0.5*np.exp(-(9*x-7)**2/4.0 - 0.25*((9*y-3)**2))
     term4 = -0.2*np.exp(-(9*x-4)**2 - (9*y-7)**2)
-    return term1 + term2 + term3 + term4
+    
+    np.random.seed(seed)
+    noise = np.random.normal(0, noise, (x.shape[0], y.shape[0]))
+    return term1 + term2 + term3 + term4 + noise
 
 if __name__ == "__main__":
     '''
