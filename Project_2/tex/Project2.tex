@@ -1,0 +1,491 @@
+%% USEFUL LINKS:
+%% -------------
+%%
+%% - UiO LaTeX guides:          https://www.mn.uio.no/ifi/tjenester/it/hjelp/latex/
+%% - Mathematics:               https://en.wikibooks.org/wiki/LaTeX/Mathematics
+%% - Physics:                   https://ctan.uib.no/macros/latex/contrib/physics/physics.pdf
+%% - Basics of Tikz:            https://en.wikibooks.org/wiki/LaTeX/PGF/Tikz
+%% - All the colors!            https://en.wikibooks.org/wiki/LaTeX/Colors
+%% - How to make tables:        https://en.wikibooks.org/wiki/LaTeX/Tables
+%% - Code listing styles:       https://en.wikibooks.org/wiki/LaTeX/Source_Code_Listings
+%% - \includegraphics           https://en.wikibooks.org/wiki/LaTeX/Importing_Graphics
+%% - Learn more about figures:  https://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions
+%% - Automagic bibliography:    https://en.wikibooks.org/wiki/LaTeX/Bibliography_Management  (this one is kinda difficult the first time)
+%%
+%%                              (This document is of class "revtex4-1", the REVTeX Guide explains how the class works)
+%%   REVTeX Guide:              http://www.physics.csbsju.edu/370/papers/Journal_Style_Manuals/auguide4-1.pdf
+%%
+%% COMPILING THE .pdf FILE IN THE LINUX IN THE TERMINAL
+%% ----------------------------------------------------
+%%
+%% [terminal]$ pdflatex report_example.tex
+%%
+%% Run the command twice, always.
+%%
+%% When using references, footnotes, etc. you should run the following chain of commands:
+%%
+%% [terminal]$ pdflatex report_example.tex
+%% [terminal]$ bibtex report_example
+%% [terminal]$ pdflatex report_example.tex
+%% [terminal]$ pdflatex report_example.tex
+%%
+%% This series of commands can of course be gathered into a single-line command:
+%% [terminal]$ pdflatex report_example.tex && bibtex report_example.aux && pdflatex report_example.tex && pdflatex report_example.tex
+%%
+%% ----------------------------------------------------
+
+\PassOptionsToPackage{square,comma,numbers,sort&compress,super}{natbib}
+\documentclass[aps,pra,english,notitlepage,reprint,nofootinbib]{revtex4-1}  % defines the basic parameters of the document
+% For preview: skriv i terminal: latexmk -pdf -pvc filnavn
+% If you want a single-column, remove "reprint"
+
+% Allows special characters (including æøå)
+% \usepackage[mathletters]{ucs}
+% \usepackage[utf8x]{inputenc}
+% \usepackage[english]{babel}
+\usepackage{silence}
+\WarningFilter{revtex4-1}{Repair the float}
+
+%% Note that you may need to download some of these packages manually, it depends on your setup.
+%% I recommend downloading TeXMaker, because it includes a large library of the most common packages.
+
+\usepackage{physics,amssymb}  % mathematical symbols (physics imports amsmath)
+\usepackage{amsmath}
+\usepackage{graphicx} 
+% include graphics such as plots
+\usepackage[dvipsnames]{xcolor}           % set colors
+% \usepackage{hyperref}         % automagic cross-referencing
+%\usepackage{url}
+% \usepackage{cleveref}
+\usepackage{listings}         % display code
+\usepackage{subfigure}        % imports a lot of cool and useful figure commands
+\usepackage{subcaption}
+%\usepackage{float}
+%\usepackage[section]{placeins}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{cprotect}
+\usepackage{multirow}
+\usepackage{array, booktabs}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\usepackage[noend]{algpseudocode}
+\usepackage{subfigure}
+\newcommand{\imp}{\hspace{5pt}\Rightarrow\hspace{5pt}}
+\newcommand\numberthis{\addtocounter{equation}{1}\tag{\theequation}}
+\usepackage{tikz}
+\usepackage{hyperref}         % automagic cross-referencing
+\usepackage{cleveref}
+% defines the color of hyperref objects
+% Blending two colors:  blue!80!black  =  80% blue and 20% black
+\hypersetup{ % this is just my personal choice, feel free to change things
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black},
+    breaklinks=true}
+\urlstyle{same}
+
+
+\renewcommand{\bibsection}{\section*{References}}
+\newcommand{\psp}{\hspace{1pt}}
+% ===========================================
+
+
+\begin{document}
+
+\title{\texorpdfstring{\begin{Large}Project 2\end{Large}\\\vspace{5pt}FYS-STK4155}{Lg}}
+\author{Erik Joshua Røset \& Oskar Idland}
+\date{\today}
+\affiliation{University of Oslo, Department of Physics}
+
+
+\begin{abstract}
+\centering
+\colorbox{magenta}{Add the abstact in the end}
+
+% We have explored various regression techniques and resampling methods within the context of machine learning, motivated by the need to develop robust models that can accurately predict and generalize from complex datasets. The main objective was to analyze and compare the performance of Ordinary Least Squares (OLS), Ridge, and Lasso regression in fitting synthetic and real-world data, focusing on the bias-variance tradeoff and model generalizability. We applied these regression techniques to the Franke function, a synthetic benchmark used in numerical analysis, and extended our analysis to cosmological N-body simulation data generated using the public G\begin{scriptsize}ASOLINE\end{scriptsize}2 SPH code. To assess model performance and generalization, we employed resampling methods such as bootstrap and $k$-fold cross-validation, examining how they help to evaluate model accuracy under different training and test data conditions. Due to runtime limitations we only tested polynomial degrees up to 31 for the cosmological data, and found that the model was insufficient in representing its intricate structure. As a result, introducing regularization with the Ridge and Lasso techniques led to poor model performance, while the employment of resampling methods proved to show negligible improvements. For future studies, optimizing our code and testing larger polynomial degrees could be an area of interest.
+\end{abstract}
+\maketitle
+\onecolumngrid
+\begin{center}
+  \vspace{-15pt}
+  % LINK TO REPOSITORY
+  \href{https://github.com/Oskar-Idland/FYS-STK4155-Projects}{https://github.com/Oskar-Idland/FYS-STK4155-Projects}%{GitHub Repository}
+  \vspace{5pt}
+\end{center}
+\twocolumngrid
+% ===========================================
+
+
+\section{Introduction}\label{sec:introduction}
+% \color{Plum}
+
+The ever-growing complexity of modern data calls for robust machine learning techniques capable of handling non-linear patterns and high-dimensional spaces. While traditional methods, such as Ordinary Least Squares (OLS), Ridge, and Lasso regression, offer valuable insights into model behavior and regularization, their limitations become apparent when addressing more intricate datasets. In our previous project, we explored these regression techniques in-depth, assessing their effectiveness on synthetic and real-world datasets, with particular attention to the bias-variance tradeoff and resampling methods for model validation. However, as data complexity increases, more sophisticated methods, such as neural networks, become necessary to model non-linear relationships and provide superior generalization.
+
+In this project, we extend the concepts introduced earlier by diving into two fundamental areas of machine learning: optimization techniques and neural networks. These topics form the backbone of many modern machine learning algorithms and offer powerful tools for tackling a wide range of problems, from regression and classification to complex tasks in pattern recognition and forecasting. We implement and analyze these methods using both synthetic data (a simple 2 dimensional terrain data generated through the Franke function) and real-world data (the Wisconsin Breast Cancer dataset for classification tasks).
+
+Gradient descent plays a critical role in optimizing the parameters of complex models, especially when closed-form solutions are impractical or non-existent. In implementing Stochastic Gradient Descent (SGD), we explore various techniques for improving its convergence and stability. These include the incorporation of momentum and mini-batch processing, as well as adaptive learning rate methods like Adagrad, RMSprop, and Adam that automatically adjust the learning rate during training. Understanding how these adaptations affect the optimization process—from convergence speed to the ability to escape local minima—is crucial for developing efficient and robust machine learning models.
+
+Furthermore, we implement feed-forward neural networks from scratch, providing a deep understanding of their inner workings. These models, inspired by biological neurons, consist of multiple layers of interconnected nodes that enable the learning of intricate data structures through non-linear activation functions. We investigate the impact of different activation functions (Sigmoid, RELU, and Leaky RELU), network architectures, and hyperparameters on model performance. By comparing our implementations with established libraries like Scikit-learn, we gain insights into both the theoretical foundations and practical considerations of neural network development.
+
+The methods explored in this project have profound implications for modern machine learning applications. Efficient optimization techniques like SGD and its variants have made it possible to train large-scale neural networks on massive datasets, enabling breakthroughs in fields ranging from computer vision to natural language processing. Understanding these fundamental building blocks is crucial for developing more advanced machine learning systems and addressing increasingly complex real-world challenges. In section II, we present the theoretical framework underlying gradient descent optimization and neural networks,,with particular attention to the mathematical foundations of backpropagation and various activation functions. Section III details our methodology, including the implementation of both basic SGD and its advanced variants, as well as our neural network architecture design choices. In section IV, we present comprehensive results comparing the performance of different optimization methods and network configurations across both regression and classification tasks. Finally, section V summarizes our findings and discusses their implications for future applications in machine learning.
+
+Through this comprehensive exploration of optimization methods and neural networks, we aim to bridge the gap between traditional regression techniques and modern deep learning approaches. Our analysis spans both regression and classification tasks, allowing us to evaluate the strengths and limitations of each method across different problem domains. The project not only builds upon our previous work with linear models but also establishes a foundation for understanding more advanced machine learning architectures and their optimization challenges.
+
+
+% In \cref{sec:theory} we present relevant background theory, the majority of which has been sourced from the lecture notes by Morten Hjorth-Jensen \cite{notes}. We go into detail explaining central concepts such as OLS, Ridge and Lasso regression, the bias-variance tradeoff and two crucial resampling methods; bootstrapping and cross-validation, both of which will be implemented in this work. A few of the most important expressions introduced in this section are derived in \cref{appsec:derivations}. Our methodology is explained in \cref{sec:methods}, specifically how we define the essential design matrix, scale our data and implement the regression and resampling techniques. We also give an overview of our code structure and present the cosmological simulation data. In \cref{sec:results discussion} we present, interpret and discuss the results of our analyses in light of expectations based on our previous knowledge of the implemented regression and resampling methods. In \cref{appsec:figures} we include some additional figures that are not essential to our discussions, yet still referred to in the aforementioned section because they are necessary in reasoning our choice of presented results. Lastly, we summarize and conclude the main findings of our work in \cref{sec:conclusion}, and provide some open questions for further exploration. 
+
+% ===========================================
+\section{Theory}\label{sec:theory}
+
+In this project, we extend our previous exploration of machine learning techniques into more advanced optimization algorithms and neural networks. Gradient descent methods, along with their various enhancements, are crucial in training neural networks, which are used to model complex, non-linear relationships. While the foundational principles of regression analysis and optimization were addressed in our previous report, here we focus specifically on gradient descent with and without momentum, and tuning methods such as decaying learning rates, AdaGrad, RMSprop, and ADAM. Additionally, the fundamentals of neural networks will be discussed, emphasizing their relevance to the current project.
+
+\subsection{Gradient Descent Methods}
+
+Gradient descent is a fundamental optimization algorithm used to minimize a cost function \( C(\beta) \), where \( \beta \) represents the model parameters. Unlike the closed-form solutions available for OLS and Ridge regression in Project 1, many modern machine learning models, particularly neural networks, require iterative optimization methods. The core principle of gradient descent is to iteratively update the parameters in the direction that minimizes the cost function. Given a cost function \( C(\beta) \) and current parameters \( \beta_t \) at iteration \(t\), the basic update rule is:
+
+\begin{equation}
+    \beta_{t+1} = \beta_t - \eta \nabla_\beta C(\beta_t)
+\end{equation}
+
+where \( \eta > 0 \) is the learning rate that controls the size of the update step, and \( \nabla_\beta L(\beta_t) \) is the gradient of the cost function with respect to \( \beta \) . The gradient represents the direction of steepest ascent in the cost landscape, so moving in the negative gradient direction ensures we minimize the cost function.
+
+\subsubsection{Gradient Descent}
+
+In its simplest form, "plain" gradient descent (GD) computes the gradient using the entire dataset:
+
+\begin{equation}
+    \nabla_\beta C(\beta_t) = \sum_{i=1}^{n} \nabla_\beta C_i(\beta_t)
+\end{equation}
+
+Where \( n\) is the total number of training examples and \( C_i(\beta_t) \) is the cost for the i-th example. While this approach would provide the most accurate estimate of the gradient, it has several significiant limitations:
+\begin{itemize}
+    \item Computational Cost: For large datasets, computing the gradient over all n data points becomes extremely expensive, as each update step requires a complete pass through the dataset.
+    \item Local Minima: Since the algorithm is deterministic, it will converge to a local minimum of the cost function if it converges at all. In machine learning applications, where we often deal with highly non-convex cost landscapes, this can lead to suboptimal solutions.
+    \item Initial Conditions: The final solution strongly depends on the initialization of parameters. Different starting points may lead to different local minima, making the choice of initialization crucial.
+    \item Uniform Step Size: The learning rate \( \eta \) is uniform across all parameter dimensions, which can be problematic when the cost surface has different curvatures in different directions. This often forces us to use a conservatively small learning rate determined by the steepest direction, significantly slowing down convergence in flatter regions.
+\end{itemize}
+
+\subsubsection{Stochastic Gradient Descent}
+
+To address these limitations, Stochastic Gradient Descent (SGD) introduces randomness into the optimization process. Instead of using the entire dataset for each update, SGD uses randomly selected subsets of the data, called mini-batches:
+
+The fundamental idea that SGD is built on is that the cost function can be written as the average of the cost functions for individual training examples. It then follows that the gradient can be computed as a sum over indivudual gradients. We can then approximate the gradient by only computing the gradient for a single minibatch:
+
+\begin{equation}
+    \nabla_\beta C(\beta_t) \approx \sum_{i \in B_k}\nabla_\beta c_i(\mathbf{x}_i, \beta_t)
+\end{equation}
+The entire dataset can be split into \( n/M \) minibatches (\( B_k \)). The size \( M \) of the minibatch represents a key parameter choice in SGD. When \( M = n \), we recover the "plain" gradient descent method, while \( M = 1 \) represents pure stochastic gradient descent where updates are made using a single randomly chosen data point. The choice of minibatch size \( M \) thus allows us to balance between the accurate but computationally expensive gradient estimates of batch gradient descent and the noisy but frequent updates of pure SGD. In practice, minibatch sizes are often chosen to be much smaller than \( n \) to maintain the computational efficiency and stochastic nature of SGD while reducing the variance in gradient estimates compared to when \( M = 1 \). This gives us the update rule for SGD:
+
+\begin{equation}
+    \beta_{t+1} = \beta_t - \eta \sum_{i \in B_k} \nabla_\beta c_i(\mathbf{x}_i, \beta_t)
+\end{equation}
+
+
+Only processing a subset of the data at each iteration facilitates more frequent parameter updates, as the required computational power for each iteration is significantly reduced. The inherent noise in gradient estimates can also help the optimizer escape poor local minima and saddle points. However, the algorithm becomes highly sensitive to the choice of learning rate. Too large values can cause divergence, while too small values lead to slow convergence.
+
+\subsection{Advanced Optimization Methods}
+
+These limitations motivate two key enhancements to the basic SGD algorithm. The uniform step size problem can be addressed by introducing momentum, which helps the optimizer maintain velocity in consistent directions while damping oscillations in regions of varying curvature. The learning rate sensitivity issue can be tackled through adaptive learning rate methods, which automatically adjust the learning rate based on the observed geometry of the cost function during training. 
+
+\subsubsection{Momentum}
+A key limitation of basic gradient descent methods is their uniform step size across all directions, which can lead to slow convergence, especially in regions where the cost surface has different curvatures in different directions. Momentum addresses this by accumulating a velocity vector that helps accelerate convergence and dampen oscillations:
+
+\begin{equation}
+    v_{t+1} = \gamma v_t + \eta \nabla_\beta C(\beta_t)
+\end{equation}
+\begin{equation}
+    \beta_{t+1} = \beta_t - v_{t+1}
+\end{equation}
+
+where \( \gamma \) (typically 0.9) is the momentum coefficient that determines how much of the previous velocity is retained. This modification provides several advantages:
+\begin{itemize}
+    \item Faster convergence in regions where the gradient is consistent
+    \item Reduced oscillations in directions of high curvature
+    \item Ability to escape shallow local minima
+\end{itemize}
+
+\subsubsection{Learning Rate Tuning Methods}
+
+Choosing the right learning rate \( \eta \) is critical to the success of gradient descent algorithms. If the learning rate is too large, the optimization may overshoot the minimum, while if it is too small, convergence will be very slow. Several adaptive learning rate methods have been proposed to dynamically adjust the learning rate during training:
+
+\paragraph{Decaying Learning Rate}
+
+ One simple approach is to gradually decrease the learning rate as training progresses, using a schedule such as:
+  \[
+  \eta_t = \frac{\eta_0}{1 + \lambda t}
+  \]
+  where \( \eta_0 \) is the initial learning rate, \( t \) is the iteration, and \( \lambda \) is the decay rate. This helps ensure that larger updates are made at the start of training when far from the optimum, and smaller, more precise updates are made later. \\
+
+\paragraph{AdaGrad}
+ (Adaptive Gradient Algorithm): AdaGrad adapts the learning rate for each parameter based on the historical gradients. It assigns a smaller learning rate to frequently updated parameters and a larger rate to less frequently updated ones:
+  \[
+  \beta_{t+1} = \beta_t - \frac{\eta}{\sqrt{G_t + \epsilon}} \nabla_\beta L(\beta_t)
+  \]
+  where \( G_t \) is the sum of the squares of the past gradients, and \( \epsilon \) is a small constant to avoid division by zero. AdaGrad is well-suited for sparse data but may become overly conservative in later iterations due to the cumulative sum of gradients. \\
+
+\paragraph{RMSprop}
+ To address AdaGrad's diminishing learning rates, RMSprop uses a moving average of the squared gradients to scale the learning rate. This helps maintain a balance between fast convergence and smooth parameter updates:
+  \[
+  E[g^2]_t = \beta E[g^2]_{t-1} + (1 - \beta) g_t^2
+  \]
+  \[
+  \beta_{t+1} = \beta_t - \frac{\eta}{\sqrt{E[g^2]_t + \epsilon}} \nabla_\beta L(\beta_t)
+  \]
+  where \( \beta \) (typically 0.9) controls the decay rate of the moving average, and \( E[g^2]_t \) is the moving average of the squared gradients. \\
+
+\paragraph{Adaptive Moment Estimation (ADAM)}
+ ADAM combines the advantages of both AdaGrad and RMSprop by keeping track of both the first moment (mean) and the second moment (uncentered variance) of the gradients:
+  \[
+  m_t = \beta_1 m_{t-1} + (1 - \beta_1) \nabla_\beta L(\beta_t)
+  \]
+  \[
+  v_t = \beta_2 v_{t-1} + (1 - \beta_2) (\nabla_\beta L(\beta_t))^2
+  \]
+  \[
+  \hat{m}_t = \frac{m_t}{1 - \beta_1^t}, \quad \hat{v}_t = \frac{v_t}{1 - \beta_2^t}
+  \]
+  \[
+  \beta_{t+1} = \beta_t - \frac{\eta}{\sqrt{\hat{v}_t} + \epsilon} \hat{m}_t
+  \]
+  ADAM is one of the most widely used optimization algorithms today due to its ability to dynamically adjust learning rates and its robustness in practice.
+
+\subsection{Neural Networks}
+
+Neural networks are powerful machine learning models designed to capture complex, non-linear relationships in data. At their core, neural networks consist of multiple layers of interconnected neurons (or nodes). Each neuron computes a weighted sum of its inputs, applies a non-linear activation function, and passes the result to the next layer.
+
+In a feedforward neural network, information flows from the input layer through one or more hidden layers to the output layer. Each layer transforms the input data in a hierarchical manner, allowing the network to learn representations at multiple levels of abstraction. The output of the network can be used for tasks such as classification, regression, or even generating new data.
+
+The training of neural networks involves backpropagation, a process in which the gradient of the cost function is computed with respect to the network's parameters. Backpropagation allows for the efficient calculation of these gradients through the chain rule of calculus, which are then used to update the weights via gradient descent.
+
+Relevant to this project, neural networks can benefit significantly from the advanced gradient descent methods described above. Techniques like momentum, ADAM, and learning rate decay help overcome challenges such as slow convergence and the vanishing gradient problem, especially in deep networks with many layers.
+
+Activation Functions and Relevance to the Project
+
+In this project, the choice of activation function plays a crucial role. The commonly used activation functions include:
+- ReLU (Rectified Linear Unit): ReLU is defined as \( \text{ReLU}(x) = \max(0, x) \), which introduces non-linearity and mitigates the vanishing gradient problem.
+- Sigmoid: Sigmoid squashes the input to a value between 0 and 1, making it useful for binary classification tasks but prone to vanishing gradients.
+- Tanh: Similar to sigmoid but maps inputs to the range (-1, 1), which can center data and mitigate some issues caused by sigmoid.
+
+Given the nature of the tasks in this project (such as handling non-linear data structures or optimizing complex cost functions), selecting appropriate activation functions and tuning the network's architecture will be key to achieving robust results.
+\color{black}
+
+
+\section{Methods \& Implementation}\label{sec:methods}
+% \subsection{The Program}\label{subsec:program}
+% \subsubsection{Code Structure}\label{subsubsec:codestructure}
+% All the source code that we developed and used to produce our results is available on our GitHub repository, linked in \cref{appsec:code}. The \verb|README.md| file contains the entire project structure. Our code is divided into the following files and notebooks:
+
+% \verb|franke.ipynb|: Jupyter notebook containing the analysis of the Franke function data, which we used to to validate our implementation.
+
+% \verb|data_analysis.ipynb|: Jupyter notebook containing the analysis of the dark matter density data. Here we have applied and further tested our regression models.
+
+% \verb|functions.py|: Python script containing all the functions used in the notebooks, all properly documented. The file includes a main block, testing the functions.
+
+
+% \subsubsection{Tools}\label{subsubsec:tools}
+% All our code is written in Python \cite{Python}, and we used scikit-learn \cite{scikit-learn} to create most of our models. To vectorize our code we used \verb|numpy| \cite{Numpy}, and for visualization we used \verb|matplotlib.pyplot| \cite{Matplotlib}. Code completion and debugging was done in Visual Studio Code \cite{VSCode} with additional assistance of GitHub Copilot \cite{Copilot}. We used \verb|git| \cite{Git} for version control, and \verb|GitHub| \cite{GitHub} for remote storage of our code.
+
+
+\section{Results \& Discussion}\label{sec:results discussion}
+
+
+% \vspace*{-2.5pt}
+\section{Conclusion}\label{sec:conclusion}
+% \vspace*{-2.5pt}
+
+% \section*{Acknowledgements}\label{sec:cknowledgements}
+% % MAYBE REMOVE
+
+\Urlmuskip=0mu plus 1mu\relax
+\onecolumngrid
+\bibliography{references}
+
+\newpage
+% ===========================================
+\appendix
+\section{Code}\label{appsec:code}
+Link to our GitHub repository: \href{https://github.com/Oskar-Idland/FYS-STK4155-Projects}{https://github.com/Oskar-Idland/FYS-STK4155-Projects}
+
+% \begin{figure*}
+%   \vspace*{-5pt}
+%   \section{Additional Figures}\label{appsec:figures}
+%   \vspace*{-5pt}
+%   \centering %Centers the figure
+%   \includegraphics[trim = 0 0.75cm 0 0,clip,width=0.7\textwidth,keepaspectratio]{../figs/g_MSE_R2_Ridge.pdf}
+%   \centering
+%   \includegraphics[width=0.7\textwidth]{../figs/g_MSE_R2_Lasso.pdf}
+%   \caption{MSE (upper rows) and $R^2$ (lower rows) for Ridge (top section) and Lasso (bottom section) regression evaluated on the cosmological test set. The scores vary with polynomial degree horizontally and hyperparameter $\lambda$ vertically. In the right columns we have cropped away degrees smaller than 19, as well as the 3 largest $\lambda$'s only for Lasso, purely for visualization purposes.}\label{appfig:g MSE R2}
+%   \vspace*{-5pt}
+% \end{figure*}
+
+\end{document}
+
+% MAYBE REMOVE
+
+% LINK WITH SPECIFIC NAME
+% \href{https://raw.github.uio.no/oskarei/CompFys-Project5/main/data/gif/triple_slit_200_81_anim.gif?token=GHSAT0AAAAAAAAAIZKJAEIVBDMTTIDARGUYZMAXTHA}{triple-slit}
+
+% MATHMODE IN HEADLINE
+% \subsubsection{\texorpdfstring{$\text{Re}(u_{i,j}^n)$ and $\text{Im}(u_{i,j}^n)$}{Lg}}
+
+
+% FIGURE COVERING BOTH COLUMNS
+% \begin{figure*}
+%   \vspace*{-5pt}
+%   \centering %Centers the figure
+%   \includegraphics[width=\textwidth]{../data/fig/triple_slit.pdf}
+%   \caption{The square root of the probabilities at each point in the box $\sqrt{p_{i,j}^n}$ at the beginning (top left), middle (top center) and end (top right) of the triple-slit simulation with adjusted initialization and potential position. The plot at the bottom shows the normalized probability values $p(y\:|\:x=0.9;\;t=0.0025)$ along the detection screen at $x = 0.9$ at the end of the simulation.}\label{fig:TripleSlit}
+%   \vspace*{-5pt}
+% \end{figure*}
+
+% FIGURE IN SINGLE COLUMN
+% \begin{figure}[h!]
+%   %\vspace*{-5pt}
+%   \centering %Centers the figure
+%   \includegraphics[width=0.9\columnwidth]{../data/fig/triple_sketch.png}
+%   \caption{Illustration showing how the triple-slit interference pattern changes with distance from the slits. Gathered from Physics StackExchange \cite{TripleSketch}.}\label{fig:TripleSketch}
+%   \vspace*{-10pt}
+% \end{figure}
+
+
+% TABLE COVERING BOTH COLUMNS
+% \begin{center}
+%   \vspace{-10pt}
+%   \renewcommand{\arraystretch}{1.5}
+%   \begin{table*}
+%   %\centering
+%   \begin{tabular}{| C{3.5cm} | C{2.2cm} | C{2.2cm} |  C{2.2cm} |  C{2.2cm} |  C{2.2cm} |  C{2.2cm} |}
+%   \hline
+%   \hspace{1pt} & \textbf{Model \hyperref[fig:potential model A]{A}} & \textbf{Model \hyperref[fig:potential model B]{B}} & \textbf{Model \hyperref[fig:potential model C]{C}} & \textbf{Model \hyperref[fig:potential model D]{D}} & \textbf{Model \hyperref[fig:potential model E]{E}} & \textbf{Model \hyperref[fig:potential model F]{F}} \\
+%   \hline
+%   \boldmath$m_0/M_{\astrosun}$ & $0.95$ & $0.95$ & $1.00$ & $1.00$ & $1.00$ & $1.05$ \\
+%   \hline
+%   \boldmath$r_0/R_{\astrosun}$ & $1.00$ & $1.25$ & $1.00$ & $1.00$ & $1.00$ & $1.50$ \\
+%   \hline
+%   \boldmath$L_0/L_{\astrosun}$ & $1.25$ & $1.00$ & $1.25$ & $1.50$ & $1.50$ & $1.00$ \\
+%   \hline
+%   \boldmath$\rho_0/\overline{\rho}_{\astrosun}$ & $1.00\times10^{-5}$ & $1.00\times10^{-5}$ & $7.50\times10^{-6}$ & $1.00\times10^{-5}$ & $2.50\times10^{-5}$ & $1.25\times10^{-5}$ \\
+%   \hline
+%   \textbf{Reach of }\boldmath{$m/m_0$} & $3.02\:\%$ & $4.24\:\%$ & $1.18\:\%$ & $2.66\:\%$ & $4.40\:\%$ & $3.79\:\%$ \\
+%   \hline
+%   \textbf{Reach of }\boldmath{$r/r_0$} & $0.73\:\%$ & $0.34\:\%$ & $0.06\:\%$ & $0.39\:\%$ & $0.51\:\%$ & $0.19\:\%$ \\
+%   \hline
+%   \textbf{Reach of }\boldmath{$L/L_0$} & $0.03\:\%$ & $0.14\:\%$ & $0.08\:\%$ & $0.04\:\%$ & $0.11\:\%$ & $0.21\:\%$ \\
+%   \hline
+%   \textbf{Size of core} & $0.24\times r_0$ & $0.19\times r_0$ & $0.26\times r_0$ & $0.25\times r_0$  & $0.24\times r_0$  & $0.15\times r_0$ \\
+%   \hline
+%   \textbf{Width of main zone} & $0.21\times r_0$ & $0.24\times r_0$ & $0.17\times r_0$ & $0.21\times r_0$ & $0.30\times r_0$ & $0.28\times r_0$ \\
+%   \hline
+%   \boldmath$F_\textbf{small}/F_\textbf{main}$ & No zone & No zone & $8.39\:\%$ & No zone & No zone & No zone \\
+%   \hline
+%   \end{tabular}
+%   \cprotect\caption{The first four rows contain the initial mass, radius, luminosity and mass density of the six models, respectively. The initial temperature was $T_0 = 5770\:\text{K}$ for all six models, and the initial pressure was decided by the initial mass density through the equation of state. The next three rows show how far $m$, $r$ and $L$ reached before the integration was stopped, respectively. The size of the core and of the main convection zone near the surface, both given in units of $r_0$, are listed in the two next rows. In the last row I have listed the ratios between the convective flux from an eventual second, smaller convection zone and the convective flux from the respective main convection zone. If it says ``No zone'', the model does not have any more convection zones.}\label{tab:models}
+%   \end{table*}
+%   \renewcommand{\arraystretch}{1}
+%   \vspace{-20pt}
+% \end{center}
+
+% STANDARD TABLE IN SINGLE COLUMN
+% \begin{center}
+%   \renewcommand{\arraystretch}{1.5}
+%   \begin{table}[h!]
+%   \centering
+%   \begin{tabular}{| C{2.2cm} | C{1.4cm} | C{1.4cm} | C{1.4cm} | C{1.4cm} |}
+%   \hline
+%   \textbf{No. of cycles} & \boldmath$\left<ϵ\right>$ \boldmath$[J]$ & \boldmath$\left<|m|\right>$ & \boldmath$C_V$ \boldmath$[k_\text{B}]$ & \boldmath$\chi$ \boldmath$[J^{-1}]$ \\
+%   \hline
+%   10 & $-1.8000$ & 0.9375 & 1.4400 & 0.1594 \\
+%   \hline
+%   20 & $-1.9000$ & 0.9688 & 0.7600 & 0.0836 \\
+%   \hline
+%   50 & $-1.9600$ & 0.9875 & 0.3136 & 0.0344 \\
+%   \hline
+%   100 & $-1.9800$ & 0.9938 & 0.1584 & 0.0173 \\
+%   \hline
+%   200 & $-1.9775$ & 0.9931 & 0.1780 & 0.0186 \\
+%   \hline
+%   500 & $-1.9880$ & 0.9962 & 0.0954 & 0.0104 \\
+%   \hline
+%   1000 & $-1.9940$ & 0.9981 & 0.0479 & 0.0052 \\
+%   \hline
+%   5000 & $-1.9960$ & 0.9988 & 0.0319 & 0.0033 \\
+%   \hline
+%   10000 & $-1.9974$ & 0.9992 & 0.0204 & 0.0022 \\
+%   \hline
+%   100000 & $-1.9975$ & 0.9992 & 0.0197 & 0.0022 \\
+%   \hline
+%   1000000 & $-1.9973$ & 0.9992 & 0.0215 & 0.0023 \\
+%   \hline
+%   \textbf{Analytical} & $-1.9960$ & 0.9987 & 0.0321 & 0.0040 \\
+%   \hline
+%   \end{tabular}
+%   \cprotect\caption{Numerical estimates of $\left<\epsilon\right>$, $\left<|m|\right>$, $C_V$ and $\chi$ for $T = 1.0\:J/k_\text{B}$ after increasing numbers of Monte Carlo cycles are performed. The last row contains the analytical values.}\label{tab:2x2 results}
+%   \end{table}
+%   \renewcommand{\arraystretch}{1}
+% \end{center}
+
+% TABLE WITH MULTIROW
+% \begin{center}
+%   \renewcommand{\arraystretch}{1.5}
+%   \begin{table}[h!]
+%   \centering
+%   \begin{tabular}{| C{2.4cm} | C{1.5cm} | C{1.1cm} | C{2.0cm} |}
+%   \hline
+%   \textbf{No. of} \boldmath$s = +1$ & \boldmath$E(\mathbf{s})$ \boldmath$[J]$ & \boldmath$M(\mathbf{s})$ & \textbf{Degeneracy} \\
+%   \hline
+%   0 & $-8$ & $-4$ & None \\
+%   \hline
+%   1 & \hspace{7pt}$0$ & $-2$ & $4$ \\
+%   \hline
+%   \multirow{2}{*}{2} & \hspace{7pt}$8$ & \multirow{2}{*}{\hspace{7pt}$0$} & $2$ \\
+%   \cline{2-2}\cline{4-4}
+%   & \hspace{7pt}$0$ & & $4$ \\
+%   \hline
+%   3 & \hspace{7pt}$0$ & \hspace{7pt}$2$ & $4$ \\
+%   \hline
+%   4 & $-8$ & \hspace{7pt}$4$ & None \\
+%   \hline
+%   \end{tabular}
+%   \cprotect\caption{Total energy $E(\mathbf{s})$ and magnetisation $M(\mathbf{s})$ for a \texorpdfstring{$2\times2$}{Lg} lattice with $0$, $1$, $2$, $3$ and $4$ spins $s = +1$. Because we use periodic boundary conditions, the total energy can either be 0$\:J$ or 8$\:J$ when we have two spins $s = +1$ and two spins $s = -1$, depending on if the equal spins are neighbours or not. The last column contains the degeneracy level for the different combinations of number of spins $s = +1$ and total energy.}\label{tab:2x2 lattice}
+%   \end{table}
+%   \renewcommand{\arraystretch}{1}
+% \end{center}
+
+
+% ALGORITHM
+% \begin{figure}
+%   % NOTE: We only need \begin{figure} ... \end{figure} here because of a compatability issue between the 'revtex4-1' document class and the 'algorithm' environment.
+%       \begin{algorithm}[H]
+%       \caption{The Metropolis Algorithm}
+%       \label{algo:Euler}
+%           \begin{algorithmic}
+%               \Procedure{Monte Carlo cycle}{$\mathbf{s}, L, β$}
+%               \For{$i = 0, 1, \ldots, L-1$}
+%               \For{$j = 0, 1, \ldots, L-1$}
+%               \State $\triangleright$ Compute energy difference due to flipping $s_{ij}$
+%               \State $\Delta E ← \Delta E_\text{function}(\mathbf{s}, i, j)$
+%               \State
+%               \State $\triangleright$ Flip if energy difference is negative or zero
+%               \If{$\Delta E \leq 0$}
+%                   \State $s_{ij} = -s_{ij}$ \Comment{Flip spin}
+%                   \State
+%               \Else \Comment{Energy difference is positive}
+%                   \State $w = e^{-β\Delta E}$ \Comment{Probability of flipping spin}
+%                   \State $\triangleright$ Generate random number $r ∈ [0,1]$
+%                   \State $\triangleright$ Flip spin if $r≤ w$
+%                   \If{$r≤ w$}
+%                       \State $s_{ij} = -s_{ij}$ \Comment{Flip spin}
+%                   \EndIf
+%               \EndIf
+%               \State 
+%               \State $\triangleright$ Calculate $E$, $E^2$, $|M|$ and $M^2$ for $\mathbf{s}$
+%               \State $E$, $E^2 = E_\text{function}(\mathbf{s})$
+%               \State $|M|$, $M^2 = M_\text{function}(\mathbf{s})$
+%               \State $\triangleright$ Update expectation values accordingly
+%               \EndFor
+%               \EndFor
+%               \EndProcedure
+%           \end{algorithmic}
+%       \end{algorithm}
+%   \end{figure}
