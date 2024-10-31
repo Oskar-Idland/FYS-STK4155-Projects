@@ -1,5 +1,15 @@
 import numpy as np
 
+
+def MSE(pred, targets):
+    return np.mean((pred - targets) ** 2)
+
+def MSE_derivative(pred, targets):
+    return 2 * (pred - targets) / len(pred)
+
+def R2(pred, targets):    
+    return 1 - np.sum((targets - pred) ** 2) / np.sum((targets - np.mean(targets)) ** 2)
+
 def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
     """
     Creates the design matrix X.

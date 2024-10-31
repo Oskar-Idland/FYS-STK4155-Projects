@@ -1,390 +1,162 @@
-import math
 import autograd.numpy as np
-import sys
-import warnings
-from autograd import grad, elementwise_grad
-from random import random, seed
-from copy import deepcopy, copy
-from typing import Tuple, Callable
-from sklearn.utils import resample
+from typing import Callable
 
 from activation_funcs import *
 from cost_funcs import *
 from Schedulers import *
+from functions import MSE, MSE_derivative, R2
 
 # warnings.simplefilter("error")
 
 class FFNN:
-	"""
-	Description:
-	------------
-		Feed Forward Neural Network with interface enabling flexible design of a
-		neural networks architecture and the specification of activation function
-		in the hidden layers and output layer respectively. This model can be used
-		for both regression and classification problems, depending on the output function.
-
-	Attributes:
-	------------
-		dimensions (tuple[int]): A list of positive integers, which specifies the
-			number of nodes in each of the networks layers. The first integer in the array
-			defines the number of nodes in the input layer, the second integer defines number
-			of nodes in the first hidden layer and so on until the last number, which
-			specifies the number of nodes in the output layer.
-
-		hidden_func (Callable): The activation function for the hidden layers
-
-		output_func (Callable): The activation function for the output layer
-
-		cost_func (Callable): Our cost function
-
-		seed (int): Sets random seed, makes results reproducible
-	"""
 	def __init__(
 		self,
 		dimensions: tuple[int],
-		hidden_func: Callable = sigmoid,
-		output_func: Callable = lambda x: x,
-		cost_func: Callable = CostOLS,
+		hidden_funcs: tuple[Callable] = None,
+		hidden_der: tuple[Callable] = None,
+		output_func: Callable = identity,
+		cost_func: Callable = MSE,
+		cost_der: Callable = MSE_derivative,
 		seed: int = None,
 	):
+		"""Feed Forward Neural Network implementation.
+		
+		Parameters:
+			dimensions: Tuple specifying number of nodes in each layer (input, hidden, output)
+			hidden_funcs: Activation functions for hidden layers
+			hidden_der: Derivatives of hidden layer activation functions
+			output_func: Activation function for output layer
+			cost_func: Cost/Loss function
+			cost_der: Derivative of cost function
+			seed: Random seed for reproducibility
+		"""
+		
+		# Set random seed for reproducibility
+		if seed is not None:
+			np.random.seed(seed)
+
+		# Input validation
+		assert len(dimensions) >= 2, "Need at least two layers (input and output)"
+
+		n_hidden_layers = len(dimensions) - 2
+
+		# Default to sigmoid activation if none provided
+		if hidden_funcs is None:
+			hidden_funcs = tuple([sigmoid] * n_hidden_layers)
+		if hidden_der is None:
+			hidden_der = tuple([sigmoid_derivative] * n_hidden_layers)
+		
+		assert len(hidden_funcs) == n_hidden_layers, f"Expected {n_hidden_layers} hidden activation functions, got {len(hidden_funcs)}"
+		assert len(hidden_der) == n_hidden_layers, f"Expected {n_hidden_layers} hidden activation derivatives, got {len(hidden_der)}"
+
 		self.dimensions = dimensions
-		self.hidden_func = hidden_func
+		self.hidden_funcs = hidden_funcs	
+		self.hidden_der = hidden_der
 		self.output_func = output_func
 		self.cost_func = cost_func
-		self.seed = seed
-		self.weights = list()
-		self.schedulers_weight = list()
-		self.schedulers_bias = list()
-		self.a_matrices = list()
-		self.z_matrices = list()
-		self.classification = None
-
-		self.reset_weights()
-		self._set_classification()
-
-	def fit(
-		self,
-		X: np.ndarray,
-		t: np.ndarray,
-		scheduler: Scheduler,
-		batches: int = 1,
-		epochs: int = 100,
-		lambd: float = 0,
-		X_val: np.ndarray = None,
-		t_val: np.ndarray = None,
-	):
-		# Setup
-		if self.seed is not None:
-			np.random.seed(self.seed) 
-			 
-		val_set = False
-		if X_val is not None and t_val is not None:
-			val_set = True
+		self.cost_der = cost_der
 		
-		# Creating arrays for score metrics
-		train_errors = np.empty(epochs)
-		train_errors.fill(np.nan)
+		# Initialize weights and biases
+		self.weights = []
+		self.biases = []
 
-		R2_scores = np.empty(epochs)
-		R2_scores.fill(np.nan)
+		for i in range(len(dimensions) - 1):
+			W = np.random.randn(dimensions[i], dimensions[i + 1])
 
-		val_errors = np.empty(epochs)
-		val_errors.fill(np.nan)
-	
-		train_accs = np.empty(epochs)
-		train_accs.fill(np.nan)
-		val_accs = np.empty(epochs)
-		val_accs.fill(np.nan)
+			b = np.random.randn(1, dimensions[i + 1])
 
-		self.schedulers_weight = list()
-		self.schedulers_bias = list()
+			self.weights.append(W)
+			self.biases.append(b)			
 
-		batch_size = X.shape[0] // batches
+	def _forward(self, inputs):
+		"""
+		Forward pass through the network.
 
+		Parameters:
+			inputs: Input data of shape (batch_size, input_nodes)
 
-		X, t = resample(X, t)
-			 
-		# This function returns a function valued only at x
-		cost_function_train = self.cost_func(t)
-		if val_set:
-			cost_function_val = self.cost_func(t_val)
+		Returns:
+			tuple_ (activations, weighted_sums)
+				- activations: List of activations for each layer
+				- weighted_sums: List of weighted sums for each layer
+		"""
 
-		# Create schedulers for each weight matrix
-		for i in range(len(self.weights)):
-			self.schedulers_weight.append(copy(scheduler))
-			self.schedulers_bias.append(copy(scheduler))
+		a = inputs
+		activations = [a] # List to store activations for each layer
+		weighted_sums = []
 
-		print(f"{scheduler.__class__.__name__}: Eta={scheduler.eta}, lambda={lambd}")
-	
-		try:
-			for e in range(epochs):
-				for i in range(batches):
-					if i == batches - 1:
-						# If the for loop has reached the last batch, take the remainding data
-						X_batch = X[i * batch_size :, :]
-						t_batch = t[i * batch_size :, :]	
-
-					else:
-						X_batch = X[i * batch_size : (i + 1) * batch_size, :]
-						t_batch = t[i * batch_size : (i + 1) * batch_size, :]
-
-					self._feedforward(X_batch)
-					self._backpropagation(X_batch, t_batch, lambd)
-
-				# Reset scheduler for each epoch
-				for scheduler in self.schedulers_weight:
-					scheduler.reset()
-
-				for scheduler in self.schedulers_bias:
-					scheduler.reset()
-				
-				# Computing performance metrics
-				pred_train = self.predict(X)
-				train_error = cost_function_train(pred_train)
-
-				train_errors[e] = train_error
-				R2_scores[e] = self._R2(pred_train, t) 
-
-				if val_set:
-					pred_val = self.predict(X_val)
-					val_error = cost_function_val(pred_val)
-					val_errors[e] = val_error
-
-
-				if self.classification:
-					train_acc = self._accuracy(self.predict(X), t)
-					train_accs[e] = train_acc
-					if val_set:
-						val_acc = self._accuracy(pred_val, t_val)
-						val_accs[e] = val_acc
-
-				# Printing progress bar
-				progression = e / epochs
-				print_length = self._progress_bar(
-					progression,
-					train_error = train_errors[e],
-					R2_score = R2_scores[e],
-					train_acc = train_accs[e],
-					val_error = val_errors[e],
-					val_acc = val_accs[e],
-				)
-		except KeyboardInterrupt:
-			# Allow the user to interrupt the training and see the results
-			pass
-	
-		# Visualize the training process
-		sys.stdout.write("\r" + " " * print_length)
-		sys.stdout.flush()
-		self._progress_bar(
-			1,
-			train_error=train_errors[e],
-			R2_score = R2_scores[e],
-			train_acc=train_accs[e],
-			val_error=val_errors[e],
-			val_acc=val_accs[e],
-		)
-		sys.stdout.write("")
-
-		# return performance metrics for the entire run
-		scores = dict()
-
-		scores["train_errors"] = train_errors
-		scores["R2_scores"] = R2_scores
+		# Loop through the hidden layers
+		for (W, b, func) in zip(self.weights[:-1], self.biases[:-1], self.hidden_funcs):
+			z = np.dot(a, W) + b
+			a = func(z)
 		
-		if val_set:
-			scores["val_errors"] = val_errors
-		
-		if self.classification:
-			scores["train_accs"] = train_accs
+		# Handle output layer separately with output activation function
+		W = self.weights[-1]
+		b = self.biases[-1]
+		z = np.dot(a, W) + b
 
-			if val_set:
-				scores["val_accs"] = val_accs
+		weighted_sums.append(z)
+		activations.append(self.output_func(z))
 
-		return scores
+		return self.output_func(z)
 	
-	def predict(self, X: np.ndarray, *, threshold = 0.5):
-
-		predict = self._feedforward(X)
-
-		if self.classification:
-			return np.where(predict > threshold, 1, 0)
-		else:
-			return predict
+	def _forward_pass(self, inputs):
+		"""Forward pass that saves intermediate values for backpropagation.
 		
-	def reset_weights(self):
+		Parameters:
+			inputs: Input data of shape (batch_size, input_nodes)
+			
+		Returns:
+			tuple: (activations, weighted_sums)
+				- activations: List of activations for each layer
+				- weighted_sums: List of weighted sums for each layer
 		"""
-		Description:
-		------------
-			Resets the weights of the network in order to train the network from scratch.
-		"""
+		a = inputs
+		activations = [a]  # Include input layer
+		weighted_sums = []
 
-		if self.seed is not None:
-			np.random.seed(self.seed)
+		# Handle hidden layers
+		for (W, b, func) in zip(self.weights[:-1], self.biases[:-1], self.hidden_funcs):
+			z = np.dot(a, W) + b
+			weighted_sums.append(z)
+			a = func(z)
+			activations.append(a)
+		
+		# Handle output layer separately
+		W = self.weights[-1]
+		b = self.biases[-1]
+		z = np.dot(a, W) + b
 
-		self.weights = list()
-		for i in range(len(self.dimensions) - 1):
-			weight_array = np.random.randn(
-				self.dimensions[i] + 1, self.dimensions[i + 1]
-			)
-			weight_array[0, :] = np.random.randn(self.dimensions[i + 1]) * 0.01
+		weighted_sums.append(z)
+		activations.append(self.output_func(z))
 
-			self.weights.append(weight_array)
-
-	def _feedforward(self, X: np.ndarray):
-
-		# Resetting the matrices
-		self.a_matrices = list()
-		self.z_matrices = list()
-
-		# Correcting the shape of the input
-		if len(X.shape) == 1:
-			X = np.reshape(X, (1, X.shape[0]))
-
-		# Adding bias to the Design Matrix
-		bias = np.ones((X.shape[0], 1)) * 0.01
-		X = np.hstack((bias, X))
-
-		# a^0, the nodes in the input layer (one a^0 for each row in X - where the
-		# exponent indicates layer number).
-		a = X
-		self.a_matrices.append(a)
-		self.z_matrices.append(a)
-
-		# Do the feedforward
-		for i in range(len(self.weights)):
-			if i < len(self.weights) -1:
-				z = a @ self.weights[i]
-				self.z_matrices.append(z)
-				a = self.hidden_func(z)
-
-				bias = np.ones((a.shape[0], 1)) * 0.01
-				a = np.hstack((bias, a))
-				self.a_matrices.append(a)
-			else:
-				try:
-					# a^L, the nodes in the output layer
-					z = a @ self.weights[i]
-					a = self.output_func(z)
-					self.a_matrices.append(a)
-					self.z_matrices.append(z)
-				except Exception as OverflowError:
-					print(
-						"OverflowError in fit() in FFNN\nHOW TO DEBUG ERROR: Consider lowering your learning rate or scheduler"
-					)
-		# Return a^L
-		return a
-
-	def _backpropagation(self, X, t, lambd):
-
-		out_derivative = derivate(self.output_func)
-		hidden_derivative = derivate(self.hidden_func)
-
-		for i in range(len(self.weights) -1, -1, -1):
-			# Delta^L
-			if i == len(self.weights) - 1:
-				# multi class classification
-				if (
-					self.output_func == "softmax"
-				):
-					delta_matrix = self.a_matrices[i + 1] - t
-				else:
-				# single class classification
-					cost_func_derivative = grad(self.cost_func(t))
-					delta_matrix = out_derivative(
-						self.z_matrices[i + 1]
-						) * cost_func_derivative(self.a_matrices[i + 1])
-			# delta matrix for hidden layers
-			else:
-				delta_matrix = (
-					self.weights[i + 1][1:, :] @ delta_matrix.T
-				).T * hidden_derivative(self.z_matrices[i + 1])
-
-			# Computing the gradients
-			gradient_weights = self.a_matrices[i][:,1:].T @ delta_matrix
-			gradient_bias = np.sum(delta_matrix, axis=0).reshape(
-				1, delta_matrix.shape[1]
-			)
-
-			# Regularization
-			gradient_weights += lambd * self.weights[i][1:, :]
-
-			# use scheduler to update weights		'
-			update_matrix = np.vstack(
-				[
-					self.schedulers_bias[i].update_change(gradient_bias),
-					self.schedulers_weight[i].update_change(gradient_weights),
-				]
-			)
-
-			# update weights and bias
-			self.weights[i] -= update_matrix
-
-	def _accuracy(self, prediction: np.ndarray, target: np.ndarray):
-
-		assert prediction.size == target.size
-		return np.average((target == prediction))
-
-	def _R2(self, prediciton: np.ndarray, target: np.ndarray):
-		"""
-		Calculates the R2 score of the model.
-
-		## Parameters:
-		prediction (np.ndarray): The predicted data values from the model.
-		target (np.ndarray): The actual data values.
-
-		## Returns:
-		float: The R2 score.
-		"""
-		prediciton = prediciton.flatten()
-		target = target.flatten()
-		return 1 - np.sum((target - prediciton)**2) / np.sum((target - np.mean(target))**2)
+		return activations, weighted_sums
 	
-	def _set_classification(self):
+	def _backpropagation(self, inputs, targets):
+		gradients = []
+		activations, weighted_sums = self._forward_pass(inputs)
 
-		self.classification = False
-		if (
-			self.cost_func.__name__ == "CostLogReg"
-			or self.cost_func.__name__ == "CostCrossEntropy"
-		):
-			self.classification = True
+		dC_da = self.cost_der(activations[-1], targets)	
 
-	def _progress_bar(self, progression, **kwargs):
-		"""
-		Description:
-		------------
-			Displays progress of training 
-		"""
-		print_length = 40
-		num_equals = int(progression * print_length)
-		num_not = print_length - num_equals
-		arrow = ">" if num_equals > 0 else ""
-		bar = "[" + "=" * (num_equals - 1) + arrow + "-" * num_not + "]"
-		perc_print = self._format(progression * 100, decimals=5)
-		line = f"  {bar} {perc_print}% "
+		for i in reversed(range(len(self.dimensions))):
+			W, b = self.weights[i], self.biases[i]
 
-		for key in kwargs:
-			if not np.isnan(kwargs[key]):
-				value = self._format(kwargs[key], decimals=4)
-				line += f"| {key}: {value} "
-		sys.stdout.write("\r" + line)
-		sys.stdout.flush()
-		
-		return len(line)
+			dW = np.dot(activations[i].T, dC_da)
+			db = np.sum(dC_da, axis=0, keepdims=True)
+			gradients.append((dW, db))
+
+			if i > 0:
+				dC_da = np.dot(dC_da, W.T) * self.hidden_der[i - 1](weighted_sums[i - 1])
+
+		return gradients[::-1]
 	
-	def _format(self, value, decimals=4):
-		"""
-		Description:
-		------------
-			Formats decimal numbers for progress bar
-		"""
-		if value > 0:
-			v = value
-		elif value < 0:
-			v = -10 * value
-		else:
-			v = 1
-		n = 1 + math.floor(math.log10(v))
-		if n >= decimals - 1:
-			return str(round(value))
+if __name__ == "__main__":
 		
-		return f"{value:.{decimals-n-1}f}"	
+	dimensions = (64, 32, 16, 10)  # Input layer: 64, 2 hidden layers: 32 & 16, output: 10
+	net = FFNN(
+		dimensions=dimensions,
+		hidden_funcs=(ReLU, ReLU),  # Activation for the two hidden layers
+		hidden_der=(ReLU_derivative, ReLU_derivative),
+		cost_func=MSE,
+		cost_der=MSE_derivative
+	)
