@@ -13,7 +13,6 @@ class FFNN:
 		self,
 		dimensions: tuple[int],
 		hidden_funcs: tuple[Callable] = None,
-		hidden_der: tuple[Callable] = None,
 		output_func: Callable = identity,
 		cost_func: Callable = MSE,
 		cost_der: Callable = MSE_derivative,
@@ -24,13 +23,11 @@ class FFNN:
 		Parameters:
 			dimensions: Tuple specifying number of nodes in each layer (input, hidden, output)
 			hidden_funcs: Activation functions for hidden layers
-			hidden_der: Derivatives of hidden layer activation functions
 			output_func: Activation function for output layer
 			cost_func: Cost/Loss function
 			cost_der: Derivative of cost function
 			seed: Random seed for reproducibility
 		"""
-		
 		# Set random seed for reproducibility
 		if seed is not None:
 			np.random.seed(seed)
@@ -43,30 +40,90 @@ class FFNN:
 		# Default to sigmoid activation if none provided
 		if hidden_funcs is None:
 			hidden_funcs = tuple([sigmoid] * n_hidden_layers)
-		if hidden_der is None:
-			hidden_der = tuple([sigmoid_derivative] * n_hidden_layers)
 		
 		assert len(hidden_funcs) == n_hidden_layers, f"Expected {n_hidden_layers} hidden activation functions, got {len(hidden_funcs)}"
-		assert len(hidden_der) == n_hidden_layers, f"Expected {n_hidden_layers} hidden activation derivatives, got {len(hidden_der)}"
 
 		self.dimensions = dimensions
 		self.hidden_funcs = hidden_funcs	
-		self.hidden_der = hidden_der
 		self.output_func = output_func
 		self.cost_func = cost_func
 		self.cost_der = cost_der
+
+		self.classification = None
+
+		self.reset_weights()
+		self._set_classification()
+
+	def fit(self, X, y, scheduler, epochs=100, batch_size=None, lmbda=0):
+		"""
+		Train the network using stochastic gradient descent.
+
+		Paremeters:
+			X: Training data
+			y: Target values
+			scheduler: Learning rate scheduler
+			epochs: Number of epochs (Default = 100)
+			batch_size: Size of mini-batches (None = full batch)
+			lmbda: Regularization parameter (Default = 0)	
+
+		"""	
+		# Set batch size to full batch if None
+		if batch_size is None:
+			batch_size = X.shape[0]
 		
-		# Initialize weights and biases
+
+		# Track scoring parameters
+		training_scores = {
+			"cost": [],
+			"R2": [] if not self.classification else None,
+			"accuracy": [] if self.classification else None
+		}
+
+		for epoch in range(epochs):
+			# Create mini-batches
+			indices = np.random.permutation(X.shape[0])
+			for i in range(0, X.shape[0], batch_size):
+				batch_indices = indices[i:i+batch_size]
+				X_batch = X[batch_indices]
+				y_batch = y[batch_indices]
+
+				# Compute gradients
+				gradients = self._backpropagation(X_batch, y_batch, lmbda)
+
+				# Update weights and biases
+				for layer in range(len(self.weights)):
+					dW, db = gradients[layer]
+					self.weights[layer] -= scheduler.update_change(dW)
+					self.biases[layer] -= scheduler.update_change(db)
+
+			# Compute training scores
+			pred_train = self.predict(X)
+			training_score = self.cost_func(pred_train, y) 
+			
+			training_scores["cost"].append(training_score) 
+			
+			if not self.classification:
+				R2_score = R2(pred_train, y)
+				training_scores["R2"].append(R2_score)	
+			else:
+				accuracy = self._accuracy(X, y)
+				training_scores["accuracy"].append(accuracy)
+
+		return training_scores
+
+	def predict(self, X):
+		"""Make predictions for given inputs."""
+		return self._forward(X)
+	
+	def reset_weights(self):
+		"""Reset weights and biases to random values."""
 		self.weights = []
 		self.biases = []
-
-		for i in range(len(dimensions) - 1):
-			W = np.random.randn(dimensions[i], dimensions[i + 1])
-
-			b = np.random.randn(1, dimensions[i + 1])
-
+		for i in range(len(self.dimensions) - 1):
+			W = np.random.randn(self.dimensions[i], self.dimensions[i + 1])
+			b = np.random.randn(1, self.dimensions[i + 1])
 			self.weights.append(W)
-			self.biases.append(b)			
+			self.biases.append(b)
 
 	def _forward(self, inputs):
 		"""
@@ -107,9 +164,7 @@ class FFNN:
 			inputs: Input data of shape (batch_size, input_nodes)
 			
 		Returns:
-			tuple: (activations, weighted_sums)
-				- activations: List of activations for each layer
-				- weighted_sums: List of weighted sums for each layer
+			Output predictions from the network
 		"""
 		a = inputs
 		activations = [a]  # Include input layer
@@ -132,23 +187,64 @@ class FFNN:
 
 		return activations, weighted_sums
 	
-	def _backpropagation(self, inputs, targets):
-		gradients = []
+	def _backpropagation(self, inputs, targets, lambd = 0):
+		"""Computes gradients for network weights and biases using backpropagation.
+		
+		Parameters:
+			inputs: Input data of shape (batch_size, input_nodes)
+			targets: Target values of shape (batch_size, output_nodes)
+			lambd: Regularization parameter (Default = 0)
+		Returns:
+		list: List of tuples (dW, db) containing gradients for each layer
+		"""
+		# Forward pass to get all activations and weighted sums
 		activations, weighted_sums = self._forward_pass(inputs)
 
-		dC_da = self.cost_der(activations[-1], targets)	
+		gradients = []
+		n_layers = len(self.weights)
 
-		for i in reversed(range(len(self.dimensions))):
-			W, b = self.weights[i], self.biases[i]
+		delta = self.cost_der(activations[-1], targets)	
+		if self.output_func != identity:  # Only apply if non-identity output function
+			delta *= derivate(self.output_func)(weighted_sums[-1])
 
-			dW = np.dot(activations[i].T, dC_da)
-			db = np.sum(dC_da, axis=0, keepdims=True)
+		# Calculate gradients for output layer
+		dW = np.dot(activations[-2].T, delta) + lambd * self.weights[-1]
+		db = np.sum(delta, axis=0, keepdims=True)
+		gradients.append((dW, db))
+
+		# Backpropagate through hidden layers
+		for l in range(n_layers -2, -1, -1): # Loop backwards through layers
+			delta = np.dot(delta, self.weights[l+1].T) 
+			delta *= derivate(self.hidden_funcs[l])(weighted_sums[l])
+			
+			# Calculate gradients for hidden layer
+			dW = np.dot(activations[l].T, delta) + lambd * self.weights[l]
+			db = np.sum(delta, axis=0, keepdims=True)
 			gradients.append((dW, db))
 
-			if i > 0:
-				dC_da = np.dot(dC_da, W.T) * self.hidden_der[i - 1](weighted_sums[i - 1])
-
 		return gradients[::-1]
+	
+	def _accuracy(self, X, y):
+		"""
+		Calculate accuracy for binary classification predictions.
+		"""
+		predictions = self.predict(X)
+		predictions = (predictions > 0.5).astype(int)  # Threshold at 0.5 for binary
+		return np.mean(predictions == y)
+	
+	def _set_classification(self):
+		"""
+		Description:
+		------------
+			Decides if FFNN acts as classifier (True) og regressor (False),
+			sets self.classification during init()
+		"""
+		self.classification = False
+		if (
+			self.cost_func.__name__ == "CostLogReg"
+			or self.cost_func.__name__ == "CostCrossEntropy"
+		):
+			self.classification = True
 	
 if __name__ == "__main__":
 		
@@ -156,7 +252,6 @@ if __name__ == "__main__":
 	net = FFNN(
 		dimensions=dimensions,
 		hidden_funcs=(ReLU, ReLU),  # Activation for the two hidden layers
-		hidden_der=(ReLU_derivative, ReLU_derivative),
 		cost_func=MSE,
 		cost_der=MSE_derivative
 	)
