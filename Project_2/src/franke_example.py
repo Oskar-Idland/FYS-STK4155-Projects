@@ -73,7 +73,7 @@ if __name__ == "__main__":
     Example use of FFNN using Franke data
     -------- 
     '''
-    N  = 1000
+    N  = 10
     x = np.arange(0, 1, 1/N)
     y = np.arange(0, 1, 1/N)
     X, Y = np.meshgrid(x, y)

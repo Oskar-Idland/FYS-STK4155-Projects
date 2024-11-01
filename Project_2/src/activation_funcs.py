@@ -1,47 +1,40 @@
 import autograd.numpy as np
 from autograd import elementwise_grad
 
-def identity(X):
-    return X
+def identity(z):
+	return z
+
+def sigmoid(z):
+	return 1 / (1 + np.exp(-z))
 
 
-def sigmoid(X):
-    try:
-        return 1.0 / (1 + np.exp(-X))
-    except FloatingPointError:
-        return np.where(X > np.zeros(X.shape), np.ones(X.shape), np.zeros(X.shape))
+def ReLU(z):
+	return np.maximum(0, z)
 
 
-def softmax(X):
-    X = X - np.max(X, axis=-1, keepdims=True)
-    delta = 10e-10
-    return np.exp(X) / (np.sum(np.exp(X), axis=-1, keepdims=True) + delta)
-
-
-def RELU(X):
-    return np.where(X > np.zeros(X.shape), X, np.zeros(X.shape))
-
-
-def LRELU(X):
-    delta = 10e-4
-    return np.where(X > np.zeros(X.shape), X, delta * X)
-
+def leaky_ReLU(z):
+	return np.where(z > 0, z, 0.01 * z)
 
 def derivate(func):
-    if func.__name__ == "RELU":
+	if func.__name__ == "sigmoid":
+		
+		def func(z):
+			return sigmoid(z) * (1 - sigmoid(z))
 
-        def func(X):
-            return np.where(X > 0, 1, 0)
+	elif func.__name__ == "RELU":
 
-        return func
+		def func(z):
+			return np.where(z > 0, 1, 0)
 
-    elif func.__name__ == "LRELU":
+		return func
 
-        def func(X):
-            delta = 10e-4
-            return np.where(X > 0, 1, delta)
+	elif func.__name__ == "LRELU":
 
-        return func
+		def func(z):
+			delta = 10e-4
+			return np.where(z > 0, 1, delta)
 
-    else:
-        return elementwise_grad(func)
+		return func
+	
+	else:
+		return elementwise_grad(func)
