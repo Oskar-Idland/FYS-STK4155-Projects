@@ -44,9 +44,9 @@ def optimal_parameters(matrix: np.ndarray, x: np.ndarray, y: np.ndarray, max_or_
     tuple[np.ndarray, np.ndarray]: The indices of the minimum value.
     """
     if max_or_min == 'max':
-        idx = np.unravel_index(np.argmax(matrix), matrix.shape)
+        idx = np.unravel_index(np.nanargmax(matrix), matrix.shape, )
     elif max_or_min == 'min':
-        idx = np.unravel_index(np.argmin(matrix), matrix.shape)
+        idx = np.unravel_index(np.nanargmin(matrix), matrix.shape)
     else:
         raise ValueError("max_or_min must be either 'max' or 'min'.")
     return x[idx[1]], y[idx[0]]
