@@ -21,6 +21,8 @@ def derivate(func):
 		def func(z):
 			return sigmoid(z) * (1 - sigmoid(z))
 
+		return func
+	
 	elif func.__name__ == "RELU":
 
 		def func(z):

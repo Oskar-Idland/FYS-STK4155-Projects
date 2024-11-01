@@ -40,6 +40,8 @@ def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
             X[:, idx] = xx**(i-j) * yy**j
             idx += 1
 
+    return X
+
 def optimal_parameters(matrix: np.ndarray, x: np.ndarray, y: np.ndarray, max_or_min: str = 'min') -> tuple[np.ndarray, np.ndarray]:
     """
     Finds the indices of the minimum value in a matrix.
