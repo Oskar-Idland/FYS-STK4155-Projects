@@ -22,24 +22,14 @@ def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
     ## Returns:
     np.ndarray: The design matrix X.
     """
-    if len(x.shape) > 1:
-        x = np.ravel(x)
-        y = np.ravel(y)
-
-    N = int(len(x)*len(y))            # Number of rows in the design matrix
-    l = int((n+1)*(n+2)/2)            # Number of columns in the design matrix
+    N = len(x)
+    l = int((n + 1) * (n + 2) / 2)  # Number of elements in beta
     X = np.ones((N, l))
-    
-    xx, yy = np.meshgrid(x, y)        # Make a meshgrid to get all possible combinations of x and y values
-    xx = xx.flatten()
-    yy = yy.flatten()
 
-    idx = 1
-    for i in range(1, n+1):
-        for j in range(i+1):
-            X[:, idx] = xx**(i-j) * yy**j
-            idx += 1
-
+    for i in range(1, n + 1):
+        q = int((i) * (i + 1) / 2)
+        for k in range(i + 1):
+            X[:, q + k] = (x ** (i - k)) * (y**k)
     return X
 
 def optimal_parameters(matrix: np.ndarray, x: np.ndarray, y: np.ndarray, max_or_min: str = 'min') -> tuple[np.ndarray, np.ndarray]:

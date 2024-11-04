@@ -3,10 +3,11 @@ from typing import Callable
 import math
 import sys
 from copy import copy
+from sklearn.utils import resample
 
 from activation_funcs import *
 from cost_funcs import *
-from Schedulers import *
+from Scheduler import *
 from functions import MSE, MSE_derivative, R2, create_X, FrankeFunction
 
 import matplotlib.pyplot as plt
@@ -36,6 +37,7 @@ class FFNN:
 			seed: Random seed for reproducibility
 		"""
 		# Set random seed for reproducibility
+		self.seed = seed
 		if seed is not None:
 			np.random.seed(seed)
 
@@ -56,28 +58,27 @@ class FFNN:
 		self.cost_func = cost_func
 		self.cost_der = cost_der
 
-		# self.weights = list()
-		# self.schedulers_weight = list()
-		# self.schedulers_bias = list()
-
 		self.classification = None
 
 		self.reset_weights()
 		self._set_classification()
 
-	def fit(self, X, y, scheduler, epochs=100, batches=1, lmbda=0):
+	def fit(self, X, y, scheduler, epochs=100, batches=1, lmbda=0, convergence_tol: float = None):
 		"""
 		Train the network using stochastic gradient descent.
 
 		Paremeters:
 			X: Training data
-			y: Target values
+			y: Target values 
 			scheduler: Learning rate scheduler
 			epochs: Number of epochs (Default = 100)
-			batch_size: Size of mini-batches (1 = full batch)
+			batches: Number of mini-batches (Default = 1)
 			lmbda: Regularization parameter (Default = 0)	
 
 		"""	
+		if self.seed is not None:
+			np.random.seed(self.seed)
+
 		batch_size = X.shape[0] // batches	
 
 		training_scores = np.empty(epochs)
@@ -93,29 +94,32 @@ class FFNN:
 		self.schedulers_bias = list()
 
 		# create schedulers for each weight matrix
-		for i in range(len(self.weights)):
+		for i in range(len(self.layer_weights)):
 			self.schedulers_weight.append(copy(scheduler))
 			self.schedulers_bias.append(copy(scheduler))
 
+		# X, y = resample(X, y, random_state=seed)
 		print(f"{scheduler.__class__.__name__}: Eta={scheduler.eta}, Lambda={lmbda}")
 
+		n_samples = X.shape[0]
+
+		if convergence_tol is not None:
+			convergence_check = True
+			recent_scores = []
+
 		for e in range(epochs):
+			indices = np.arange(n_samples)
+			np.random.shuffle(indices)
+			X = X[indices]
+			y = y[indices]
 			for i in range(0, X.shape[0], batch_size):
-				# Mini-batch gradient descent
-				if i == batches - 1:
-					# Take the rest of the data at the last batch
-					X_batch = X[i * batch_size]
-					y_batch = y[i * batch_size]
-				else:
-					X_batch = X[i * batch_size : (i + 1) * batch_size]
-					y_batch = y[i * batch_size : (i + 1) * batch_size]
+				
+				end = min(i + batch_size, n_samples)
+				X_batch = X[i:end]
+				y_batch = y[i:end]
 
 				# Compute gradients
 				self._backpropagation(X_batch, y_batch, lmbda)
-
-				# # Update weights
-				# for i, grad in enumerate(gradients):
-				# 	self.weight[i] -= scheduler.update_change(grad)
 
 			# reset schedulers for each epoch (some schedulers pass in this call)
 			for scheduler in self.schedulers_weight:
@@ -147,6 +151,27 @@ class FFNN:
 				train_acc=train_accs[e],
 			)
 
+			# Check for convergence
+			if convergence_tol is not None and convergence_check:
+				recent_scores.append(training_score)
+
+				# Only check convergence after collecting enough epochs
+				if len(recent_scores) >= 10:
+					# Keep only the most recent values
+					if len(recent_scores) > 10:
+						recent_scores.pop(0)
+						
+					# Calculate mean and std of recent MSEs
+					mean_mse = np.mean(recent_scores)
+					std_mse = np.std(recent_scores)
+					
+					# Check if variation is below tolerance
+					if std_mse < convergence_tol * mean_mse:
+						convergence_epoch = e
+						print(f"\nConverged at epoch {convergence_epoch} with MSE stability below {convergence_tol:.2e}")
+						convergence_check = False
+			
+
 		# visualization of training progression (similiar to tensorflow progression bar)
 		sys.stdout.write("\r" + " " * print_length)
 		sys.stdout.flush()
@@ -168,6 +193,9 @@ class FFNN:
 		else:
 			scores["accuracy"] = train_accs
 		
+		if convergence_tol is not None:
+				return scores, convergence_epoch
+
 		return scores
 
 	def predict(self, X):
@@ -176,14 +204,18 @@ class FFNN:
 	
 	def reset_weights(self):
 		"""Reset weights and biases to random values."""
-		self.weights = []
+
+		if self.seed is not None:
+			np.random.seed(self.seed)
+
+		self.layer_weights = []
+		self.layer_biases = []
 		for i in range(len(self.layer_sizes) - 1):
-			# Initialize weight matrix with an extra column for bias
-			layer_weight_matrix = np.random.randn(self.layer_sizes[i], self.layer_sizes[i + 1] + 1)
-			# Initialize bias weights with small values
-			layer_weight_matrix[:, 0] = np.random.randn(self.layer_sizes[i]) * 0.01
+			layer_weight = np.random.randn(self.layer_sizes[i], self.layer_sizes[i + 1])
+			layer_biases = np.random.randn(self.layer_sizes[i + 1]) * 0.01
 			
-			self.weights.append(layer_weight_matrix)
+			self.layer_weights.append(layer_weight)
+			self.layer_biases.append(layer_biases)
 
 	def _forward(self, inputs):
 		"""Forward pass returning only final predictions."""
@@ -199,35 +231,28 @@ class FFNN:
 		Returns:
 		tuple: Lists of activations and weighted sums for all layers
 		"""
-		activations = []
-		weighted_sums = []
-		
-		# Add bias term to input
-		bias = np.ones((inputs.shape[0])) * 0.01
-		a = np.zeros((inputs.shape[0] + 1, inputs.shape[1]))
-		a[1:] = inputs
-		a[0] = bias
+
+		z_values = [] # List of weighted sums for each layer
+		activations = [inputs] # List of activations for each layer
+
+		# Iterate through hidden layers
+		for i, (W, b, func) in enumerate(zip(self.layer_weights[:-1], self.layer_biases[:-1], self.hidden_funcs)):
+			z = activations[i] @ W + b
+			a = func(z)
+
+			z_values.append(z)
+			activations.append(a)
+			
+		# Output layer
+		z = activations[-1] @ self.layer_weights[-1] + self.layer_biases[-1]
+		z_values.append(z)
+
+		a = self.output_func(z)
 		activations.append(a)
 		
-		# Through hidden layers
-		for (W, func) in zip(self.weights[:-1], self.hidden_funcs):
-			weight, bias = W[1:], W[0]
-			z = (a @ weight.T)[0] + bias
-			weighted_sums.append(z)
-			a = func(z)
-			# Add bias term for next layer
-			bias = np.ones((a.shape[0], 1)) * 0.01
-			a = np.hstack([bias, a])
-			activations.append(a)
-		
-		# Output layer
-		z = a @ self.weights[-1]
-		weighted_sums.append(z)
-		activations.append(self.output_func(z))
-		
-		return activations, weighted_sums
+		return activations, z_values
 	
-	def _backpropagation(self, inputs, targets, lambd = 0):
+	def _backpropagation(self, inputs, targets, lmbda = 0):
 		"""Computes gradients for network weights and biases using backpropagation.
 		
 		Parameters:
@@ -238,45 +263,43 @@ class FFNN:
 			weight_gradients: List of weight gradients for each layer
 			bias_gradients: List of bias gradients for each layer
 		"""
+		if self.seed is not None:
+			np.random.seed(self.seed)
+
 		 # Forward pass to get activations and z-values
-		activations, weighted_sums = self._forward_pass(inputs)
+		activations, z_values = self._forward_pass(inputs)
 		
-		 # Iterate through layers backwards
-		for i in range(len(self.weights) - 1, -1, -1):
-			# Compute delta for output layer
-			if i == len(self.weights) - 1:
-				if self.output_func.__name__ == "softmax":
-					delta_matrix = activations[i + 1] - targets
-				else:
-					delta_matrix = derivate(self.output_func)(weighted_sums[-1])
-					delta_matrix *= self.cost_der(activations[-1], targets)
-			
-			# Compute delta for hidden layers
-			else:
-				delta_matrix = (self.weights[i + 1][1:, :] @ delta_matrix.T).T
-				print(i)
-				delta_matrix *= derivate(self.hidden_funcs[i])(weighted_sums[i + 1])
-			
-			# Split activations into bias and rest
-			a_bias = activations[i][:, 0].reshape(-1, 1)
-			a_rest = activations[i][:, 1]
-			
-			# Calculate gradients
-			gradient_weights = activations[i][:, 1:].T @ delta_matrix
-			gradient_bias = np.sum(delta_matrix, axis=0).reshape(1, -1)
-			
-			# Add regularization (only to weights, not bias)
-			gradient_weights += self.weights[i][1:, :] * lambd
-			
-			# Combine updates in format expected by schedulers
-			update_matrix = np.vstack([
-				self.schedulers_bias[i].update_change(gradient_bias),
-				self.schedulers_weight[i].update_change(gradient_weights)
-			])
-			
-			# Update weights
-			self.weights[i] -= update_matrix
-	
+
+		# Compute gradients for output layer
+		if self.output_func.__name__ == "softmax":
+			delta = activations[i + 1] - targets
+		else:
+			delta = self.cost_der(activations[-1], targets)	
+			delta *= derivate(self.output_func)(z_values[-1]) 
+		
+
+		 # Iterate backwards through layers 
+		for i in range(len(self.layer_weights) - 1, -1, -1):
+			# Compute gradients
+			dW = activations[i].T @ delta
+			db = np.sum(delta, axis=0, keepdims=True)
+
+		
+			# Propagate error to previous layer
+			if i > 0: # Skip if input layer
+				delta = delta @ self.layer_weights[i].T
+				delta *= derivate(self.hidden_funcs[i-1])(z_values[i-1])
+
+			# Add regularization term
+			dW += lmbda * self.layer_weights[i]
+
+			# Update weights and biases
+			weight_update = self.schedulers_weight[i].update_change(dW)
+			bias_update = self.schedulers_bias[i].update_change(db)
+
+			self.layer_weights[i] -= weight_update
+			self.layer_biases[i] -= bias_update.reshape(-1)
+
 	def _accuracy(self, X, y):
 		"""
 		Calculate accuracy for binary classification predictions.
@@ -336,7 +359,7 @@ class FFNN:
 		n = 1 + math.floor(math.log10(v))
 		if n >= decimals - 1:
 			return str(round(value))
-		return f"{value:.{decimals-n-1}f}"
+		return f"{value:4>.{decimals-n-1}f}"
 	
 if __name__ == "__main__":
 	from sklearn.preprocessing import StandardScaler
@@ -347,27 +370,47 @@ if __name__ == "__main__":
 
 
 	N  = 100
+	dx = 1/N
 
-	x = np.arange(0, 1, 1/N)
-	y = np.arange(0, 1, 1/N)
+	x = np.linspace(0, 1, N)
+	y = np.linspace(0, 1, N)
 	xx, yy = np.meshgrid(x, y)
 
-	z = (FrankeFunction(xx, yy) + np.random.normal(0, 0.001, (N, N))).reshape(-1, 1) 
+	xx = xx.flatten().reshape(-1,1)
+	yy = yy.flatten().reshape(-1,1)
 
-	poly_degree = 3
-	X = create_X(x, y, poly_degree)
+	zz = FrankeFunction(xx, yy)
+	target = zz.reshape(-1,1)
 
-	X_train, X_test, y_train, y_test = train_test_split(X, z, test_size=0.2, random_state=seed)
+	poly_degree = 4
+	# X = create_X(x, y, poly_degree)
+	
 
-	scaler = StandardScaler()
-	X_train_scaled = scaler.fit_transform(X_train)
-	X_test_scaled = scaler.transform(X_test)
+	# X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=0.2, random_state=seed)
+	# print(f"{X_train.shape = }, {X_test.shape = }, {z_train.shape = }, {z_test.shape = }")
 
-	y_train_scaled = scaler.fit_transform(y_train)
-	y_test_scaled = scaler.transform(y_test)
 
-	input_shape = X_train_scaled.shape[1]
-	hidden_shape = (4,2)
+	# scaler_x = StandardScaler()
+	# scaler_z = StandardScaler()
+
+	# X_train_scaled = scaler_x.fit_transform(X_train)
+	# X_test_scaled = scaler_x.transform(X_test)
+
+	# z_train_scaled = scaler_z.fit_transform(z_train)
+	# z_test_scaled = scaler_z.transform(z_test)
+
+
+	scaler_x = StandardScaler()
+	scaler_y = StandardScaler()
+	x_scaled = scaler_x.fit_transform(xx)
+	y_scaled = scaler_y.fit_transform(yy)
+
+	X = np.hstack([x_scaled, y_scaled])
+
+	target = (target - np.mean(target)) / np.std(target)
+
+	input_shape = X.shape[1]
+	hidden_shape = [50, 50]
 	output_shape = 1
 	dims =  (input_shape, *hidden_shape, output_shape)
 
@@ -380,34 +423,40 @@ if __name__ == "__main__":
 		seed=seed
 	)
 
-	scheduler = Adagrad(eta=0.001)
+	model.reset_weights()
+
+	# scheduler = Constant(eta=0.001)
+	scheduler = Adam(eta=0.001, rho=0.9, rho2=0.999)
 
 	epochs = 1000
-	batches = 10
+	batches = 32
 
-	lmbda = 0.01
+	lmbda = 0.001
 
 	scores = model.fit(
-		X_train_scaled,
-		y_train_scaled, 
+		X,
+		target, 
 		scheduler=scheduler,
 		epochs=epochs,
 		batches=batches,
 		lmbda=lmbda,
 		)
 
-	z_pred_scaled = model.predict(X)
-	z_pred = scaler.inverse_transform(z_pred_scaled)
+	z_pred = model.predict(X)
 	
-	# Reshape prediction to match grid
-	z_pred = z_pred.reshape(len(x), len(y))
+	grid_size = int(np.sqrt(len(xx)))
+	xx = xx.reshape((grid_size, grid_size))
+	yy = yy.reshape((grid_size, grid_size))
+	zz = zz.reshape((grid_size, grid_size))
+	z_pred = z_pred.reshape((grid_size, grid_size))
 
-	z2 = (FrankeFunction(xx, yy) + np.random.normal(0, 0.1, (N, N)))
-	
+
 	fig = plt.figure(figsize = (13, 7))
 	axs = [fig.add_subplot(121, projection = "3d"), fig.add_subplot(122, projection = "3d")]
 
-	surf_true = axs[0].plot_surface(xx, yy, z2, cmap = cm.coolwarm, linewidth = 0, antialiased = False)
+	surf_true = axs[0].plot_surface(xx, yy, zz, cmap = cm.coolwarm, linewidth = 0, antialiased = False)
+	axs[0].set_title("True Franke function")
+	axs[1].set_title("Predicted Franke function")
 	surf_predict = axs[1].plot_surface(xx, yy, z_pred, cmap = cm.coolwarm, linewidth = 0, antialiased = False)
 	for i in range(2):
 		axs[i].zaxis.set_major_locator(LinearLocator(10))
@@ -419,3 +468,5 @@ if __name__ == "__main__":
 	plt.tight_layout()
 	# plt.savefig("../figs/a_Franke_surf.pdf")
 	plt.show()
+
+	

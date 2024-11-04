@@ -48,7 +48,7 @@ class Adagrad(Scheduler):
         self.G_t = None
 
     def update_change(self, gradient):
-        delta = 1e-8  # avoid division by zero
+        delta = 1e-8  # avoid division ny zero
 
         if self.G_t is None:
             self.G_t = np.zeros((gradient.shape[0], gradient.shape[0]))
