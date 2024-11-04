@@ -48,17 +48,21 @@ class Adagrad(Scheduler):
         self.G_t = None
 
     def update_change(self, gradient):
-        delta = 1e-8  # avoid division ny zero
+        delta = 1e-8  # avoid division by zero
 
         if self.G_t is None:
-            self.G_t = np.zeros((gradient.shape[0], gradient.shape[0]))
+            self.G_t = np.zeros_like(gradient)
 
-        self.G_t += gradient @ gradient.T
+        self.G_t += gradient * gradient
 
-        G_t_inverse = 1 / (
-            delta + np.sqrt(np.reshape(np.diagonal(self.G_t), (self.G_t.shape[0], 1)))
-        )
-        return self.eta * gradient * G_t_inverse
+        return self.eta * gradient / (np.sqrt(self.G_t + delta))
+
+        # self.G_t += gradient @ gradient.T
+
+        # G_t_inverse = 1 / (
+        #     delta + np.sqrt(np.reshape(np.diagonal(self.G_t), (self.G_t.shape[0], 1)))
+        # )
+        # return self.eta * gradient * G_t_inverse
 
     def reset(self):
         self.G_t = None
