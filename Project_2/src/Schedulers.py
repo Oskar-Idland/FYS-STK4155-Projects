@@ -18,7 +18,7 @@ class Scheduler:
 
 
 class Constant(Scheduler):
-    def __init__(self, eta):
+    def __init__(self, eta: float):
         super().__init__(eta)
 
     def update_change(self, gradient):

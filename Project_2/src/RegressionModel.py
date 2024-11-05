@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split, cross_val_score, cross_val
 from sklearn.utils import resample
 from autograd import grad
 from jax import jit
-from Scheduler import Adagrad, AdagradMomentum, RMSprop, Adam, Constant
+from Schedulers import Adagrad, AdagradMomentum, RMS_prop, Adam, Constant, Momentum
 
 
 #TODO edit this class to fit with rest of project code, maybe remove all gradient descent methods
@@ -71,7 +71,7 @@ class RegressionModel:
         self._split()
         self._scale()
 
-    def set_seed(self, seed: int):
+    def set_seed(self, seed: int): # TODO: Delete?
         """
         Sets the seed used for reproducibility.
         """
@@ -186,19 +186,20 @@ class RegressionModel:
     """ 
     Gradient descent methods 
     """
-    def gradient_descent(self, n_iter: int, eta: float | None = None, tuning_method: float | None = None, tuning_params: list | None = None, lmbd: float | None = 0.0, gamma: float | None = 0.0, use_autograd: bool = False, return_theta: bool = False) -> tuple[np.ndarray]:
+    def gradient_descent(self, n_iter: int, eta: float | None = None, tuning_method: str  = 'Const', tuning_params: list | None = None, lmbd: float | None = 0.0, gamma: float | None = 0.0, use_autograd: bool = False, return_theta: bool = False) -> tuple[np.ndarray]:
         """
         Uses gradient descent with or without momentum to minimize the cost function. TODO maybe change
 
         ## Parameters:
         n_iter (int): The number of iterations to perform in gradient descent.
         eta (float | None, optional): The learning rate. Must either be between 0.0 and 1.0 or None. If passed as None, it is computed from the Hessian matrix. Default is None.
-        tuning_method (str | None, optional): Which tuning method to implement. The options are "decay", "AdaGrad", "RMSprop", "ADAM" and None. Default is None. #TODO does it make sense to group decaying rate together with the others? how are they tuning methods?
+        tuning_method (str | None, optional): Which tuning method to implement. The options are "Const", "AdaGrad", "RMS_prop", "Adam" and None. Default is None (Const). #TODO does it make sense to group decaying rate together with the others? how are they tuning methods?
         tuning_params: (list, optional): List containing the parameters needed for the tuning method. If None, or if tuning_method is passed as None, no tuning is performed. Default is None. The expected signatures for the different methods are:
-        "decay":   [t0: int, t1: int]        
-        "AdaGrad": [delta: float]               
-        "RMSprop": [delta: float, rho: float]    
-        "ADAM":    [delta: float, beta_1: float, beta_1: float]
+        "Const":   None         
+        "Momentum": None
+        "AdaGrad": None               
+        "RMS_prop": rho: float    
+        "Adam":     beta_1: float, beta_1: float
         lmbd (float, optional): The regularization parameter in Ridge regression. Passing as zero corresponds to OLS. Default is 0.0.
         gamma (float, optional): The momentum parameter. Must be between 0.0 and 1.0. Passing as zero corresponds to using gradient descent without momentum. Default is 0.0.
         use_autograd (bool, optional): Whether to use autograd's grad function to compute the gradients. Default is False.
@@ -226,30 +227,30 @@ class RegressionModel:
 
         if use_autograd:
             def cost_func(theta):
-                return (1.0 / len(self.y_train)) * np.sum((self.X_train @ theta - self.ydelta, beta_train)**2) + lmbd * np.sum(theta**2) #TODO correct to use len(y_train)? generalize to 2D
+                return (1.0 / len(self.y_train)) * np.sum((self.X_train @ theta - self.y_train)**2) + lmbd * np.sum(theta**2) #TODO correct to use len(y_train)? generalize to 2D
             training_gradient = grad(cost_func)
         else:
             def training_gradient(theta):
-                return 2.0 * ((1.0 / len(self.y_train)) * self.X_train.T @ (self.X_train @ theta - self.y_train) + lmbd * theta * 2) #TODO correct to use len(y_train)? generalize to 2D
+                return 2.0 * ((1.0 / len(self.y_train)) * self.X_train.T @ (self.X_train @ theta - self.y_train) + lmbd * theta) #TODO correct to use len(y_train)? generalize to 2D
             
-        if tuning_method == "decay":    # Uses a decaying learning rate
-           gradient_change = Constant(eta)
-        
-        elif tuning_method == "AdaGrad": # Uses the AdaGrad tuning method
-            delta = tuning_params[0]
-            gradient_change = Adagrad(eta, delta)
             
-        elif tuning_method == "AdagradMomentum": # Uses the AdaGrad tuning method
-            delta, beta = tuning_params
-            gradient_change = AdagradMomentum(eta, gamma)
-        
-        elif tuning_method == "RMSprop": # Uses the RMSprop tuning method
-            delta, rho = tuning_params
-            gradient_change = RMSprop(eta, delta, rho)
-        
-        elif tuning_method == "ADAM":    # Uses the ADAM optimizer tuning method
-            delta, beta_1, beta_2 = tuning_params
-            gradient_change = Adam(eta, delta, beta_1, beta_2)
+        match tuning_method.lower():
+            case "const":    # Uses a decaying learning rate
+                gradient_change = Constant(eta)
+            case "momentum":
+                gradient_change = Momentum(eta, gamma)
+            case "adagrad":
+                gradient_change = Adagrad(eta)
+            case "adagradmomentum":
+                gradient_change = AdagradMomentum(eta, gamma)
+            case "rms_prop":
+                rho = tuning_params
+                gradient_change = RMS_prop(eta, rho)
+            case "adam":
+                rho_1, rho_2 = tuning_params
+                gradient_change = Adam(eta, rho_1, rho_2)
+            case _:
+                raise ValueError(f"Invalid tuning method: {tuning_method}.")
             
         
         # Estimating theta's with gradient descent
@@ -267,23 +268,27 @@ class RegressionModel:
         quantities = [MSE, R2]
         if return_theta:
             quantities.append(theta)
+            
+        gradient_change.reset()
         return quantities
 
     #TODO have one method for each tuning method?
     #TODO if not, optimize anyway
-    def stochastic_gradient_descent(self, n_epochs: int, M: int, eta: float | None = None, tuning_method: float | None = None, tuning_params: list | None = None, lmbd: float | None = 0.0, gamma: float | None = 0.0, use_autograd: bool = False, return_theta: bool = False) -> tuple[np.ndarray]:
+    def stochastic_gradient_descent(self, n_epochs: int, M: int, eta: float | None = None, tuning_method: str = 'Const', tuning_params: list | None = None, lmbd: float | None = 0.0, gamma: float | None = 0.0, use_autograd: bool = False, return_theta: bool = False) -> tuple[np.ndarray]:
         """
         Uses stochastic gradient descent with or without momentum to minimize the cost function. TODO maybe change
 
         n_epochs (int): Number of epochs to use.
         M (int): Size of each minibatch.
         eta (float | None, optional): The learning rate. Must either be between 0.0 and 1.0 or None. If passed as None, it is computed from the Hessian matrix. Default is None.
-        tuning_method (str | None, optional): Which tuning method to implement. The options are "decay", "AdaGrad", "RMSprop", "ADAM" and None. Default is None. #TODO does it make sense to group decaying rate together with the others? how are they tuning methods?
+        tuning_method (str | None, optional): Which tuning method to implement. The options are "Const", "AdaGrad", "AdaGradMomentum", "RMS_prop", "Adam" and None. Default is None. #TODO does it make sense to group decaying rate together with the others? how are they tuning methods?
         tuning_params: (list, optional): List containing the parameters needed for the tuning method. If None, or if tuning_method is passed as None, no tuning is performed. Default is None. The expected signatures for the different methods are:
-            "decay":   [t0: int, t1: int]        
-            "AdaGrad": [delta: float]               
-            "RMSprop": [delta: float, rho: float]    
-            "ADAM":    [delta: float, beta_1: float, beta_1: float]      
+            "Const":   None      
+            "Momentum": None  
+            "AdaGrad": [float]   
+            "AdagradMomentum": [float, gamma: float]            
+            "RMS_prop": [float, rho: float]    
+            "Adam":    [float, rho_1: float, rho_2: float]      
         lmbd (float, optional): The regularization parameter in Ridge regression. Passing as zero corresponds to OLS. Default is 0.0.
         gamma (float, optional): The momentum parameter. Must be between 0.0 and 1.0. Passing as zero corresponds to using gradient descent without momentum. Default is 0.0.
         use_autograd (bool, optional): Whether to use autograd's grad function to compute the gradients. Default is False.
@@ -293,18 +298,6 @@ class RegressionModel:
         tuple: A tuple containing the Mean-Squared Error (MSE) score and the R-squared (R2) score, as well as the theta values (coefficients) if return_theta is passed as True.
         """
         np.random.seed(self.seed)
-        #TODO do this in a better way
-        Hessian = False
-        if eta is None:
-            Hessian = True
-        elif eta < 0.0 or eta > 1.0:
-            Hessian = True
-            print("The learning rate eta must be between 0.0 and 1.0! Computing using the Hessian matrix.")
-        if Hessian:
-            H = 2.0 * ((1.0 / len(self.y_train)) * self.X_train.T @ self.X_train + lmbd * np.eye(self.X_train.shape[1])) #TODO correct to use len(y_train)? generalize to 2D
-            eigvals, eigvecs = np.linalg.eig(H)
-            eta = 1.0 / np.max(eigvals)
-
         if gamma < 0.0 or gamma > 1.0:
             print("The momentum parameter gamma must be between 0.0 and 1.0! Setting to 0.0.")
             gamma = 0.0
@@ -317,62 +310,38 @@ class RegressionModel:
             def training_gradient(X, y, theta):
                 return 2.0 * ((1.0 / len(y)) * X.T @ (X @ theta - y) + lmbd * theta) #TODO correct to use len(y)? generalize to 2D
 
-        if tuning_method == "decay":     # Uses a decaying learning rate
-            t0, t1 = tuning_params
-            def learning_schedule(t):
-                return t0 / (t + t1)
-        elif tuning_method == "AdaGrad": # Uses the AdaGrad tuning method
-            delta = tuning_params[0]
-        elif tuning_method == "RMSprop": # Uses the RMSprop tuning method
-            delta, rho = tuning_params
-        elif tuning_method == "ADAM":    # Uses the ADAM optimizer tuning method
-            delta, beta_1, beta_2 = tuning_params
         
+        match tuning_method.lower():
+            case "const":    # Uses a decaying learning rate
+                gradient_change = Constant(eta)
+            case "momentum":
+                gradient_change = Momentum(eta, gamma)
+            case "adagrad":
+                gradient_change = Adagrad(eta)
+            case "adagradmomentum":
+                gradient_change = AdagradMomentum(eta, gamma)
+            case "rms_prop":
+                rho = tuning_params
+                gradient_change = RMS_prop(eta, rho)
+            case "adam":
+                rho_1, rho_2 = tuning_params
+                gradient_change = Adam(eta, rho_1, rho_2)
+            case _:
+                raise ValueError(f"Invalid tuning method: {tuning_method}.")
+            
+            
         # Estimating theta's with gradient descent
         m      = int(len(self.y_train) / M) # Number of minibatches TODO correct shape?
         theta  = np.random.randn(self.X.shape[1], 1) #TODO correct shape?
-        change = 0.0
-        if tuning_method == "ADAM":
-            iter = 0
-
+        
         for epoch in range(1, n_epochs + 1):
-            #TODO set change to zero at the start of every epoch?
-            if tuning_method in ["AdaGrad", "RMSprop"]:
-                Giter = 0.0
-            elif tuning_method == "ADAM":
-                first_moment, second_moment = 0.0, 0.0
-                iter += 1
-
             for i in range(m):
-                k  = M*np.random.randint(m) # Pick the k-th minibatch at random
+                k  = M*np.random.randint(m)
                 Xi = self.X_train[k:k+M]
                 yi = self.y_train[k:k+M]
-
                 gradients = training_gradient(Xi, yi, theta)
-                
-                if tuning_method in [None, "decay"]:
-                    if tuning_method == "decay":
-                        t = epoch*m + i
-                        eta = learning_schedule(t)
-                    new_change = eta * gradients + gamma * change
-                    theta -= new_change
-                    change = new_change 
-                
-                else:
-                    if tuning_method in ["AdaGrad", "RMSprop"]:
-                        gradients = training_gradient(Xi, yi, theta)
-                        if tuning_method == "AdaGrad":
-                            Giter += gradients*gradients
-                        else:
-                            Giter = (rho * Giter + (1 - rho) * gradients*gradients)
-                        change = gradients * eta /(delta + np.sqrt(Giter))
-                    elif tuning_method == "ADAM":
-                        first_moment = beta_1*first_moment + (1 - beta_1)*gradients
-                        second_moment = beta_2*second_moment + (1 - beta_2)*gradients*gradients
-                        first_term = first_moment / (1.0 - beta_1**iter)
-                        second_term = second_moment / (1.0 - beta_2**iter)
-                        change = eta * first_term / (np.sqrt(second_term) + delta)
-                    theta -= change
+                change = gradient_change.update_change(gradients)
+                theta -= change
     
         y_pred = self.X_test @ theta
         
@@ -382,6 +351,9 @@ class RegressionModel:
         quantities = [MSE, R2]
         if return_theta:
             quantities.append(theta)
+            
+            
+        gradient_change.reset()
         return quantities
 
 
@@ -420,31 +392,3 @@ class RegressionModel:
             theta = np.mean(theta, axis = 1, keepdims = True)
             quantities.append(theta)
         return quantities
-
-
-    # def kfold_crossval(self, k: int, model: sklearn.linear_model.LinearRegression | sklearn.linear_model.Ridge | sklearn.linear_model.Lasso, predict: bool = False) -> float | np.ndarray:
-    def kfold_crossval(self, k: int, model, predict: bool = False) -> float | np.ndarray:
-        """
-        Performs k-fold cross-validation.
-
-        ## Parameters:
-        k (int): The number of folds in the k-fold cross-validation.
-        model (sklearn.linear_model.LinearRegression | sklearn.linear_model.Ridge | sklearn.linear_model.Lasso): The regression model to be used. This must already have been initialized with eventual hyperparameters #TODO maybe change
-        predict (bool, optional): Whether to return the predicted values instead of the score. Default is False.
-
-        ## Returns:
-        float | np.ndarray: The estimated Mean-Squared Error (MSE) from the k-fold cross-validation if predict is passed as False, and the predicted values if predict is passed as True.
-        """
-
-        kfold = KFold(n_splits = k, shuffle = True, random_state = self.seed) 
-
-        X = self.scaler_X.transform(self.X)
-        y = self.scaler_y.transform(self.y)
-
-        if predict:
-            y_pred = cross_val_predict(model, X, y, cv = kfold).reshape(-1, 1)
-            return self.scaler_y.inverse_transform(y_pred)
-        else:
-            MSE_folds = cross_val_score(model, X, y, scoring = "neg_mean_squared_error", cv = kfold)
-            MSE = np.mean(-MSE_folds)
-            return MSE
