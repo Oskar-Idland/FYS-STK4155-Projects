@@ -51,7 +51,7 @@
 
 \usepackage{physics,amssymb}  % mathematical symbols (physics imports amsmath)
 \usepackage{amsmath}
-\usepackage{graphicx} 
+\usepackage{graphicx}
 % include graphics such as plots
 \usepackage[dvipsnames]{xcolor}           % set colors
 % \usepackage{hyperref}         % automagic cross-referencing
@@ -75,6 +75,7 @@
 \usepackage{tikz}
 \usepackage{hyperref}         % automagic cross-referencing
 \usepackage{cleveref}
+\usepackage{comment}
 % defines the color of hyperref objects
 % Blending two colors:  blue!80!black  =  80% blue and 20% black
 \hypersetup{ % this is just my personal choice, feel free to change things
@@ -82,36 +83,35 @@
     linkcolor={red!50!black},
     citecolor={blue!50!black},
     urlcolor={blue!80!black},
-    breaklinks=true}
+breaklinks=true}
 \urlstyle{same}
-
 
 \renewcommand{\bibsection}{\section*{References}}
 \newcommand{\psp}{\hspace{1pt}}
 % ===========================================
 
-
 \begin{document}
 
-\title{\texorpdfstring{\begin{Large}Project 2\end{Large}\\\vspace{5pt}FYS-STK4155}{Lg}}
+\title{\texorpdfstring{
+        \begin{Large}Project 2
+\end{Large}\\\vspace{5pt}FYS-STK4155}{Lg}}
 \author{Erik Joshua Røset \& Oskar Idland}
 \date{\today}
 \affiliation{University of Oslo, Department of Physics}
 
-
 \begin{abstract}
-\centering
-\colorbox{magenta}{Add the abstact in the end}
+    \centering
+    \colorbox{magenta}{Add the abstact in the end}
 
-% We have explored various regression techniques and resampling methods within the context of machine learning, motivated by the need to develop robust models that can accurately predict and generalize from complex datasets. The main objective was to analyze and compare the performance of Ordinary Least Squares (OLS), Ridge, and Lasso regression in fitting synthetic and real-world data, focusing on the bias-variance tradeoff and model generalizability. We applied these regression techniques to the Franke function, a synthetic benchmark used in numerical analysis, and extended our analysis to cosmological N-body simulation data generated using the public G\begin{scriptsize}ASOLINE\end{scriptsize}2 SPH code. To assess model performance and generalization, we employed resampling methods such as bootstrap and $k$-fold cross-validation, examining how they help to evaluate model accuracy under different training and test data conditions. Due to runtime limitations we only tested polynomial degrees up to 31 for the cosmological data, and found that the model was insufficient in representing its intricate structure. As a result, introducing regularization with the Ridge and Lasso techniques led to poor model performance, while the employment of resampling methods proved to show negligible improvements. For future studies, optimizing our code and testing larger polynomial degrees could be an area of interest.
+    % We have explored various regression techniques and resampling methods within the context of machine learning, motivated by the need to develop robust models that can accurately predict and generalize from complex datasets. The main objective was to analyze and compare the performance of Ordinary Least Squares (OLS), Ridge, and Lasso regression in fitting synthetic and real-world data, focusing on the bias-variance tradeoff and model generalizability. We applied these regression techniques to the Franke function, a synthetic benchmark used in numerical analysis, and extended our analysis to cosmological N-body simulation data generated using the public G\begin{scriptsize}ASOLINE\end{scriptsize}2 SPH code. To assess model performance and generalization, we employed resampling methods such as bootstrap and $k$-fold cross-validation, examining how they help to evaluate model accuracy under different training and test data conditions. Due to runtime limitations we only tested polynomial degrees up to 31 for the cosmological data, and found that the model was insufficient in representing its intricate structure. As a result, introducing regularization with the Ridge and Lasso techniques led to poor model performance, while the employment of resampling methods proved to show negligible improvements. For future studies, optimizing our code and testing larger polynomial degrees could be an area of interest.
 \end{abstract}
 \maketitle
 \onecolumngrid
 \begin{center}
-  \vspace{-15pt}
-  % LINK TO REPOSITORY
-  \href{https://github.com/Oskar-Idland/FYS-STK4155-Projects}{https://github.com/Oskar-Idland/FYS-STK4155-Projects}%{GitHub Repository}
-  \vspace{5pt}
+    \vspace{-15pt}
+    % LINK TO REPOSITORY
+    \href{https://github.com/Oskar-Idland/FYS-STK4155-Projects}{https://github.com/Oskar-Idland/FYS-STK4155-Projects}%{GitHub Repository}
+    \vspace{5pt}
 \end{center}
 \twocolumngrid
 % ===========================================
@@ -119,7 +119,10 @@
 %#TODO punctuate the equations
 
 \section{Introduction}\label{sec:introduction}
-% \color{Plum}
+\begin{comment}
+  #TODO: Maybe angle it more towards exploring breast cancer?
+  #TODO: Mention the appendix and what it contains
+\end{comment}
 
 The ever-growing complexity of modern data calls for robust machine learning techniques capable of handling non-linear patterns and high-dimensional spaces. While traditional methods, such as Ordinary Least Squares (OLS), Ridge, and Lasso regression, offer valuable insights into model behavior and regularization, their limitations become apparent when addressing more intricate datasets. In our previous project, we explored these regression techniques in-depth, assessing their effectiveness on synthetic and real-world datasets, with particular attention to the bias-variance tradeoff and resampling methods for model validation. However, as data complexity increases, more sophisticated methods, such as neural networks, become necessary to model non-linear relationships and provide superior generalization.
 
@@ -133,8 +136,7 @@ The methods explored in this project have profound implications for modern machi
 
 Through this comprehensive exploration of optimization methods and neural networks, we aim to bridge the gap between traditional regression techniques and modern deep learning approaches. Our analysis spans both regression and classification tasks, allowing us to evaluate the strengths and limitations of each method across different problem domains. The project not only builds upon our previous work with linear models but also establishes a foundation for understanding more advanced machine learning architectures and their optimization challenges.
 
-
-% In \cref{sec:theory} we present relevant background theory, the majority of which has been sourced from the lecture notes by Morten Hjorth-Jensen \cite{notes}. We go into detail explaining central concepts such as OLS, Ridge and Lasso regression, the bias-variance tradeoff and two crucial resampling methods; bootstrapping and cross-validation, both of which will be implemented in this work. A few of the most important expressions introduced in this section are derived in \cref{appsec:derivations}. Our methodology is explained in \cref{sec:methods}, specifically how we define the essential design matrix, scale our data and implement the regression and resampling techniques. We also give an overview of our code structure and present the cosmological simulation data. In \cref{sec:results discussion} we present, interpret and discuss the results of our analyses in light of expectations based on our previous knowledge of the implemented regression and resampling methods. In \cref{appsec:figures} we include some additional figures that are not essential to our discussions, yet still referred to in the aforementioned section because they are necessary in reasoning our choice of presented results. Lastly, we summarize and conclude the main findings of our work in \cref{sec:conclusion}, and provide some open questions for further exploration. 
+% In \cref{sec:theory} we present relevant background theory, the majority of which has been sourced from the lecture notes by Morten Hjorth-Jensen \cite{notes}. We go into detail explaining central concepts such as OLS, Ridge and Lasso regression, the bias-variance tradeoff and two crucial resampling methods; bootstrapping and cross-validation, both of which will be implemented in this work. A few of the most important expressions introduced in this section are derived in \cref{appsec:derivations}. Our methodology is explained in \cref{sec:methods}, specifically how we define the essential design matrix, scale our data and implement the regression and resampling techniques. We also give an overview of our code structure and present the cosmological simulation data. In \cref{sec:results discussion} we present, interpret and discuss the results of our analyses in light of expectations based on our previous knowledge of the implemented regression and resampling methods. In \cref{appsec:figures} we include some additional figures that are not essential to our discussions, yet still referred to in the aforementioned section because they are necessary in reasoning our choice of presented results. Lastly, we summarize and conclude the main findings of our work in \cref{sec:conclusion}, and provide some open questions for further exploration.
 
 % ===========================================
 \section{Theory}\label{sec:theory}
@@ -146,7 +148,7 @@ In this project, we extend our previous exploration of machine learning techniqu
 Gradient descent is a fundamental optimization algorithm used to minimize a cost function \( C(\beta) \), where \( \beta \) represents the model parameters. Unlike the closed-form solutions available for OLS and Ridge regression in Project 1, many modern machine learning models, particularly neural networks, require iterative optimization methods. The core principle of gradient descent is to iteratively update the parameters in the direction that minimizes the cost function. Given a cost function \( C(\beta) \) and current parameters \( \beta_t \) at iteration \(t\), the basic update rule is:
 
 \begin{equation}
-    \beta_{t+1} = \beta_t - \eta \nabla_\beta C(\beta_t)
+    \beta_{t+1} = \beta_t - \eta \nabla_\beta C(\beta_t),
 \end{equation}
 
 where \( \eta > 0 \) is the learning rate that controls the size of the update step, and \( \nabla_\beta L(\beta_t) \) is the gradient of the cost function with respect to \( \beta \) . The gradient represents the direction of steepest ascent in the cost landscape, so moving in the negative gradient direction ensures we minimize the cost function.
@@ -156,10 +158,10 @@ where \( \eta > 0 \) is the learning rate that controls the size of the update s
 In its simplest form, "plain" gradient descent (GD) computes the gradient using the entire dataset:
 
 \begin{equation}
-    \nabla_\beta C(\beta_t) = \sum_{i=1}^{n} \nabla_\beta C_i(\beta_t)
+    \nabla_\beta C(\beta_t) = \sum_{i=1}^{n} \nabla_\beta C_i(\beta_t).
 \end{equation}
 
-Where \( n\) is the total number of training examples and \( C_i(\beta_t) \) is the cost for the i-th example. While this approach would provide the most accurate estimate of the gradient, it has several significiant limitations:
+Where \( n\) is the total number of training examples and \( C_i(\beta_t) \) is the cost for the i-th example. While this approach would provide the most accurate estimate of the gradient, it has several significant limitations:
 \begin{itemize}
     \item Computational Cost: For large datasets, computing the gradient over all n data points becomes extremely expensive, as each update step requires a complete pass through the dataset.
     \item Local Minima: Since the algorithm is deterministic, it will converge to a local minimum of the cost function if it converges at all. In machine learning applications, where we often deal with highly non-convex cost landscapes, this can lead to suboptimal solutions.
@@ -171,32 +173,31 @@ Where \( n\) is the total number of training examples and \( C_i(\beta_t) \) is 
 
 To address these limitations, Stochastic Gradient Descent (SGD) introduces randomness into the optimization process. Instead of using the entire dataset for each update, SGD uses randomly selected subsets of the data, called mini-batches:
 
-The fundamental idea that SGD is built on is that the cost function can be written as the average of the cost functions for individual training examples. It then follows that the gradient can be computed as a sum over indivudual gradients. We can then approximate the gradient by only computing the gradient for a single minibatch:
+The fundamental idea that SGD is built on is that the cost function can be written as the average of the cost functions for individual training examples. It then follows that the gradient can be computed as a sum over individual gradients. We can then approximate the gradient by only computing the gradient for a single minibatch:
 
 \begin{equation}
-    \nabla_\beta C(\beta_t) \approx \sum_{i \in B_k}\nabla_\beta c_i(\mathbf{x}_i, \beta_t)
+    \nabla_\beta C(\beta_t) \approx \sum_{i \in B_k}\nabla_\beta c_i(\mathbf{x}_i, \beta_t).
 \end{equation}
 The entire dataset can be split into \( n/M \) minibatches (\( B_k \)). The size \( M \) of the minibatch represents a key parameter choice in SGD. When \( M = n \), we recover the "plain" gradient descent method, while \( M = 1 \) represents pure stochastic gradient descent where updates are made using a single randomly chosen data point. The choice of minibatch size \( M \) thus allows us to balance between the accurate but computationally expensive gradient estimates of batch gradient descent and the noisy but frequent updates of pure SGD. In practice, minibatch sizes are often chosen to be much smaller than \( n \) to maintain the computational efficiency and stochastic nature of SGD while reducing the variance in gradient estimates compared to when \( M = 1 \). This gives us the update rule for SGD:
 
 \begin{equation}
-    \beta_{t+1} = \beta_t - \eta \sum_{i \in B_k} \nabla_\beta c_i(\mathbf{x}_i, \beta_t)
+    \beta_{t+1} = \beta_t - \eta \sum_{i \in B_k} \nabla_\beta c_i(\mathbf{x}_i, \beta_t).
 \end{equation}
-
 
 Only processing a subset of the data at each iteration facilitates more frequent parameter updates, as the required computational power for each iteration is significantly reduced. The inherent noise in gradient estimates can also help the optimizer escape poor local minima and saddle points. However, the algorithm becomes highly sensitive to the choice of learning rate. Too large values can cause divergence, while too small values lead to slow convergence.
 
 \subsection{Advanced Optimization Methods}
 
-These limitations motivate two key enhancements to the basic SGD algorithm. The uniform step size problem can be addressed by introducing momentum, which helps the optimizer maintain velocity in consistent directions while damping oscillations in regions of varying curvature. The learning rate sensitivity issue can be tackled through adaptive learning rate methods, which automatically adjust the learning rate based on the observed geometry of the cost function during training. 
+These limitations motivate two key enhancements to the basic SGD algorithm. The uniform step size problem can be addressed by introducing momentum, which helps the optimizer maintain velocity in consistent directions while damping oscillations in regions of varying curvature. The learning rate sensitivity issue can be tackled through adaptive learning rate methods, which automatically adjust the learning rate based on the observed geometry of the cost function during training.
 
 \subsubsection{Momentum}
 A key limitation of basic gradient descent methods is their uniform step size across all directions, which can lead to slow convergence, especially in regions where the cost surface has different curvatures in different directions. Momentum addresses this by accumulating a velocity vector that helps accelerate convergence and dampen oscillations:
 
 \begin{equation}
-    v_{t+1} = \gamma v_t + \eta \nabla_\beta C(\beta_t)
+    v_{t+1} = \gamma v_t + \eta \nabla_\beta C(\beta_t),
 \end{equation}
 \begin{equation}
-    \beta_{t+1} = \beta_t - v_{t+1}
+    \beta_{t+1} = \beta_t - v_{t+1},
 \end{equation}
 
 where \( \gamma \) (typically 0.9) is the momentum coefficient that determines how much of the previous velocity is retained. This modification provides several advantages:
@@ -212,44 +213,44 @@ Choosing the right learning rate \( \eta \) is critical to the success of gradie
 
 \paragraph*{Decaying Learning Rate}
 
- One simple approach is to gradually decrease the learning rate as training progresses, using a schedule such as:
-  \[
-  \eta_t = \frac{\eta_0}{1 + \lambda t}
-  \]
-  where \( \eta_0 \) is the initial learning rate, \( t \) is the iteration, and \( \lambda \) is the decay rate. This helps ensure that larger updates are made at the start of training when far from the optimum, and smaller, more precise updates are made later.
+One simple approach is to gradually decrease the learning rate as training progresses, using a schedule such as:
+\[
+    \eta_t = \frac{\eta_0}{1 + \lambda t},
+\]
+where \( \eta_0 \) is the initial learning rate, \( t \) is the iteration, and \( \lambda \) is the decay rate. This helps ensure that larger updates are made at the start of training when far from the optimum, and smaller, more precise updates are made later.
 
 \paragraph*{AdaGrad}
- (Adaptive Gradient Algorithm): AdaGrad adapts the learning rate for each parameter based on the historical gradients. It assigns a smaller learning rate to frequently updated parameters and a larger rate to less frequently updated ones:
-  \[
-  \beta_{t+1} = \beta_t - \frac{\eta}{\sqrt{G_t + \epsilon}} \nabla_\beta L(\beta_t)
-  \]
-  where \( G_t \) is the sum of the squares of the past gradients, and \( \epsilon \) is a small constant to avoid division by zero. AdaGrad is well-suited for sparse data but may become overly conservative in later iterations due to the cumulative sum of gradients.
+(Adaptive Gradient Algorithm): AdaGrad adapts the learning rate for each parameter based on the historical gradients. It assigns a smaller learning rate to frequently updated parameters and a larger rate to less frequently updated ones:
+\[
+    \beta_{t+1} = \beta_t - \frac{\eta}{\sqrt{G_t + \epsilon}} \nabla_\beta L(\beta_t),
+\]
+where \( G_t \) is the sum of the squares of the past gradients, and \( \epsilon \) is a small constant to avoid division by zero. AdaGrad is well-suited for sparse data but may become overly conservative in later iterations due to the cumulative sum of gradients.
 
 \paragraph*{RMSprop}
- To address AdaGrad's diminishing learning rates, RMSprop uses a moving average of the squared gradients to scale the learning rate. This helps maintain a balance between fast convergence and smooth parameter updates:
-  \[
-  E[g^2]_t = \beta E[g^2]_{t-1} + (1 - \beta) g_t^2
-  \]
-  \[
-  \beta_{t+1} = \beta_t - \frac{\eta}{\sqrt{E[g^2]_t + \epsilon}} \nabla_\beta L(\beta_t)
-  \]
-  where \( \beta \) (typically 0.9) controls the decay rate of the moving average, and \( E[g^2]_t \) is the moving average of the squared gradients.
+To address AdaGrad's diminishing learning rates, RMSprop uses a moving average of the squared gradients to scale the learning rate. This helps maintain a balance between fast convergence and smooth parameter updates:
+\[
+    E[g^2]_t = \beta E[g^2]_{t-1} + (1 - \beta) g_t^2,
+\]
+\[
+    \beta_{t+1} = \beta_t - \frac{\eta}{\sqrt{E[g^2]_t + \epsilon}} \nabla_\beta L(\beta_t),
+\]
+where \( \beta \) (typically 0.9) controls the decay rate of the moving average, and \( E[g^2]_t \) is the moving average of the squared gradients.
 
 \paragraph*{Adaptive Moment Estimation (ADAM)}
- ADAM combines the advantages of both AdaGrad and RMSprop by keeping track of both the first moment (mean) and the second moment (uncentered variance) of the gradients:
-  \[
-  m_t = \beta_1 m_{t-1} + (1 - \beta_1) \nabla_\beta L(\beta_t)
-  \]
-  \[
-  v_t = \beta_2 v_{t-1} + (1 - \beta_2) (\nabla_\beta L(\beta_t))^2
-  \]
-  \[
-  \hat{m}_t = \frac{m_t}{1 - \beta_1^t}, \quad \hat{v}_t = \frac{v_t}{1 - \beta_2^t}
-  \]
-  \[
-  \beta_{t+1} = \beta_t - \frac{\eta}{\sqrt{\hat{v}_t} + \epsilon} \hat{m}_t
-  \]
-  ADAM is one of the most widely used optimization algorithms today due to its ability to dynamically adjust learning rates and its robustness in practice.
+ADAM combines the advantages of both AdaGrad and RMSprop by keeping track of both the first moment (mean) and the second moment (uncentered variance) of the gradients:
+\[
+    m_t = \beta_1 m_{t-1} + (1 - \beta_1) \nabla_\beta L(\beta_t),
+\]
+\[
+    v_t = \beta_2 v_{t-1} + (1 - \beta_2) (\nabla_\beta L(\beta_t))^2,
+\]
+\[
+    \hat{m}_t = \frac{m_t}{1 - \beta_1^t}, \quad \hat{v}_t = \frac{v_t}{1 - \beta_2^t},
+\]
+\[
+    \beta_{t+1} = \beta_t - \frac{\eta}{\sqrt{\hat{v}_t} + \epsilon} \hat{m}_t.
+\]
+ADAM is one of the most widely used optimization algorithms today due to its ability to dynamically adjust learning rates and its robustness in practice.
 
 \subsection{Neural Networks}
 
@@ -263,18 +264,26 @@ A feed-forward neural network (FFNN) is structured into three distinct types of 
 
 The FFNN generalizes our previous linear models by defining the model output \( \tilde{y} \) as a nested series of transformations of the input vector \(x \in \mathbb{R}^{n} \). The fundamental computation at each node takes the form:
 
-\begin{equation} z = wx +b \end{equation}
-\begin{equation} a = f(z) \end{equation} 
+\begin{equation}
+    z = wx +b
+\end{equation}
+\begin{equation}
+    a = f(z)
+\end{equation}
 
 Where \( w \) are the weights, \( b \) is the bias, and \( f(\cdot) \) is a non-linear activation function. This computation can be extended to a layer of neurons by organizing the weigths into a matrix \( W \in \mathbb{R}^{m\times n} \) and the biases into a vector \( \mathbf{b} \in \mathbb{R}^m \):
 
-\begin{equation} \mathbf{z} = W\mathbf{X} + \mathbf{b} \end{equation}
-\begin{equation} \mathbf{a} = f(\mathbf{z}) \end{equation}
+\begin{equation}
+    \mathbf{z} = W\mathbf{X} + \mathbf{b}
+\end{equation}
+\begin{equation}
+    \mathbf{a} = f(\mathbf{z})
+\end{equation}
 
 Where \( \mathbf{X} \in \mathbb{R}^{b \times n}\) represent a batch of input vectors and \( \mathbf{a} \in \mathbb{R}^{b \times m} \) is the layer output and \( \mathbf{b} \) is a vector of biases. For a network with \( L \) layers, we can express the complete forward propagation as:
 
 \begin{align*}
-    \mathbf{z}^1 &= W^1\mathbf{X} + \mathbf{b}^1 \\ 
+    \mathbf{z}^1 &= W^1\mathbf{X} + \mathbf{b}^1 \\
     \mathbf{a}^1 &= f(\mathbf{z}^1) \\
     \mathbf{z}^2 &= W^2\mathbf{a}^1 + \mathbf{b}^2 \\
     \mathbf{a}^2 &= f(\mathbf{z}^2) \\
@@ -315,22 +324,22 @@ Where $\lambda$ is the regularization parameter, $N$ is the number of training s
 
 \subsubsection{Activation Functions}
 
-The non-linear activation functions are fundamental components that enable neural networks to approximate complex functions. By introducing non-linearity between layers, these functions allow the network to learn and represent patterns that would be impossible with purely linear transformations. The careful selection of activation functions significantly impacts both the network's expressive capability and its training dynamics. 
+The non-linear activation functions are fundamental components that enable neural networks to approximate complex functions. By introducing non-linearity between layers, these functions allow the network to learn and represent patterns that would be impossible with purely linear transformations. The careful selection of activation functions significantly impacts both the network's expressive capability and its training dynamics.
 
-An activation function \( f(\cdot) \) takes the weighted sum \( z \) of a node's inputs and transforms it into an output signal \( a = f(z) \). For our implementations we consider the following activation functions: \\
+An activation function \( f(\cdot) \) takes the weighted sum \( z \) of a node's inputs and transforms it into an output signal \( a = f(z) \). For our implementations we consider the following activation functions.
 
 \paragraph*{Identity:}
 The identity function, simply defined as
 \begin{equation*}
     f(z) = z,
 \end{equation*}
-passes its input unchanged. While this function is rarely used in hidden layers due to its linearity, it serves as the standard activation function for regression tasks in the output layer.  
+passes its input unchanged. While this function is rarely used in hidden layers due to its linearity, it serves as the standard activation function for regression tasks in the output layer.
 \paragraph*{Sigmoid:}
 The Sigmoid function, defined as
- \begin{equation}
+\begin{equation}
     \sigma(z) = \frac{1}{1 + e^{-z}},
- \end{equation}
-  maps any real input the the interval \( (0, 1) \). This smooth, continuously differentiable function has historically been popular due to its biological inspiration and interpretable output range that naturally corresponds to probability-like quantities. However, it suffers from several drawbacks:
+\end{equation}
+maps any real input the the interval \( (0, 1) \). This smooth, continuously differentiable function has historically been popular due to its biological inspiration and interpretable output range that naturally corresponds to probability-like quantities. However, it suffers from several drawbacks:
 \begin{itemize}
     \item For inputs with large magnitudes, the function becomes nearly flat, which can complicate the training process
     \item Its output is not zero-centered, which can introduce systematic bias during training.
@@ -340,17 +349,19 @@ The Sigmoid function, defined as
 Despite these limitations, the sigmoid remains useful in the output layer for binary classification tasks where probability interpretation is desired.
 
 \paragraph*{Rectified Linear Unit (ReLU):}
-The ReLU function, defined as 
+The ReLU function, defined as
 \begin{equation}
     f(z) = \max(0, z),
 \end{equation}
 has become the default choice for many neural network architectures. As it is a very simple threshold function, it is computationally efficient. It enables sparse activation, as all negative inputs are mapped to exactly zero. However, it suffers from the "dying ReLU" problem, where neurons can become inactive and stop learning if they receive consistently negative inputs.
 
 \paragraph*{Leaky Rectified Linear Unit (Leaky RELU):}
-To adress the "dying ReLU" problem, the Leaky RELU function introduces a small slope for negative inputs:
+To address the "dying ReLU" problem, the Leaky RELU function introduces a small slope for negative inputs:
 \begin{equation}
-     f(z) = \begin{cases} z & \text{if } z > 0 \\
-\alpha z & \text{if } z \leq 0 \end{cases},
+    f(z) =
+    \begin{cases} z & \text{if } z > 0 \\
+        \alpha z & \text{if } z \leq 0
+    \end{cases},
 \end{equation}
 where \( \alpha \) is a small constant (typically 0.01). This modification prevents complete deactivation of neurons while maintaining the computational efficiency of the standard ReLU. By allowing a small, non-zero output for negative inputs, Leaky ReLU ensures that neurons can continue to participate in the learning process even when receiving predominantly negative inputs.
 
@@ -368,14 +379,13 @@ The choice of activation function is a critical design decision that can signifi
 
 The backpropagation algorithm provides an efficient method for computing gradients in neural networks, enabling the network to learn from its errors by adjusting weights and biases. While the forward pass computes predictions, backpropagation determines how each parameter should be adjusted to reduce the prediction error. The algorithm derives its name from the way it propagates error gradients backward through the network, from the output layer to the input layer.
 
-To understand backpropagation, we start with a cost function \( C \) that measures the network's prediction error. For regression tasks, this is typically the mean squared error (MSE). The goal is similiar to that of the gradient descent algorithms: to minimize the cost function. To achieve this, we compute the gradient of the cost function with respect to the network's parameters, the weights \( \frac{\partial C}{\partial w_{jk}^l} \) and \( \frac{\partial C}{\partial b_j^l} \) for each weight and bias in the network. 
+To understand backpropagation, we start with a cost function \( C \) that measures the network's prediction error. For regression tasks, this is typically the mean squared error (MSE). The goal is similar to that of the gradient descent algorithms: to minimize the cost function. To achieve this, we compute the gradient of the cost function with respect to the network's parameters, the weights \( \frac{\partial C}{\partial w_{jk}^l} \) and \( \frac{\partial C}{\partial b_j^l} \) for each weight and bias in the network.
 
 The key insight behind backpropagation is the chain rule, which allows us to decompose these calculations into smaller, more manageable steps. We introduce an intermediate quantity, the error term \( \delta_j^l \), which represents the error in node \( j \) in layer \( l \).
 
 \begin{equation}
     \delta_j^l = \frac{\partial C}{\partial z_j^l}.
 \end{equation}
-    
 
 Where \( z_j^l \) is the weighted input to the activation function for node \( j \) in layer \( l \). This error term represents how a change in the node's input affects the overall cost.
 
@@ -390,7 +400,7 @@ Where \( f'(\cdot) \) is the derivative of the activation function. For the hidd
     \delta_j^l = \sum_k w_{kj}^{l+1}\delta_k^{l+1}f'(z_j^l).
 \end{equation}
 
-This equation shows how errors propagate backward: each node's error is a weighted sum of the errors in the next layer, scaled by the local derivative of its ativation function.
+This equation shows how errors propagate backward: each node's error is a weighted sum of the errors in the next layer, scaled by the local derivative of its activation function.
 
 Once we have computed these error terms, the gradient for any weight or bias follows a simple pattern:
 
@@ -404,7 +414,7 @@ and
     \frac{\partial C}{\partial b_j^l} = \delta_j^l.
 \end{equation}
 
-In these equation the simplicity of the gradient expressions is evident. The gradient for a weight is the product of the error at its target node and the activation from its source node, while the gradient for a bias is simlpy at the error at its node.
+In these equation the simplicity of the gradient expressions is evident. The gradient for a weight is the product of the error at its target node and the activation from its source node, while the gradient for a bias is simply at the error at its node.
 
 During backpropagation, regularization terms are also added to the weight gradients to prevent overfitting, while the bias gradients remain unchanged. This selective regularization of weights but not biases reflects the different roles these parameters play in the network: weights determine the importance of connections, while biases set activation thresholds.
 
@@ -413,7 +423,7 @@ The complete backpropagation algorithm can then be summarized in four steps:
 \begin{itemize}
     \item Forward Pass: Compute activations for all layers
     \item Output Error: Calculate error terms \( \delta^L \) for the output layer
-    \item Backpropagate: Compute error terms \( \delta^l \) for each hidden layer
+    \item Backpropagation: Compute error terms \( \delta^l \) for each hidden layer
     \item Gradient Computation: Calculate the gradients using the error terms
 \end{itemize}
 
@@ -425,7 +435,7 @@ The learning rate tuning methods discussed in section \ref{sec:learning_rate_tun
 \subsection{Training Considerations for Optimization Methods}
 While gradient descent and neural networks may appear quite different at first glance, they share many fundamental training elements and challenges. Understanding these commonalities helps illuminate the underlying principles of machine learning optimization
 
-\subsubsection{Cost Functions and Optimization Goals} 
+\subsubsection{Cost Functions and Optimization Goals}
 Both methods aim to minimize a cost function that measures prediction error. For regression tasks, we prefer the MSE discussed in Project 1 because its quadratic form makes it differentiable and provides stronger penalties for large errors. However, binary classification tasks often employ the logistic regression cost function:
 
 \begin{equation}
@@ -438,7 +448,7 @@ where \( p_i \) represents the predicted probability of class 1 for observation 
 Both gradient descent and neural networks benefit from stochastic updates using mini-batches. This approach offers several advantages:
 
 \begin{itemize}
-    \item Reduced memory requirements compared to full-batch methods 
+    \item Reduced memory requirements compared to full-batch methods
     \item More frequent parameter updates
     \item Introduction of beneficial noise that can help escape local minima
     \item Potential for better generalization
@@ -450,7 +460,7 @@ The choice of batch size involves similar tradeoffs in both cases: smaller batch
 Both methods typically measure progress in terms of epochs - complete passes through the training data. The number of epochs needed depends on factors like dataset size, model complexity, and the difficulty of the task. Training continues until either a maximum number of epochs is reached or some convergence criterion is met. However, the interpretation of "convergence" can differ between methods - neural networks may require more epochs due to their non-linear nature and larger parameter space.
 
 \subsubsection{Hyperparameter Selection}
-Both approches require careful tuning of hyperparameters that control the learning process:
+Both approaches require careful tuning of hyperparameters that control the learning process:
 \begin{itemize}
     \item Learning rates and their scheduling
     \item Regularization strength \( \lambda \)
@@ -473,13 +483,10 @@ The common thread through all these considerations is the fundamental challenge 
 
 % \verb|functions.py|: Python script containing all the functions used in the notebooks, all properly documented. The file includes a main block, testing the functions.
 
-
 % \subsubsection{Tools}\label{subsubsec:tools}
 % All our code is written in Python \cite{Python}, and we used scikit-learn \cite{scikit-learn} to create most of our models. To vectorize our code we used \verb|numpy| \cite{Numpy}, and for visualization we used \verb|matplotlib.pyplot| \cite{Matplotlib}. Code completion and debugging was done in Visual Studio Code \cite{VSCode} with additional assistance of GitHub Copilot \cite{Copilot}. We used \verb|git| \cite{Git} for version control, and \verb|GitHub| \cite{GitHub} for remote storage of our code.
 
-
 \section{Results \& Discussion}\label{sec:results discussion}
-
 
 % \vspace*{-2.5pt}
 \section{Conclusion}\label{sec:conclusion}
@@ -520,7 +527,6 @@ Link to our GitHub repository: \href{https://github.com/Oskar-Idland/FYS-STK4155
 % MATHMODE IN HEADLINE
 % \subsubsection{\texorpdfstring{$\text{Re}(u_{i,j}^n)$ and $\text{Im}(u_{i,j}^n)$}{Lg}}
 
-
 % FIGURE COVERING BOTH COLUMNS
 % \begin{figure*}
 %   \vspace*{-5pt}
@@ -538,7 +544,6 @@ Link to our GitHub repository: \href{https://github.com/Oskar-Idland/FYS-STK4155
 %   \caption{Illustration showing how the triple-slit interference pattern changes with distance from the slits. Gathered from Physics StackExchange \cite{TripleSketch}.}\label{fig:TripleSketch}
 %   \vspace*{-10pt}
 % \end{figure}
-
 
 % TABLE COVERING BOTH COLUMNS
 % \begin{center}
@@ -643,7 +648,6 @@ Link to our GitHub repository: \href{https://github.com/Oskar-Idland/FYS-STK4155
 %   \renewcommand{\arraystretch}{1}
 % \end{center}
 
-
 % ALGORITHM
 % \begin{figure}
 %   % NOTE: We only need \begin{figure} ... \end{figure} here because of a compatability issue between the 'revtex4-1' document class and the 'algorithm' environment.
@@ -669,7 +673,7 @@ Link to our GitHub repository: \href{https://github.com/Oskar-Idland/FYS-STK4155
 %                       \State $s_{ij} = -s_{ij}$ \Comment{Flip spin}
 %                   \EndIf
 %               \EndIf
-%               \State 
+%               \State
 %               \State $\triangleright$ Calculate $E$, $E^2$, $|M|$ and $M^2$ for $\mathbf{s}$
 %               \State $E$, $E^2 = E_\text{function}(\mathbf{s})$
 %               \State $|M|$, $M^2 = M_\text{function}(\mathbf{s})$
