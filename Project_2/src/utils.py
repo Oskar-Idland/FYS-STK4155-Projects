@@ -2,6 +2,23 @@ import numpy as np
 import matplotlib.pyplot as plt
 # TODO: Add docstrings to the functions below
 
+def FrankeFunction(x: float | np.ndarray,y: float | np.ndarray, noise: float = 0, seed: int = 42) -> float | np.ndarray:
+    """ 
+    Generates a surface plot of the Franke function.
+    # Parameters:
+    x (float | np.ndarray): The x-value(s).
+    y (float | np.ndarray): The y-value(s).
+    noise (float): The standard deviation of the noise. Default is 0 (no noise).
+    seed (int): The seed for the random number generator. Default is 42.
+    """
+    term1 = 0.75*np.exp(-(0.25*(9*x-2)**2) - 0.25*((9*y-2)**2))
+    term2 = 0.75*np.exp(-((9*x+1)**2)/49.0 - 0.1*(9*y+1))
+    term3 = 0.5*np.exp(-(9*x-7)**2/4.0 - 0.25*((9*y-3)**2))
+    term4 = -0.2*np.exp(-(9*x-4)**2 - (9*y-7)**2)
+    
+    np.random.seed(seed)
+    noise = np.random.normal(0, noise, (x.shape[0], y.shape[0]))
+    return term1 + term2 + term3 + term4 + noise
 
 def MSE(pred: np.ndarray | float, targets: np.ndarray | float) -> float:
     """
@@ -22,42 +39,6 @@ def MSE_derivative(pred: np.ndarray | float, targets: np.ndarray | float) -> np.
 def R2(pred: np.ndarray | float, targets: np.ndarray | float) -> float:    
     return 1 - np.sum((targets - pred) ** 2) / np.sum((targets - np.mean(targets)) ** 2)
 
-def CostLogReg(pred, targets):
-    """
-    Compute the logistic regression cost (binary cross-entropy loss).
-    
-    Parameters:
-        pred (np.ndarray): Model predictions, should be between 0 and 1
-        targets (np.ndarray): True binary labels (0 or 1)
-    
-    Returns:
-        float: Average binary cross-entropy loss
-    """
-    eps = 1e-15  # Small constant to prevent log(0)
-    # Clip predictions to avoid numerical instability
-    pred = np.clip(pred, eps, 1 - eps)
-    
-    # Binary cross-entropy formula: -[y*log(p) + (1-y)*log(1-p)]
-    cost = -np.mean(targets * np.log(pred) + (1 - targets) * np.log(1 - pred))
-    return cost
-
-def CostLogReg_derivative(pred, targets):
-    """
-    Compute the derivative of logistic regression cost function.
-    
-    Parameters:
-        pred (np.ndarray): Model predictions, should be between 0 and 1
-        targets (np.ndarray): True binary labels (0 or 1)
-    
-    Returns:
-        np.ndarray: Gradient of the cost with respect to predictions
-    """
-    eps = 1e-15  # Same small constant for numerical stability
-    pred = np.clip(pred, eps, 1 - eps)
-    
-    # Derivative of binary cross-entropy: (p-y)/(p(1-p))
-    derivative = (pred - targets) / (pred * (1 - pred))
-    return derivative
 
 def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
     """
@@ -209,8 +190,3 @@ def plot_mse_contour(MSE_matrix: np.ndarray[float, float], x_array: np.ndarray, 
         plt.show()
     else:
         return fig
-    
-
-# Activation functions
-def identity(X): # TODO: Delete?
-    return X

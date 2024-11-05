@@ -8,7 +8,7 @@ from sklearn.utils import resample
 from activation_funcs import *
 from cost_funcs import *
 from Scheduler import *
-from functions import MSE, MSE_derivative, R2, create_X, FrankeFunction
+from utils import MSE, MSE_derivative, R2, create_X, FrankeFunction
 
 import matplotlib.pyplot as plt
 from matplotlib import cm

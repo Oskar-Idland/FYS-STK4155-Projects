@@ -473,6 +473,39 @@ These hyperparameters often interact in complex ways. For example, the optimal l
 The common thread through all these considerations is the fundamental challenge of optimization: balancing computational efficiency, model accuracy, and generalization ability. Whether using simple gradient descent or complex neural networks, success depends on carefully managing these tradeoffs through proper choice and tuning of training parameters. This understanding provides a unified framework for approaching machine learning optimization, regardless of the specific method employed.
 
 \section{Methods \& Implementation}\label{sec:methods}
+\subsection{Regression Analysis}
+To explore the optimization methods discussed in the theory \cref{sec:theory}, we first consider a regression problem using the Franke function. This function is a widely used benchmark for regression tasks, as it provides a smooth, non-linear surface that can be sampled to generate noisy data. We generate a dataset by sampling the Franke function with added Gaussian noise, which we then use to train and evaluate our regression models. We fit our model to this data with a polynomial design matrix, after splitting it into training and test sets, and evaluate the model's performance using metrics like the mean squared error (MSE) and \( R^2 \) score.
+
+Regression models have many parameters, making it impossible (or at least impractical) to iterate over all possible combinations. We use grid search to explore two parameters at a time. We then zoom in on the most promising regions to find the optimal parameters. After finding a suitable set of parameters, we continue the search for the next set of parameters.
+
+\subsubsection{Plain Gradient Descent}
+\paragraph{No Momentum:}
+To be sure we understand the basic principles of gradient descent, we start by implementing a simple gradient descent algorithm for linear regression. We use the MSE as our cost function and compute the gradient of the cost function with respect to the model parameters. We then update the parameters using the gradient and iterating over a set of learning rates.
+\paragraph{Momentum:}
+We then extend our implementation to include momentum. Now we iterate over all possible values of the momentum and learning rate to find the optimal combination for our model. After creating a general overview of the entire parameter space, we zoom in on the most promising regions to find the optimal parameters. This process will be repeated for the other optimization methods as well.
+
+\subsubsection{Stochastic Gradient Descent}
+\paragraph{No Momentum:}
+Continuing with stochastic gradient descent, we implement a simple version of the algorithm and apply it to our regression problem. We then begin by iterating over all possible learning rates and batch sizes to find the optimal combination. We then zoom in on the most promising regions to find the optimal parameters.
+\paragraph{Momentum:}
+Secondly, we use the ideal learning rate, and then iterate over possible values of the momentum to find the optimal combination. We then zoom in on the most promising regions to find the optimal parameters.
+
+Moving on to the more advanced optimization methods, we implement AdaGrad, RMSprop, and Adam. We follow the same procedure as before, iterating over all possible learning rates and momentum values to find the optimal combination. We note the optimal values to use in the neural network implementation.
+
+\begin{comment}
+  #TODO: Update if we iterate over momentum and rho values as well
+\end{comment}
+
+\subsubsection{AdaGrad}
+\paragraph{No Momentum:}
+For both the regular and stochastic versions of AdaGrad, we iterate over all possible learning rates to find the optimal value.
+
+\paragraph{Momentum:}
+Using the optimal values found in the previous step, we then iterate over all possible values of the momentum to find the optimal value to pair with the learning rate.
+
+\subsubsection{RMSprop \& Adam}
+\paragraph{No Momentum:}
+
 % \subsection{The Program}\label{subsec:program}
 % \subsubsection{Code Structure}\label{subsubsec:codestructure}
 % All the source code that we developed and used to produce our results is available on our GitHub repository, linked in \cref{appsec:code}. The \verb|README.md| file contains the entire project structure. Our code is divided into the following files and notebooks:
@@ -486,6 +519,29 @@ The common thread through all these considerations is the fundamental challenge 
 % \subsubsection{Tools}\label{subsubsec:tools}
 % All our code is written in Python \cite{Python}, and we used scikit-learn \cite{scikit-learn} to create most of our models. To vectorize our code we used \verb|numpy| \cite{Numpy}, and for visualization we used \verb|matplotlib.pyplot| \cite{Matplotlib}. Code completion and debugging was done in Visual Studio Code \cite{VSCode} with additional assistance of GitHub Copilot \cite{Copilot}. We used \verb|git| \cite{Git} for version control, and \verb|GitHub| \cite{GitHub} for remote storage of our code.
 
+\section{Program}\label{sec:program}
+\subsection{Code Structure}\label{subsec:codestructure}
+All the source code that we developed and used to produce our results is available on our GitHub repository, linked in \cref{appsec:code} in \verb|Project_2/src|. The \verb|README.md| file contains the entire project file structure. To replicate our exact results, use the provided \verb|requirements.txt| file to install the necessary packages. Our code is divided into the following files and notebooks.
+
+\subsubsection{Regression Analysis}
+\verb|RegressionModel.py| contains the classes for the regression models.
+
+\verb|regression_anal.ipynb| contains the analysis of the Franke function data, which we used to validate our implementation.
+
+\subsubsection{Neural Networks}
+\verb|FFNN.py| contains the classes for the neural networks.
+
+\verb|nn_Franke.ipynb| contains the analysis of the Franke function to validate the implementation of neural networks.
+
+\verb|nn_breast_cancer.ipynb| contains the analysis of the breast cancer data using neural networks. This is where we truly optimize the hyperparameters of the neural networks.
+
+\verb|activation_funcs.py| contains the activation functions used in the neural networks.
+
+\verb|cost_funcs.py| contains the cost functions used in the neural networks.
+
+\subsubsection{Miscellaneous}
+\verb|utils.py| contains utility functions used throughout the project. This includes plotting, data generation and other repetitive tasks.
+
 \section{Results \& Discussion}\label{sec:results discussion}
 
 % \vspace*{-2.5pt}
@@ -497,7 +553,7 @@ The common thread through all these considerations is the fundamental challenge 
 
 \Urlmuskip=0mu plus 1mu\relax
 \onecolumngrid
-\bibliography{references}
+\bibliography{tex/references}
 
 \newpage
 % ===========================================
