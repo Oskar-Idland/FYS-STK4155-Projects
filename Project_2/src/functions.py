@@ -22,6 +22,43 @@ def MSE_derivative(pred: np.ndarray | float, targets: np.ndarray | float) -> np.
 def R2(pred: np.ndarray | float, targets: np.ndarray | float) -> float:    
     return 1 - np.sum((targets - pred) ** 2) / np.sum((targets - np.mean(targets)) ** 2)
 
+def CostLogReg(pred, targets):
+    """
+    Compute the logistic regression cost (binary cross-entropy loss).
+    
+    Parameters:
+        pred (np.ndarray): Model predictions, should be between 0 and 1
+        targets (np.ndarray): True binary labels (0 or 1)
+    
+    Returns:
+        float: Average binary cross-entropy loss
+    """
+    eps = 1e-15  # Small constant to prevent log(0)
+    # Clip predictions to avoid numerical instability
+    pred = np.clip(pred, eps, 1 - eps)
+    
+    # Binary cross-entropy formula: -[y*log(p) + (1-y)*log(1-p)]
+    cost = -np.mean(targets * np.log(pred) + (1 - targets) * np.log(1 - pred))
+    return cost
+
+def CostLogReg_derivative(pred, targets):
+    """
+    Compute the derivative of logistic regression cost function.
+    
+    Parameters:
+        pred (np.ndarray): Model predictions, should be between 0 and 1
+        targets (np.ndarray): True binary labels (0 or 1)
+    
+    Returns:
+        np.ndarray: Gradient of the cost with respect to predictions
+    """
+    eps = 1e-15  # Same small constant for numerical stability
+    pred = np.clip(pred, eps, 1 - eps)
+    
+    # Derivative of binary cross-entropy: (p-y)/(p(1-p))
+    derivative = (pred - targets) / (pred * (1 - pred))
+    return derivative
+
 def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
     """
     Creates the design matrix X.
@@ -34,23 +71,15 @@ def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
     ## Returns:
     np.ndarray: The design matrix X.
     """
-    if len(x.shape) > 1:
-        x = np.ravel(x)
-        y = np.ravel(y)
-
-    N = int(len(x)*len(y))            # Number of rows in the design matrix
-    l = int((n+1)*(n+2)/2)            # Number of columns in the design matrix
+    N = len(x)
+    l = int((n + 1) * (n + 2) / 2)  # Number of elements in beta
     X = np.ones((N, l))
-    
-    xx, yy = np.meshgrid(x, y)        # Make a meshgrid to get all possible combinations of x and y values
-    xx = xx.flatten()
-    yy = yy.flatten()
 
-    idx = 1
-    for i in range(1, n+1):
-        for j in range(i+1):
-            X[:, idx] = xx**(i-j) * yy**j
-            idx += 1
+    for i in range(1, n + 1):
+        q = int((i) * (i + 1) / 2)
+        for k in range(i + 1):
+            X[:, q + k] = (x ** (i - k)) * (y**k)
+    return X
 
 def optimal_parameters(matrix: np.ndarray, x: np.ndarray, y: np.ndarray, max_or_min: str = 'min') -> tuple[np.ndarray, np.ndarray]:
     """
