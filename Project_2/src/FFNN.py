@@ -7,7 +7,7 @@ from sklearn.utils import resample
 
 from activation_funcs import *
 from cost_funcs import *
-from Scheduler import *
+from Schedulers import *
 from functions import MSE, MSE_derivative, R2, create_X, FrankeFunction
 
 import matplotlib.pyplot as plt
@@ -159,14 +159,13 @@ class FFNN:
 					R2_test[e] = R2(pred_test, y_test)
 
 			else:
-				train_accuracy = self._accuracy(X, y)
+				train_accuracy = self._accuracy(pred_train, y)
 				train_accs[e] = train_accuracy
 
 				if tes_set:
 					pred_test = self.predict(X_test)
-					test_scores = self.cost_func(pred_test, y_test)
-
-					test_accuracy = self._accuracy(X_test, y_test)
+					test_scores[e] = self.cost_func(pred_test, y_test)
+					test_accuracy = self._accuracy(pred_test, y_test)
 					test_accs[e] = test_accuracy
 
 			 # printing progress bar
@@ -235,9 +234,12 @@ class FFNN:
 
 		return scores
 
-	def predict(self, X):
+	def predict(self, X, threshold=0.5):
 		"""Make predictions for given inputs."""
-		return self._forward(X)
+		predictions = self._forward(X)
+		if self.classification:
+			return (predictions > threshold).astype(int)
+		return predictions
 	
 	def reset_weights(self):
 		"""Reset weights and biases to random values."""
@@ -308,8 +310,8 @@ class FFNN:
 		
 
 		# Compute gradients for output layer
-		if self.output_func.__name__ == "softmax":
-			delta = activations[i + 1] - targets
+		if self.classification:
+			delta = activations[-1] - targets
 		else:
 			delta = self.cost_der(activations[-1], targets)	
 			delta *= derivate(self.output_func)(z_values[-1]) 
@@ -337,14 +339,14 @@ class FFNN:
 			self.layer_weights[i] -= weight_update
 			self.layer_biases[i] -= bias_update.reshape(-1)
 
-	def _accuracy(self, X, y):
+	def _accuracy(self, predictions, target):
 		"""
 		Calculate accuracy for binary classification predictions.
 		"""
-		predictions = self.predict(X)
-		predictions = (predictions > 0.5).astype(int)  # Threshold at 0.5 for binary
-		return np.mean(predictions == y)
-	
+		assert predictions.size == target.size
+		predictions = (predictions > 0.5).astype(int)
+		return np.mean((target == predictions))
+
 	def _set_classification(self):
 		"""
 		Description:
