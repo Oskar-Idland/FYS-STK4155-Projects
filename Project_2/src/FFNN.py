@@ -63,7 +63,7 @@ class FFNN:
 		self.reset_weights()
 		self._set_classification()
 
-	def fit(self, X, y, scheduler, epochs=100, batches=1, lmbda=0, convergence_tol: float = None):
+	def fit(self, X, y, scheduler, epochs=100, batches=1, lmbda=0, convergence_tol: float = None, X_test: np.ndarray = None, y_test: np.ndarray = None):
 		"""
 		Train the network using stochastic gradient descent.
 
@@ -79,6 +79,11 @@ class FFNN:
 		if self.seed is not None:
 			np.random.seed(self.seed)
 
+		tes_set = False
+		if X_test is not None and y_test is not None:
+			tes_set = True
+		
+
 		batch_size = X.shape[0] // batches	
 
 		training_scores = np.empty(epochs)
@@ -87,8 +92,17 @@ class FFNN:
 		R2_scores = np.empty(epochs)
 		R2_scores.fill(np.nan)
 
+		test_scores = np.empty(epochs)
+		test_scores.fill(np.nan)
+
+		R2_test = np.empty(epochs)
+		R2_test.fill(np.nan)
+
 		train_accs = np.empty(epochs)
 		train_accs.fill(np.nan)
+
+		test_accs = np.empty(epochs)
+		test_accs.fill(np.nan)
 
 		self.schedulers_weight = list()
 		self.schedulers_bias = list()
@@ -134,21 +148,37 @@ class FFNN:
 			training_score = self.cost_func(pred_train, y) 
 			
 			training_scores[e] = training_score
-			
+
 			if not self.classification:
 				R2_score = R2(pred_train, y)
 				R2_scores[e] = R2_score	
+
+				if tes_set:
+					pred_test = self.predict(X_test)
+					test_scores[e] = self.cost_func(pred_test, y_test)
+					R2_test[e] = R2(pred_test, y_test)
+
 			else:
-				accuracy = self._accuracy(X, y)
-				train_accs[e] = accuracy
-			
+				train_accuracy = self._accuracy(X, y)
+				train_accs[e] = train_accuracy
+
+				if tes_set:
+					pred_test = self.predict(X_test)
+					test_scores = self.cost_func(pred_test, y_test)
+
+					test_accuracy = self._accuracy(X_test, y_test)
+					test_accs[e] = test_accuracy
+
 			 # printing progress bar
 			progression = e / epochs
 			print_length = self._progress_bar(
 				progression,
 				training_scores=training_scores[e],
+				R2_test=R2_test[e],
+				test_scores=test_scores[e],
 				R2_scores=R2_scores[e],
 				train_acc=train_accs[e],
+				test_acc=test_accs[e],
 			)
 
 			# Check for convergence
@@ -163,10 +193,8 @@ class FFNN:
 						
 					# Calculate mean and std of recent MSEs
 					mean_mse = np.mean(recent_scores)
-					std_mse = np.std(recent_scores)
-					
 					# Check if variation is below tolerance
-					if std_mse < convergence_tol * mean_mse:
+					if abs(mean_mse - training_score) / training_score <=  convergence_tol:
 						convergence_epoch = e
 						print(f"\nConverged at epoch {convergence_epoch} with MSE stability below {convergence_tol:.2e}")
 						convergence_check = False
@@ -178,8 +206,11 @@ class FFNN:
 		self._progress_bar(
 			1,
 			training_scores=training_scores[e],
+			R2_test=R2_test[e],
+			test_scores=test_scores[e],
 			R2_scores=R2_scores[e],
 			train_acc=train_accs[e],
+			test_acc=test_accs[e],
 		)
 		sys.stdout.write("")
 
@@ -190,8 +221,14 @@ class FFNN:
 
 		if not self.classification:
 			scores["R2"] = R2_scores
+			if tes_set:
+				scores["test_cost"] = test_scores
+				scores["test_R2"] = R2_test
 		else:
-			scores["accuracy"] = train_accs
+			scores["train_accuracy"] = train_accs
+			if tes_set:
+				scores["test_cost"] = test_scores
+				scores["test_accuracy"] = test_accs
 		
 		if convergence_tol is not None:
 				return scores, convergence_epoch
@@ -321,6 +358,7 @@ class FFNN:
 			or self.cost_func.__name__ == "CostCrossEntropy"
 		):
 			self.classification = True
+			print("Classification task detected")
 
 	def _progress_bar(self, progression, **kwargs):
 		"""

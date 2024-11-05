@@ -116,6 +116,7 @@
 \twocolumngrid
 % ===========================================
 
+%#TODO punctuate the equations
 
 \section{Introduction}\label{sec:introduction}
 % \color{Plum}
@@ -205,26 +206,26 @@ where \( \gamma \) (typically 0.9) is the momentum coefficient that determines h
     \item Ability to escape shallow local minima
 \end{itemize}
 
-\subsubsection{Learning Rate Tuning Methods}
+\subsubsection{Learning Rate Tuning Methods} \label{sec:learning_rate_tuning}
 
 Choosing the right learning rate \( \eta \) is critical to the success of gradient descent algorithms. If the learning rate is too large, the optimization may overshoot the minimum, while if it is too small, convergence will be very slow. Several adaptive learning rate methods have been proposed to dynamically adjust the learning rate during training:
 
-\paragraph{Decaying Learning Rate}
+\paragraph*{Decaying Learning Rate}
 
  One simple approach is to gradually decrease the learning rate as training progresses, using a schedule such as:
   \[
   \eta_t = \frac{\eta_0}{1 + \lambda t}
   \]
-  where \( \eta_0 \) is the initial learning rate, \( t \) is the iteration, and \( \lambda \) is the decay rate. This helps ensure that larger updates are made at the start of training when far from the optimum, and smaller, more precise updates are made later. \\
+  where \( \eta_0 \) is the initial learning rate, \( t \) is the iteration, and \( \lambda \) is the decay rate. This helps ensure that larger updates are made at the start of training when far from the optimum, and smaller, more precise updates are made later.
 
-\paragraph{AdaGrad}
+\paragraph*{AdaGrad}
  (Adaptive Gradient Algorithm): AdaGrad adapts the learning rate for each parameter based on the historical gradients. It assigns a smaller learning rate to frequently updated parameters and a larger rate to less frequently updated ones:
   \[
   \beta_{t+1} = \beta_t - \frac{\eta}{\sqrt{G_t + \epsilon}} \nabla_\beta L(\beta_t)
   \]
-  where \( G_t \) is the sum of the squares of the past gradients, and \( \epsilon \) is a small constant to avoid division by zero. AdaGrad is well-suited for sparse data but may become overly conservative in later iterations due to the cumulative sum of gradients. \\
+  where \( G_t \) is the sum of the squares of the past gradients, and \( \epsilon \) is a small constant to avoid division by zero. AdaGrad is well-suited for sparse data but may become overly conservative in later iterations due to the cumulative sum of gradients.
 
-\paragraph{RMSprop}
+\paragraph*{RMSprop}
  To address AdaGrad's diminishing learning rates, RMSprop uses a moving average of the squared gradients to scale the learning rate. This helps maintain a balance between fast convergence and smooth parameter updates:
   \[
   E[g^2]_t = \beta E[g^2]_{t-1} + (1 - \beta) g_t^2
@@ -232,9 +233,9 @@ Choosing the right learning rate \( \eta \) is critical to the success of gradie
   \[
   \beta_{t+1} = \beta_t - \frac{\eta}{\sqrt{E[g^2]_t + \epsilon}} \nabla_\beta L(\beta_t)
   \]
-  where \( \beta \) (typically 0.9) controls the decay rate of the moving average, and \( E[g^2]_t \) is the moving average of the squared gradients. \\
+  where \( \beta \) (typically 0.9) controls the decay rate of the moving average, and \( E[g^2]_t \) is the moving average of the squared gradients.
 
-\paragraph{Adaptive Moment Estimation (ADAM)}
+\paragraph*{Adaptive Moment Estimation (ADAM)}
  ADAM combines the advantages of both AdaGrad and RMSprop by keeping track of both the first moment (mean) and the second moment (uncentered variance) of the gradients:
   \[
   m_t = \beta_1 m_{t-1} + (1 - \beta_1) \nabla_\beta L(\beta_t)
@@ -252,24 +253,214 @@ Choosing the right learning rate \( \eta \) is critical to the success of gradie
 
 \subsection{Neural Networks}
 
-Neural networks are powerful machine learning models designed to capture complex, non-linear relationships in data. At their core, neural networks consist of multiple layers of interconnected neurons (or nodes). Each neuron computes a weighted sum of its inputs, applies a non-linear activation function, and passes the result to the next layer.
+Having established the mathematical framework for optimizing model parameters through gradient descent and its variants, we now turn our attention to neural networks - a powerful class of models whose training relies heavily on these optimization techniques. Neural networks represent a significant advancement beyond the linear models discussed in our previous work, offering the capability to model complex, non-linear relationships in data. These networks can be trained for both regression tasks, where we predict continuous values similar to our previous project, and classification tasks where we predict discrete categories. While linear regression models are constrained to linear combinations of input features, neural networks can approximate arbitrary continuous functions through the composition of multiple non-linear transformations. This property, formally stated in the universal approximation theorem \cite{uniapproxtheorem}, means that neural networks can theoretically approximate any continuous function to arbitrary accuracy given sufficient size.
 
-In a feedforward neural network, information flows from the input layer through one or more hidden layers to the output layer. Each layer transforms the input data in a hierarchical manner, allowing the network to learn representations at multiple levels of abstraction. The output of the network can be used for tasks such as classification, regression, or even generating new data.
+This approximation capability is achieved through a network of interconnected nodes organized into layers, where each node applies a non-linear transformation to its input. The network learns by adjusting parameters called weights and biases, which determine how information flows and is transformed between nodes. During training, these parameters are iteratively adjusted to minimize a cost function, allowing the network to learn patterns directly from the data without explicit feature engineering.
 
-The training of neural networks involves backpropagation, a process in which the gradient of the cost function is computed with respect to the network's parameters. Backpropagation allows for the efficient calculation of these gradients through the chain rule of calculus, which are then used to update the weights via gradient descent.
+\subsubsection{Feed-Forward Neural Networks}
 
-Relevant to this project, neural networks can benefit significantly from the advanced gradient descent methods described above. Techniques like momentum, ADAM, and learning rate decay help overcome challenges such as slow convergence and the vanishing gradient problem, especially in deep networks with many layers.
+A feed-forward neural network (FFNN) is structured into three distinct types of layers: the input layer, hidden layers, and output layer. The input layer represents the input data, with each node corresponding to a feature in the dataset. The output layer produces the final prediction, with its structure depending on the task - a single node for regression problems or multiple nodes for classification tasks. Between these lie the hidden layers, where the network learns to identify and extract relevant patterns from the input data. The term "hidden" stems from the fact that while we observe the inputs and final outputs during training, we do not directly observe what features these intermediate layers learn to represent.
 
-Activation Functions and Relevance to the Project
+The FFNN generalizes our previous linear models by defining the model output \( \tilde{y} \) as a nested series of transformations of the input vector \(x \in \mathbb{R}^{n} \). The fundamental computation at each node takes the form:
 
-In this project, the choice of activation function plays a crucial role. The commonly used activation functions include:
-- ReLU (Rectified Linear Unit): ReLU is defined as \( \text{ReLU}(x) = \max(0, x) \), which introduces non-linearity and mitigates the vanishing gradient problem.
-- Sigmoid: Sigmoid squashes the input to a value between 0 and 1, making it useful for binary classification tasks but prone to vanishing gradients.
-- Tanh: Similar to sigmoid but maps inputs to the range (-1, 1), which can center data and mitigate some issues caused by sigmoid.
+\begin{equation} z = wx +b \end{equation}
+\begin{equation} a = f(z) \end{equation} 
 
-Given the nature of the tasks in this project (such as handling non-linear data structures or optimizing complex cost functions), selecting appropriate activation functions and tuning the network's architecture will be key to achieving robust results.
-\color{black}
+Where \( w \) are the weights, \( b \) is the bias, and \( f(\cdot) \) is a non-linear activation function. This computation can be extended to a layer of neurons by organizing the weigths into a matrix \( W \in \mathbb{R}^{m\times n} \) and the biases into a vector \( \mathbf{b} \in \mathbb{R}^m \):
 
+\begin{equation} \mathbf{z} = W\mathbf{X} + \mathbf{b} \end{equation}
+\begin{equation} \mathbf{a} = f(\mathbf{z}) \end{equation}
+
+Where \( \mathbf{X} \in \mathbb{R}^{b \times n}\) represent a batch of input vectors and \( \mathbf{a} \in \mathbb{R}^{b \times m} \) is the layer output and \( \mathbf{b} \) is a vector of biases. For a network with \( L \) layers, we can express the complete forward propagation as:
+
+\begin{align*}
+    \mathbf{z}^1 &= W^1\mathbf{X} + \mathbf{b}^1 \\ 
+    \mathbf{a}^1 &= f(\mathbf{z}^1) \\
+    \mathbf{z}^2 &= W^2\mathbf{a}^1 + \mathbf{b}^2 \\
+    \mathbf{a}^2 &= f(\mathbf{z}^2) \\
+    & \quad \cdots \\
+    \mathbf{z}^L &= W^L\mathbf{a}^{L-1} + \mathbf{b}^L \\
+    \mathbf{a}^L &= f(\mathbf{z}^L) \numberthis \label{eqn}
+\end{align*}
+
+This iterative process of matrix multiplications and non-linear transformations enables the network to progressively build more complex representations of the input data at each layer. The final output \( \mathbf{a}^L \) is then used to compute the cost function, which is minimized during training to learn the optimal weights and biases.
+
+\subsubsection{Initialization and Regularization}
+The weights and biases represent the parameters that the network learns during training. Each weight \(w_{ij}^l \) represents the strength of the connection between node \( i \) in layer \( l-1 \) and node \( j \) in layer \( l \), determining how much influence the output from one node has on the next. The bias \( b_j^l \) for each node \( j \) in layer \( l \) allows the network to shift its activation function, providing an additional degree of freedom in fitting the data. Together, these parameters define how information is transformed as it moves through the network.
+
+The choice of initial weights can significantly impact whether a network learns effectively or fails to train. Poor initialization can lead to either vanishing or exploding gradients, particularly in deep networks. If initial weights are too small, the signals shrink as they pass through each layer until they become too weak to drive meaningful learning. Conversely, if weights are too large, the signals grow exponentially, saturating activation functions and stalling learning.
+A common approach is to draw initial weights from a normal distribution with zero mean and a variance scaled by the number of input connections to each neuron.
+
+\begin{equation}
+    w_{jk}^l \sim \mathcal{N}\left(0, \frac{1}{n_{in}}\right),
+\end{equation}
+
+where $n_{in}$ is the number of inputs to the layer. This scaling helps maintain a similar scale of activations and gradients across layers at the start of training.  Biases are typically initialized from a normal distribution with a small scale factor to break symmetry while keeping activations in a reasonable range:
+
+\begin{equation}
+    b_j^l = 0 \text{ or } b_j^l = 0.01.
+\end{equation}
+
+This small random initialization for biases helps prevent all neurons in a layer from developing identical behavior during early training.
+
+While Project 1 introduced regularization in the context of Ridge regression, neural networks benefit from similar techniques to prevent overfitting. The most common approach is L2 regularization (weight decay), which adds a penalty term to the cost function:
+
+\begin{align*}
+    C(\theta) &= \frac{1}{N} \sum_{i=1}^{N} \mathcal{L}_i(\theta) \\
+    &\rightarrow \frac{1}{N} \sum_{i=1}^{N} \mathcal{L}_i(\theta) + \lambda||w||_2^2 \\
+    &= \frac{1}{N} \sum_{i=1}^{N} \mathcal{L}_i(\theta) + \lambda \sum_{ij}w_{ij}^2. \numberthis \label{reg}
+\end{align*}
+
+Where $\lambda$ is the regularization parameter, $N$ is the number of training samples, and the sum runs over all weights in the network. This modification encourages the network to use smaller weights and distribute the learned patterns across multiple nodes rather than relying too heavily on any single connection.
+
+\subsubsection{Activation Functions}
+
+The non-linear activation functions are fundamental components that enable neural networks to approximate complex functions. By introducing non-linearity between layers, these functions allow the network to learn and represent patterns that would be impossible with purely linear transformations. The careful selection of activation functions significantly impacts both the network's expressive capability and its training dynamics. 
+
+An activation function \( f(\cdot) \) takes the weighted sum \( z \) of a node's inputs and transforms it into an output signal \( a = f(z) \). For our implementations we consider the following activation functions: \\
+
+\paragraph*{Identity:}
+The identity function, simply defined as
+\begin{equation*}
+    f(z) = z,
+\end{equation*}
+passes its input unchanged. While this function is rarely used in hidden layers due to its linearity, it serves as the standard activation function for regression tasks in the output layer.  
+\paragraph*{Sigmoid:}
+The Sigmoid function, defined as
+ \begin{equation}
+    \sigma(z) = \frac{1}{1 + e^{-z}},
+ \end{equation}
+  maps any real input the the interval \( (0, 1) \). This smooth, continuously differentiable function has historically been popular due to its biological inspiration and interpretable output range that naturally corresponds to probability-like quantities. However, it suffers from several drawbacks:
+\begin{itemize}
+    \item For inputs with large magnitudes, the function becomes nearly flat, which can complicate the training process
+    \item Its output is not zero-centered, which can introduce systematic bias during training.
+    \item The exponential computation is relative expensive.
+\end{itemize}
+
+Despite these limitations, the sigmoid remains useful in the output layer for binary classification tasks where probability interpretation is desired.
+
+\paragraph*{Rectified Linear Unit (ReLU):}
+The ReLU function, defined as 
+\begin{equation}
+    f(z) = \max(0, z),
+\end{equation}
+has become the default choice for many neural network architectures. As it is a very simple threshold function, it is computationally efficient. It enables sparse activation, as all negative inputs are mapped to exactly zero. However, it suffers from the "dying ReLU" problem, where neurons can become inactive and stop learning if they receive consistently negative inputs.
+
+\paragraph*{Leaky Rectified Linear Unit (Leaky RELU):}
+To adress the "dying ReLU" problem, the Leaky RELU function introduces a small slope for negative inputs:
+\begin{equation}
+     f(z) = \begin{cases} z & \text{if } z > 0 \\
+\alpha z & \text{if } z \leq 0 \end{cases},
+\end{equation}
+where \( \alpha \) is a small constant (typically 0.01). This modification prevents complete deactivation of neurons while maintaining the computational efficiency of the standard ReLU. By allowing a small, non-zero output for negative inputs, Leaky ReLU ensures that neurons can continue to participate in the learning process even when receiving predominantly negative inputs.
+
+\paragraph*{Softmax:}
+Used primarily in the output layer for multi-class classification, the softmax function generalizes the sigmoid to multiple classes:
+\begin{equation}
+    \text{softmax}(z)_i = \frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}}.
+\end{equation}
+
+Where \( K \) is the number of classes. The softmax function produces a probability distribution, I.e. the output values sum to 1, which is useful for interpreting the network's output as class probabilities.
+
+The choice of activation function is a critical design decision that can significantly impact the network's performance. For the hidden layers, the ReLU and Leaky ReLU functions are often preferred due to their computational efficiency and generally better training performance than sigmoid. \colorbox{magenta}{Cite} While the activation function for the output layer depends on the task, the softmax function is commonly used for multi-class classification tasks, while the sigmoid function is suitable for binary classification problems and in regression problems one often uses the identity function.
+
+\subsubsection{Backpropagation}
+
+The backpropagation algorithm provides an efficient method for computing gradients in neural networks, enabling the network to learn from its errors by adjusting weights and biases. While the forward pass computes predictions, backpropagation determines how each parameter should be adjusted to reduce the prediction error. The algorithm derives its name from the way it propagates error gradients backward through the network, from the output layer to the input layer.
+
+To understand backpropagation, we start with a cost function \( C \) that measures the network's prediction error. For regression tasks, this is typically the mean squared error (MSE). The goal is similiar to that of the gradient descent algorithms: to minimize the cost function. To achieve this, we compute the gradient of the cost function with respect to the network's parameters, the weights \( \frac{\partial C}{\partial w_{jk}^l} \) and \( \frac{\partial C}{\partial b_j^l} \) for each weight and bias in the network. 
+
+The key insight behind backpropagation is the chain rule, which allows us to decompose these calculations into smaller, more manageable steps. We introduce an intermediate quantity, the error term \( \delta_j^l \), which represents the error in node \( j \) in layer \( l \).
+
+\begin{equation}
+    \delta_j^l = \frac{\partial C}{\partial z_j^l}.
+\end{equation}
+    
+
+Where \( z_j^l \) is the weighted input to the activation function for node \( j \) in layer \( l \). This error term represents how a change in the node's input affects the overall cost.
+
+For the output layer, the error term is directly computed:
+
+\begin{equation}
+    \delta_j^L = \frac{\partial C}{\partial a_j^L}\frac{\partial a_j^L}{\partial z_j^L} = (a_j^L - y_j)f'(z_j^L).
+\end{equation}
+Where \( f'(\cdot) \) is the derivative of the activation function. For the hidden layers, the error term is recursively computed based on the error terms of the subsequent layer:
+
+\begin{equation}
+    \delta_j^l = \sum_k w_{kj}^{l+1}\delta_k^{l+1}f'(z_j^l).
+\end{equation}
+
+This equation shows how errors propagate backward: each node's error is a weighted sum of the errors in the next layer, scaled by the local derivative of its ativation function.
+
+Once we have computed these error terms, the gradient for any weight or bias follows a simple pattern:
+
+\begin{equation}
+    \frac{\partial C}{\partial w_{jk}^l} = a_k^{l-1}\delta_j^l,
+\end{equation}
+
+and
+
+\begin{equation}
+    \frac{\partial C}{\partial b_j^l} = \delta_j^l.
+\end{equation}
+
+In these equation the simplicity of the gradient expressions is evident. The gradient for a weight is the product of the error at its target node and the activation from its source node, while the gradient for a bias is simlpy at the error at its node.
+
+During backpropagation, regularization terms are also added to the weight gradients to prevent overfitting, while the bias gradients remain unchanged. This selective regularization of weights but not biases reflects the different roles these parameters play in the network: weights determine the importance of connections, while biases set activation thresholds.
+
+The complete backpropagation algorithm can then be summarized in four steps:
+
+\begin{itemize}
+    \item Forward Pass: Compute activations for all layers
+    \item Output Error: Calculate error terms \( \delta^L \) for the output layer
+    \item Backpropagate: Compute error terms \( \delta^l \) for each hidden layer
+    \item Gradient Computation: Calculate the gradients using the error terms
+\end{itemize}
+
+This process provides the gradients needed for the various optimization methods discussed earlier to update the network's parameters. The efficiency of backpropagation comes from its clever reuse of intermediate calculations through the chain rule, avoiding redundant computations that would occur in a more naive approach to gradient calculation.
+
+\subsubsection{Learning Rate Tuning}
+The learning rate tuning methods discussed in section \ref{sec:learning_rate_tuning} for gradient descent optimization are equally applicable to neural network training. The same challenges of balancing convergence speed with stability apply, and methods like AdaGrad, RMSprop, and Adam are commonly used to automatically adjust learning rates during neural network training.
+
+\subsection{Training Considerations for Optimization Methods}
+While gradient descent and neural networks may appear quite different at first glance, they share many fundamental training elements and challenges. Understanding these commonalities helps illuminate the underlying principles of machine learning optimization
+
+\subsubsection{Cost Functions and Optimization Goals} 
+Both methods aim to minimize a cost function that measures prediction error. For regression tasks, we prefer the MSE discussed in Project 1 because its quadratic form makes it differentiable and provides stronger penalties for large errors. However, binary classification tasks often employ the logistic regression cost function:
+
+\begin{equation}
+    C = -\frac{1}{n}\sum_{i=1}^n [y_i\log(p_i) + (1-y_i)\log(1-p_i)],
+\end{equation}
+
+where \( p_i \) represents the predicted probability of class 1 for observation \( i \). This function is particularly well-suited for classification as it naturally handles probabilistic predictions and automatically enforces outputs between 0 and 1.
+
+\subsubsection{Batch Processing and Stochasticity}
+Both gradient descent and neural networks benefit from stochastic updates using mini-batches. This approach offers several advantages:
+
+\begin{itemize}
+    \item Reduced memory requirements compared to full-batch methods 
+    \item More frequent parameter updates
+    \item Introduction of beneficial noise that can help escape local minima
+    \item Potential for better generalization
+\end{itemize}
+
+The choice of batch size involves similar tradeoffs in both cases: smaller batches provide more frequent updates but noisier gradient estimates, while larger batches give more stable gradients but slower convergence. The optimal batch size often depends on both the problem structure and computational constraints.
+
+\subsubsection{Training Progress}
+Both methods typically measure progress in terms of epochs - complete passes through the training data. The number of epochs needed depends on factors like dataset size, model complexity, and the difficulty of the task. Training continues until either a maximum number of epochs is reached or some convergence criterion is met. However, the interpretation of "convergence" can differ between methods - neural networks may require more epochs due to their non-linear nature and larger parameter space.
+
+\subsubsection{Hyperparameter Selection}
+Both approches require careful tuning of hyperparameters that control the learning process:
+\begin{itemize}
+    \item Learning rates and their scheduling
+    \item Regularization strength \( \lambda \)
+    \item Optimization algorithm parameters (momentum, decay rates, etc.)
+    \item Batch size and number of epochs
+\end{itemize}
+
+These hyperparameters often interact in complex ways. For example, the optimal learning rate typically decreases with batch size to compensate for more accurate gradient estimates. Similarly, stronger regularization (higher \( \lambda \)) may require more epochs or higher learning rates to reach convergence. Understanding these interactions is crucial for both gradient descent and neural network optimization.
+
+The common thread through all these considerations is the fundamental challenge of optimization: balancing computational efficiency, model accuracy, and generalization ability. Whether using simple gradient descent or complex neural networks, success depends on carefully managing these tradeoffs through proper choice and tuning of training parameters. This understanding provides a unified framework for approaching machine learning optimization, regardless of the specific method employed.
 
 \section{Methods \& Implementation}\label{sec:methods}
 % \subsection{The Program}\label{subsec:program}
