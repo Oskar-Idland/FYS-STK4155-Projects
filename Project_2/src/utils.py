@@ -128,7 +128,7 @@ def optimal_parameters(matrix: np.ndarray, x: np.ndarray, y: np.ndarray, max_or_
     return x[idx[1]], y[idx[0]]
 
 
-def plot_mse_contour(MSE_matrix: np.ndarray[float, float], x_array: np.ndarray, x_name: str, y_array: np.ndarray, y_name: str, n_ticks: int | None = None, scatter: bool = False, show: bool = True) -> None | plt.Figure:
+def plot_mse_contour(MSE_matrix: np.ndarray[float, float], x_array: np.ndarray, x_name: str, y_array: np.ndarray, y_name: str, n_ticks: int | None = None, scatter: bool = False, show: bool = False) -> None | plt.Figure:
     '''This function plots a contour plot of Mean Squared Error (MSE) values based on a given MSE matrix
     and corresponding x and y arrays, with options to customize axis labels, tick marks, and scatter
     points.
@@ -190,3 +190,35 @@ def plot_mse_contour(MSE_matrix: np.ndarray[float, float], x_array: np.ndarray, 
         plt.show()
     else:
         return fig
+    
+    
+def parameter_print_plot(MSE_array, R2_array, x_array, y_array, x_label, y_label, n_ticks: int | None = None, scatter: bool = False, show: bool = False):
+    x_optimal, y_optimal = optimal_parameters(MSE_array, x_array, y_array)
+    
+    greek_dict = {r'$\eta$': 'η', r'$\gamma$': 'γ', r'$\rho$': 'ρ'}
+    if x_label in greek_dict:
+        x_label_greek = greek_dict[x_label]
+    else:
+        x_label_greek = x_label
+    if y_label in greek_dict:
+        y_label_greek = greek_dict[y_label]
+    else:
+        y_label_greek = y_label
+    
+    
+        
+    x_label_greek = greek_dict[x_label]
+    y_label_greek = greek_dict[y_label]
+    print(f'Minimum MSE: {np.nanmin(MSE_array):>16.3e}')
+    print(f'Optimal {x_label_greek} for MSE: {x_optimal: 3.3e}')
+    print(f'Optimal {y_label_greek} for MSE: {y_optimal: 3.3e}')
+    
+    print()
+    
+    x_optimal, y_optimal = optimal_parameters(R2_array, x_array, y_array, max_or_min='max')
+    print(f'Maximum R2: {np.nanmax(R2_array):>16.2%}')
+    print(f'Optimal {x_label_greek} for R2: {x_optimal: 3.3e}')
+    print(f'Optimal {y_label_greek} for R2: {y_optimal: 3.3e}')
+    
+    fig = plot_mse_contour(MSE_array, x_array, x_label, y_array, y_label, n_ticks=n_ticks, scatter=scatter, show=show)
+    return fig
