@@ -8,7 +8,7 @@ from jax import jit
 from Schedulers import Adagrad, AdagradMomentum, RMS_prop, Adam, Constant, Momentum
 
 
-#TODO edit this class to fit with rest of project code, maybe remove all gradient descent methods
+#TODO Add docstring to rho 
 class RegressionModel:
     def __init__(self, x: list | np.ndarray, y: np.ndarray, degree: int, test_size: float = 0.2, seed: int | None = None):
         """
@@ -186,7 +186,7 @@ class RegressionModel:
     """ 
     Gradient descent methods 
     """
-    def gradient_descent(self, n_iter: int, eta: float | None = None, tuning_method: str  = 'Const', tuning_params: list | None = None, lmbd: float | None = 0.0, gamma: float | None = 0.0, use_autograd: bool = False, return_theta: bool = False) -> tuple[np.ndarray]:
+    def gradient_descent(self, n_iter: int, eta: float | None = None, tuning_method: str  = 'Const', rho_1: float | None = None, rho_2: float | None = None, lmbd: float | None = 0.0, gamma: float | None = 0.0, use_autograd: bool = False, return_theta: bool = False) -> tuple[np.ndarray]:
         """
         Uses gradient descent with or without momentum to minimize the cost function. TODO maybe change
 
@@ -244,10 +244,12 @@ class RegressionModel:
             case "adagradmomentum":
                 gradient_change = AdagradMomentum(eta, gamma)
             case "rms_prop":
-                rho = tuning_params
-                gradient_change = RMS_prop(eta, rho)
+                success = rho_1 >= 0.0 and rho_1 <= 1.0
+                assert success, f"The decay rate rho_1 must be passed for RMS_prop. Default is None, got {rho_1}."
+                gradient_change = RMS_prop(eta, rho_1)
             case "adam":
-                rho_1, rho_2 = tuning_params
+                success = rho_1 >= 0.0 and rho_1 <= 1.0 and rho_2 >= 0.0 and rho_2 <= 1.0
+                assert success, f"The decay rates rho_1 and rho_2 must be passed for Adam. Default is None, got {rho_1} and {rho_2}."
                 gradient_change = Adam(eta, rho_1, rho_2)
             case _:
                 raise ValueError(f"Invalid tuning method: {tuning_method}.")
@@ -274,7 +276,7 @@ class RegressionModel:
 
     #TODO have one method for each tuning method?
     #TODO if not, optimize anyway
-    def stochastic_gradient_descent(self, n_epochs: int, M: int, eta: float | None = None, tuning_method: str = 'Const', tuning_params: list | None = None, lmbd: float | None = 0.0, gamma: float | None = 0.0, use_autograd: bool = False, return_theta: bool = False) -> tuple[np.ndarray]:
+    def stochastic_gradient_descent(self, n_epochs: int, M: int, eta: float | None = None, tuning_method: str = 'Const', rho_1: float | None = None, rho_2: float | None = None, lmbd: float | None = 0.0, gamma: float | None = 0.0, use_autograd: bool = False, return_theta: bool = False) -> tuple[np.ndarray]:
         """
         Uses stochastic gradient descent with or without momentum to minimize the cost function. TODO maybe change
 
@@ -321,10 +323,8 @@ class RegressionModel:
             case "adagradmomentum":
                 gradient_change = AdagradMomentum(eta, gamma)
             case "rms_prop":
-                rho = tuning_params
-                gradient_change = RMS_prop(eta, rho)
+                gradient_change = RMS_prop(eta, rho_1)
             case "adam":
-                rho_1, rho_2 = tuning_params
                 gradient_change = Adam(eta, rho_1, rho_2)
             case _:
                 raise ValueError(f"Invalid tuning method: {tuning_method}.")
