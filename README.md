@@ -26,7 +26,7 @@ All projects are stored in the root directory of the repository. Each project ha
 - [Project 2: Neural Networks for Breast Cancer Classification](#project-2-neural-networks-for-breast-cancer-classification)
 
 ## Project 1: Machine Learning on Dark Matter Distribution
-Full report can be found [here](Project_1/tex/Project_1.pdf)
+Full report can be found [here](Project_1/tex/out/Project_1.pdf)
 ### Project Structure  
 #### `Project_1/`: Root folder for project 1.
 
