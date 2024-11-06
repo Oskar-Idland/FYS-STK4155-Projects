@@ -242,6 +242,37 @@ def gridsearch_plot(scores, ticks, cmap = "viridis", opt_search = None, opt_colo
     return fig, axs
 
 
+def plot_mse_contour(MSE_matrix: np.ndarray[float, float], x_array: np.ndarray, x_name: str, y_array: np.ndarray, y_name: str, n_ticks: int | None = None, scatter: bool = False, show: bool = False) -> None | plt.Figure:
+    '''This function plots a contour plot of Mean Squared Error (MSE) values based on a given MSE matrix
+    and corresponding x and y arrays, with options to customize axis labels, tick marks, and scatter
+    points.
+    
+    Parameters
+    ----------
+    MSE_matrix : np.ndarray[float, float]
+        An array containing Mean Squared Error (MSE) values for different combinations of x and y
+    parameters.
+    x_array : np.ndarray
+        x_array is an array containing the values for the x-axis in the contour plot.
+    x_name : str
+        The `x_name` parameter is a string that represents the name of the x-axis in the plot. It is used
+    to label the x-axis with a descriptive name that indicates what the values on the x-axis represent.
+    y_array : np.ndarray
+        `y_array` is an array containing the values for the y-axis in the contour plot. It is used to
+    generate the contour plot based on the Mean Squared Error (MSE) values provided in the `MSE_matrix`.
+    y_name : str
+        The `y_name` parameter is a string that represents the name of the y-axis in the plot. It is used
+    to label the y-axis with a descriptive name that helps users understand the data being displayed.
+    n_ticks : int | None
+        The `n_ticks` parameter in the `plot_mse_contour` function is used to specify the number of ticks
+    on the contour plot axes. If `n_ticks` is set to `None`, the plotting function will determine the
+    number of ticks automatically based on the data range. If a specific
+    scatter : bool, optional
+        The `scatter` parameter in the `plot_mse_contour` function is a boolean flag that determines
+    whether to plot the MSE values as a scatter plot on top of the contour plot. If `scatter` is set to
+    `True`, the function will overlay a scatter plot of the MSE values on
+    
+    '''
     nx, ny = MSE_matrix.shape
     MSE_max, MSE_min = np.max(MSE_matrix), np.min(MSE_matrix)
     levels = np.linspace(MSE_min, MSE_max, nx*ny)
