@@ -669,27 +669,79 @@ All our code is written in Python (3.12) \cite{Python}, and we used scikit-learn
 
 \section{Results \& Discussion}\label{sec:results discussion}
 \subsection{Regression Analysis}
-\subsubsection{Gradient Descent}
+\subsubsection{Plain and Stochastic Gradient Descent}
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = .45\textwidth]{../figs/a_2_parameter_overview.pdf}
-    \caption{Overview of the entire parameter space for the Franke function regression problem using plain gradient descent. The optimal parameters are marked with a red cross, to use as a starting point for further analysis.}
+    \includegraphics[width = .4\textwidth]{../figs/a_2_parameter_overview.pdf}
+    \caption{Overview of the entire parameter space, plotting learning rate against momentum,  using plain gradient descent. The optimal parameters are marked with a red cross, to use as a starting point for further analysis.}
     \label{fig: param_overview}
 \end{figure}
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width = .45\textwidth]{../figs/GD_eta_gamma.pdf}
-    \caption{Overview of narrowed down parameter space}
+    \includegraphics[width = .4\textwidth]{../figs/GD_eta_gamma.pdf}
+    \caption{Narrowed down parameter space from \cref{fig: param_overview}.}
     \label{fig: param_narrowed}
 \end{figure}
 
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width = .4\textwidth]{../figs/SGD_batch_eta_.pdf}
+    \caption{Plotting batch size, against learning rate, using stochastic gradient descent.}
+    \label{fig: SGD_batch_eta}
+\end{figure}
 
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width = 0.4\textwidth]{../figs/SGD_batch_gamma.pdf}
+    \caption{Plotting the batch size against the momentum, using stochastic gradient descent. Using a learning rate of $0.2$}
+    \label{fig: SGD_batch_gamma}
+\end{figure}
 
+\subsubsection{AdaGrad}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width = 0.4\textwidth]{../figs/AdagradMomentum_eta_gamma.pdf}
+    \caption{Plotting the learning rate against the momentum, using regular AdaGrad}
+    \label{fig: AdagradMomentum_eta_gamma}
+\end{figure}
 
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width = 0.4\textwidth]{../figs/AdagradMomentum_stochastic_eta_gamma.pdf}
+    \caption{Plotting the learning rate against the momentum, using stochastic AdaGrad. The batch size is set to 20.}
+    \label{fig: AdagradMomentum_stochastic_eta_gamma}
+\end{figure}
 
+\subsubsection{RMSprop}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width = 0.4\textwidth]{../figs/RMS_Prop_eta_rho.pdf}
+    \caption{Plotting the learning rate against the decay rate, using RMSprop}
+    \label{fig: RMS_Prop_eta_rho}
+\end{figure}
 
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width = 0.4\textwidth]{../figs/RMS_Prop_stochastic_eta_rho.pdf}
+    \caption{Plotting the learning rate against the decay rate, using stochastic RMSprop. The batch size is set to 20.}
+    \label{fig: RMS_Prop_stochastic_eta_rho}
+\end{figure}
 
+\subsubsection{Adam}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width = 0.4\textwidth]{../figs/Adam_eta_rho.pdf}
+    \caption{Plotting the learning rate against the decay rate. We have set the same value for $ρ_1$ and $ρ_2$, using Adam}
+    \label{fig: Adam_eta_rho.pdf}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width = 0.4\textwidth]{../figs/Adam_stochastic_eta_rho.pdf}
+    \caption{Plotting the learning rate against the decay rate, using stochastic Adam. The batch size is set to 20, and the same value for $ρ_1$ and $ρ_2$ is used.}
+    \label{fig: Adam_stochastic_eta_rho.pdf}
+\end{figure}
 
 \subsection{Neural Networks Validation}
 
