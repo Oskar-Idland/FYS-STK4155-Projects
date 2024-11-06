@@ -665,7 +665,7 @@ All the source code that we developed and used to produce our results is availab
 
 \subsection{Tools}\label{subsec:tools}
 
-All our code is written in Python (3.12) \cite{Python}, and we used scikit-learn \cite{scikit-learn} and py-torch to test against our models. To vectorize our code we used \verb|numpy| \cite{Numpy}, and for visualization we used \verb|matplotlib.pyplot| \cite{Matplotlib}. All python packages and their versions can be found in our \verb|requirements.txt|. Code completion and debugging was done in Visual Studio Code \cite{VSCode} with additional assistance of GitHub Copilot \cite{Copilot}. We used \verb|git| \cite{Git} for version control, and \verb|GitHub| \cite{GitHub} for remote storage of our code.
+All our code is written in Python (3.12) \cite{Python},  and we used scikit-learn \cite{scikit-learn} and py-torch to test against our models. To vectorize our code we used \verb|numpy| \cite{Numpy}, and for visualization we used \verb|matplotlib.pyplot| \cite{Matplotlib}. All python packages and their versions can be found in our \verb|requirements.txt|. Code completion and debugging was done in Visual Studio Code \cite{VSCode} with additional assistance of GitHub Copilot \cite{Copilot}. We used \verb|git| \cite{Git} for version control, and \verb|GitHub| \cite{GitHub} for remote storage of our code.
 
 \section{Results \& Discussion}\label{sec:results discussion}
 \subsection{Regression Analysis}
@@ -691,7 +691,97 @@ All our code is written in Python (3.12) \cite{Python}, and we used scikit-learn
 
 
 
-\subsection{Neural Networks Validation}
+\subsection{Neural Networks Regression}
+
+\begin{onecolumngrid}
+    \begin{center}
+        \begin{figure}[h!]
+            \includegraphics[width = .75\textwidth]{../figs/c_eta_lambda.pdf}
+            \caption{The effect of learning rate and regularization strength on the Franke function regression problem. The plot shows the MSE and \( R^2 \) scores for different combinations of learning rate and regularization strength, with the optimal values highlighted in red.}
+            \label{fig:NN_Franke_eta_lambda}
+        \end{figure}
+    \end{center}
+\end{onecolumngrid}
+
+\begin{onecolumngrid}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width = .9\textwidth]{../figs/b_schedulers.pdf}
+        \caption{The effect of different learning rate schedulers on the Franke function regression problem. The plot shows the training MSE and \( R^2 \) scores for different learning rate schedulers as a function of epochs. The schedulers MSEs are marked with a cross indicating at which epoch convergence was reached.}
+        \label{fig:NN_Franke_schedulers}
+    \end{figure}
+\end{onecolumngrid}
+
+\begin{onecolumngrid}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width = .9\textwidth]{../figs/c_activation_funcs.pdf}
+        \caption{The effect of different activation functions on the Franke function regression problem. The plot shows the test MSE and \( R^2 \) scores for different activation functions.}
+        \label{fig:NN_Franke_activation}
+    \end{figure}
+\end{onecolumngrid}
+
+\begin{onecolumngrid}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width = .9\textwidth]{../figs/nn_torch_franke.pdf}
+        \caption{PyTorch neural network regression on the Franke function. The plot shows the training and test MSE and \( R^2 \) as a function of epochs.}
+        \label{fig:NN_Torch_scores}
+    \end{figure}
+\end{onecolumngrid}
+
+\subsection{Neural Networks Classification}
+
+\begin{onecolumngrid}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width = .9\textwidth]{../figs/classification_lambda_eta.pdf}
+        \caption{Model performance for different learning rates and regularization strengths on the breast cancer classification problem. The plot shows the training and test accuracy scores for different combinations of learning rate and regularization strength. The optimal values are highlighted in green.}
+    \end{figure}
+\end{onecolumngrid}
+
+\begin{onecolumngrid}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width = .9\textwidth]{../figs/classification_hidden_layers_nodes.pdf}
+        \caption{Model performance for different network architectures on the breast cancer classification problem. The plot shows the training and test accuracy scores for different numbers of hidden layers and nodes. The optimal values are highlighted in green.}
+        \label{fig:NN_Classification_hidden_layers_nodes}
+    \end{figure}
+\end{onecolumngrid}
+
+\begin{onecolumngrid}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width = .9\textwidth]{../figs/classification_activations_layers.pdf}
+        \caption{Model performance for different activation functions on the breast cancer classification problem. The plot shows the training and test accuracy scores for different activation functions and numbers of hidden layers.}
+        \label{fig:NN_Classification_activations_layers}
+    \end{figure}
+\end{onecolumngrid}
+
+\begin{onecolumngrid}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width =.9\textwidth]{../figs/nn_torch_breast_cancer.pdf}
+        \caption{PyTorch neural network classification on the breast cancer dataset. The plot shows the training and test accuracy as a function of epochs.}
+        \label{fig:NN_Torch_breast_cancer}
+    \end{figure}
+\end{onecolumngrid}
+
+\begin{onecolumngrid}
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width = .9\textwidth]{../figs/logistic_regression_gridsearch.pdf}
+        \caption{Model performance for different learning rates and regularization strengths on the breast cancer classification problem using logistic regression. The plot shows the training and test accuracy scores for different combinations of learning rate and regularization strength. The optimal values are highlighted in green.}
+    \end{figure}
+\end{onecolumngrid}
+
+
+\begin{figure}[h!]
+    \includegraphics[width =.45\textwidth]{../figs/confusion_matrix.pdf}
+    \caption{Confusion matrix for the breast cancer classification problem with Skikit's Logicstic Regression. The plot shows the confusion matrix for the test set, with the number of true positives, true negatives, false positives, and false negatives.}
+    \label{fig:confusion_matrix}
+\end{figure}
+
 
 % \vspace*{-2.5pt}
 \section{Conclusion}\label{sec:conclusion}
