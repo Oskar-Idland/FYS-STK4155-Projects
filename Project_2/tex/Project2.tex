@@ -322,7 +322,7 @@ While Project 1 introduced regularization in the context of Ridge regression, ne
 
 Where $\lambda$ is the regularization parameter, $N$ is the number of training samples, and the sum runs over all weights in the network. This modification encourages the network to use smaller weights and distribute the learned patterns across multiple nodes rather than relying too heavily on any single connection.
 
-\subsubsection{Activation Functions}
+\subsubsection{Activation Functions}\label{sec:activation_functions}
 
 The non-linear activation functions are fundamental components that enable neural networks to approximate complex functions. By introducing non-linearity between layers, these functions allow the network to learn and represent patterns that would be impossible with purely linear transformations. The careful selection of activation functions significantly impacts both the network's expressive capability and its training dynamics.
 
@@ -432,20 +432,67 @@ This process provides the gradients needed for the various optimization methods 
 \subsubsection{Learning Rate Tuning}
 The learning rate tuning methods discussed in section \ref{sec:learning_rate_tuning} for gradient descent optimization are equally applicable to neural network training. The same challenges of balancing convergence speed with stability apply, and methods like AdaGrad, RMSprop, and Adam are commonly used to automatically adjust learning rates during neural network training.
 
-\subsection{Training Considerations for Optimization Methods}
-While gradient descent and neural networks may appear quite different at first glance, they share many fundamental training elements and challenges. Understanding these commonalities helps illuminate the underlying principles of machine learning optimization
+\subsection{Logistic Regression}
+While neural networks provide a powerful framework for both regression and classification tasks, understanding logistic regression offers valuable insights into many core concepts of deep learning. It can be viewed as a single-layer neural network and introduces key ideas like activation functions and alternative cost functions to the SGD method.
 
-\subsubsection{Cost Functions and Optimization Goals}
-Both methods aim to minimize a cost function that measures prediction error. For regression tasks, we prefer the MSE discussed in Project 1 because its quadratic form makes it differentiable and provides stronger penalties for large errors. However, binary classification tasks often employ the logistic regression cost function:
+For binary classification problems where outcomes take only two values \( \{0,1\} \), we model the probability of a positive outcome using the sigmoid function (which we encountered in \cref{sec:activation_functions} as a neural network activation function):
 
 \begin{equation}
-    C = -\frac{1}{n}\sum_{i=1}^n [y_i\log(p_i) + (1-y_i)\log(1-p_i)],
+    p(y=1|x, \theta) = \frac{e^{\theta_0 + \theta_1x}}{1 + e^{\theta_0 + \theta_1x}},
+\end{equation}
+\begin{equation}
+    p(y=0|x, \theta) = 1 - p(y=1|x, \theta).
 \end{equation}
 
-where \( p_i \) represents the predicted probability of class 1 for observation \( i \). This function is particularly well-suited for classification as it naturally handles probabilistic predictions and automatically enforces outputs between 0 and 1.
+For a dataset \( D = \{(y_i,x_i)\} \) with binary labels \( y_i \in \{0,1\} \), assuming independent observations, the likelihood is:
+
+\begin{equation}
+    P(D|\theta) = \prod_i[p(y_i=1|x_i,\theta)]^{y_i}[1-p(y_i=1|x_i,\theta)]^{1-y_i}.
+\end{equation}  
+
+Taking the logarithm gives the cross entropy cost function which is also used in classification for neural networks:
+
+\begin{align*}
+    C(\theta) 
+    = &-\sum_i\Big[y_i\log(p(y_i=1|x_i,\theta)) \\
+    & + (1-y_i)\log(1-p(y_i=1|x_i,\theta))\Big]. \numberthis \label{logistic_cost}
+\end{align*}
+
+Using matrix notation with design matrix \( X \), target vector \( y \), and predicted probabilities \( p \), the gradient takes a form similar to what we saw for neural networks:
+
+\begin{equation}
+    \frac{\partial C(\theta)}{\partial \theta} = -X^T(y-p).
+\end{equation}
+
+Like in neural networks, we often add regularization terms to prevent overfitting. The optimization can be performed using any of the gradient-based methods discussed earlier, though Newton-Raphson's method is traditionally preferred when computationally feasible due to its faster convergence near the minimum. % #TODO Cite lecture 38
+
+The logistic regression model illustrates several key concepts that carry over to neural networks: the use of non-linear activation functions to constrain outputs, the importance of choosing appropriate cost functions for classification tasks, and the application of gradient-based optimization methods. Furthermore, many of the training considerations we will discuss next, such as batch processing and learning rate tuning, apply equally to logistic regression and neural networks.
+\subsection{Training Considerations for Optimization Methods}
+While gradient descent, neural networks and logistic regression may appear quite different at first glance, they share many fundamental training elements and challenges. Understanding these commonalities helps illuminate the underlying principles of machine learning optimization
+
+\subsubsection{Cost Functions and Optimization Goals}
+All three methods aim to minimize a cost function that measures prediction error. For regression tasks, we prefer the MSE discussed in Project 1 because its quadratic form makes it differentiable and provides stronger penalties for large errors. However, binary classification tasks often employ the logistic regression cost function.
+
+For classification tasks, while we optimize the cross-entropy cost function during training, we typically evaluate model performance using the accuracy score - the fraction of correct predictions. For a binary classification problem with predictions \( \hat{y}_i \) and true values \( y_i \), the accuracy is defined as:
+
+\begin{equation}
+    \text{Accuracy} = \frac{1}{n}\sum_{i=1}^{n} \mathbb{I}(\hat{y}_i = y_i),
+\end{equation}
+
+where \( \mathbb{I}\) is the indicator function that equals 1 if \( y_i = \hat{y}_i \) and 0 otherwise. For neural networks and logistic regression with sigmoid output, we typically threshold the output probability at 0.5 to obtain binary predictions:
+
+\begin{equation}
+    \hat{y}_i = 
+    \begin{cases}
+        1 & \text{if } \sigma(x_i) \geq 0.5 \\
+        0 & \text{if } \sigma(x_i) < 0.5
+    \end{cases}
+\end{equation}
+
+While accuracy provides an intuitive measure of model performance, it is worth noting that we do not optimize it directly during training. This is because accuracy is not differentiable (due to the threshold operation), making it unsuitable for gradient-based optimization. Instead, we optimize the cross-entropy cost function, which provides a smooth, differentiable measure that encourages the model to output probabilities close to 0 or 1 for the correct classes.
 
 \subsubsection{Batch Processing and Stochasticity}
-Both gradient descent and neural networks benefit from stochastic updates using mini-batches. This approach offers several advantages:
+They all benefit from stochastic updates using mini-batches. This approach offers several advantages:
 
 \begin{itemize}
     \item Reduced memory requirements compared to full-batch methods
@@ -454,13 +501,13 @@ Both gradient descent and neural networks benefit from stochastic updates using 
     \item Potential for better generalization
 \end{itemize}
 
-The choice of batch size involves similar tradeoffs in both cases: smaller batches provide more frequent updates but noisier gradient estimates, while larger batches give more stable gradients but slower convergence. The optimal batch size often depends on both the problem structure and computational constraints.
+The choice of batch size involves similar tradeoffs for all cases: smaller batches provide more frequent updates but noisier gradient estimates, while larger batches give more stable gradients but slower convergence. The optimal batch size often depends on both the problem structure and computational constraints.
 
 \subsubsection{Training Progress}
-Both methods typically measure progress in terms of epochs - complete passes through the training data. The number of epochs needed depends on factors like dataset size, model complexity, and the difficulty of the task. Training continues until either a maximum number of epochs is reached or some convergence criterion is met. However, the interpretation of "convergence" can differ between methods - neural networks may require more epochs due to their non-linear nature and larger parameter space.
+They typically measure progress in terms of epochs - complete passes through the training data. The number of epochs needed depends on factors like dataset size, model complexity, and the difficulty of the task. Training continues until either a maximum number of epochs is reached or some convergence criterion is met. However, the interpretation of "convergence" can differ between methods - neural networks may require more epochs due to their non-linear nature and larger parameter space.
 
 \subsubsection{Hyperparameter Selection}
-Both approaches require careful tuning of hyperparameters that control the learning process:
+All approches require careful tuning of hyperparameters that control the learning process:
 \begin{itemize}
     \item Learning rates and their scheduling
     \item Regularization strength \( \lambda \)
@@ -479,15 +526,15 @@ To explore the optimization methods discussed in the theory \cref{sec:theory}, w
 Regression models have many parameters, making it impossible (or at least impractical) to iterate over all possible combinations. We use grid search to explore two parameters at a time. We then zoom in on the most promising regions to find the optimal parameters. After finding a suitable set of parameters, we continue the search for the next set of parameters.
 
 \subsubsection{Plain Gradient Descent}
-\paragraph{No Momentum:}
+\paragraph*{No Momentum:}
 To be sure we understand the basic principles of gradient descent, we start by implementing a simple gradient descent algorithm for linear regression. We use the MSE as our cost function and compute the gradient of the cost function with respect to the model parameters. We then update the parameters using the gradient and iterating over a set of learning rates.
-\paragraph{Momentum:}
+\paragraph*{Momentum:}
 We then extend our implementation to include momentum. Now we iterate over all possible values of the momentum and learning rate to find the optimal combination for our model. After creating a general overview of the entire parameter space, we zoom in on the most promising regions to find the optimal parameters. This process will be repeated for the other optimization methods as well.
 
 \subsubsection{Stochastic Gradient Descent}
-\paragraph{No Momentum:}
+\paragraph*{No Momentum:}
 Continuing with stochastic gradient descent, we implement a simple version of the algorithm and apply it to our regression problem. We then begin by iterating over all possible learning rates and batch sizes to find the optimal combination. We then zoom in on the most promising regions to find the optimal parameters.
-\paragraph{Momentum:}
+\paragraph*{Momentum:}
 Secondly, we use the ideal learning rate, and then iterate over possible values of the momentum to find the optimal combination. We then zoom in on the most promising regions to find the optimal parameters.
 
 Moving on to the more advanced optimization methods, we implement AdaGrad, RMSprop, and Adam. We follow the same procedure as before, iterating over all possible learning rates and momentum values to find the optimal combination. We note the optimal values to use in the neural network implementation.
@@ -505,6 +552,82 @@ Using the optimal values found in the previous step, we then iterate over all po
 
 \subsubsection{RMSprop \& Adam}
 \paragraph{No Momentum:}
+
+\subsection{Neural Networks}
+In order to explore the optimization methods discussed in the theory section, we consider again a regression problem on the Franke function, and also a classification problem on the Wisconsin Breast Cancer dataset. % #TODO cite sklearn
+The hyperparameter space is vast, and in order to effectively produce results we narrow down the possibilities by first deciding on a singular network model to base our work on. This entails initializing our models with pseudo-random weights sampled from a univariate normal distribution with zero mean and a variance of one. The same goes for the biases, but with an added constant of 0.01 in order to break symmetry. With the focus on exploring the influence of hyperparameters, we choose to keep the network architecture simple, with a single hidden layer and a fixed number of nodes. This allows us to focus on the effects of the learning rate, batch size, and regularization strength on the network's performance.
+\subsubsection{Franke Function Regression} 
+
+We first validated our neural network implementation using the Franke function regression problem. Input data was generated by sampling the Franke function on a uniform grid of \( 100 \times 100 \) points over the unit square \( [0,1]\times[0,1] \). To simulate measurement noise, we added Gaussian noise with mean zero and standard deviation \( \sigma = 0.01 \) to the function values.
+
+The input coordinates \( (x,y) \) were used to generate a design matrix with polynomial features up to degree 4, chosen to match the complexity of the Franke function's structure. The dataset was split into training \( (80\%) \) and test \( (20\%) \) sets using scikit-learn's \verb|train_test_split function|. Both input features and target values were standardized using StandardScaler, with the scaling parameters computed only from the training set to prevent data leakage.
+
+The network was configured with a single hidden layer of 15 nodes, empirically chosen as a balance between model complexity and computational efficiency. The output layer consisted of a single node for regression. We initialized weights from a normal distribution \( \mathcal{N} (0,1) \) and biases with a small constant offset of 0.01 to break symmetry in the network's initial state.
+
+For our systematic hyperparameter exploration, we established a standard configuration:
+\begin{itemize}
+    \item Activation function: Sigmoid in the hidden layer
+    \item Cost function: Mean Squared Error (MSE)
+    \item Optimizer: AdaGrad with momentum (\( \eta \) = 0.001, \( \gamma \) = 0.8)
+    \item Regularization rate: \( \lambda \) = 0.001
+\end{itemize}
+
+These baseline parameters were chosen based on preliminary experiments showing stable convergence without excessive overfitting. This configuration served as our control point, allowing us to systematically vary individual parameters while holding others constant. 
+
+\paragraph*{Epochs vs batch size:}
+Our first step was to explore the relationship between the number of epochs and the batch size. We iterated over epoch sizes \( (100, 500, 1000, 2000) \) and number of batches \( (1, 10, 20, 50, 100) \) and calculated the score metrics for each combination. From here we went further with using 500 epochs and 20 batches for the rest of the analysis.
+
+\paragraph*{Learning rate (\( \eta \)) vs Regularization (\( \lambda \)):}
+This was conducted in similar fashion to the previous step, with the learning rate \( \eta \) ranging from values (\( 1e^{-4} \) to \( 1e^{-1} \) and 0.5), and the regularization parameter \( \lambda \) ranging from (\( 1e^{-5} \) to \( 1e^{-1} \)). 
+
+\paragraph*{Schedulers:}
+To compare the different learning rate schedulers discussed in \cref{sec:learning_rate_tuning}, we implented one instance of each of them with the standard learning rate. For plain momentum and Adagrad with momentum, we used the parameters \( \gamma = 0.8 \) again. For Adam, we used the parameters \( \rho = 0.9, \rho_2 = 0.999 \). RMPprop had the same \( \rho \) value as Adam. To ensure numerical stability, we used a small value of \( \epsilon = 1e^{-8} \) for all the optimizers. The momentum and decay parameters were chosen based on common values in deep learning literature that typically show good performance across different problems. % #TODO cite 
+
+Training progression was monitored by computing both MSE and \( R^2 \) scores on the training data at each epoch. Convergence was defined quantitatively as the point where the relative difference between the mean MSE of the last 10 epochs and the current MSE fell below \( 10^{-2} \), providing a systematic criterion for comparing optimizer efficiency. For final model evaluation, we computed these metrics on the held-out test set to assess generalization performance.
+\subsubsection{Breast Cancer Classification}
+
+For the classification task, we used the Wisconsin Breast Cancer dataset, which contains 30 features computed from digitized images of fine needle aspirates (FNA) of breast mass, with binary labels indicating malignant or benign tumors. The data was split into training and test sets using an 80-20 split. Unlike the Franke function data, only the input features were standardized since the target values are binary.
+
+We maintained the same basic network architecture as in the regression task, initially using a single hidden layer with 15 nodes. The sigmoid activation function was employed in both the hidden and output layers, with the output layer producing a single value representing the probability of malignancy. For this binary classification problem, we used the logistic regression cost function \cref{logistic_cost}.
+
+Given the relatively small size of the dataset compared to the Franke function case, we reduced the training duration to 20 epochs with 20 batches. The initial configuration used a regularization parameter \( \lambda \) = 0.01 and the Adam optimizer with learning rate \( \eta \) = 0.001, and momentum parameters \( \rho \) = 0.9, \( \rho_2 \) = 0.999. Model performance was evaluated using both training and test set accuracy scores.
+
+Our investigation proceeded in three main stages:
+
+\paragraph*{Learning Rate and Regularization Parameter:}
+Learning Rate and Regularization: We performed a grid search over learning rates and regularization parameters, both ranging from \( 10^{-5} \) to \( 10^{-1} \). This explored the balance between model convergence speed and stability versus overfitting prevention.
+
+\paragraph*{Network Architecture:}
+We systematically investigated the effect of network depth and width by varying:
+\begin{itemize}
+    \item Number of hidden layers: 1 to 3 layers
+    \item Neurons per layer: 5 to 25 neurons, in steps of 5
+\end{itemize}
+Each configuration was trained with the previously determined optimal learning rate and regularization parameter to isolate the effect of architecture changes.
+
+\paragraph*{Activation Functions:}
+Maintaining the 15-neuron architecture, we compared three different activation functions in the hidden layers:
+\begin{itemize}
+    \item Sigmoid
+    \item ReLU
+    \item Leaky ReLU
+\end{itemize}
+This comparison was performed across networks with 1 to 3 hidden layers to understand how different activation functions affect the network's learning capacity at varying depths. The output layer retained the sigmoid activation function to maintain proper probability outputs for classification.
+
+\subsection{Logistic Regression}
+To evaluate different approaches to classification of the Wisconsin Breast Cancer dataset, we implemented logistic regression alongside our neural network. While our neural network used a single hidden layer, logistic regression represents an even simpler model that can be viewed as a neural network without any hidden layers, using only a sigmoid activation function on the output.
+
+Using the same preprocessed dataset as in our neural network analysis (standardized features, 80-20 train-test split), we implemented logistic regression with the standard sigmoid function and logistic regression cost function.
+
+To enable direct comparison with our neural network results, we performed a similar grid search over:
+
+\begin{itemize}
+    \item Learning rates \( \eta \): [\( 10^-{5,} 10^{-4}, 10{^-}3, 10^{-2}, 10^{-1} \)]
+    \item Regularization \( \lambda \): [\( 10^{-5}, 10^{-4}, 10^{-3}, 10^{-2}, 10^{-1} \)]
+\end{itemize}
+We maintained consistency with our other implementations by using stochastic gradient descent with batch size 20 and 20 epochs. The model's performance was evaluated using the accuracy score on both training and test sets, allowing comparison between the simpler logistic regression and the single-hidden-layer neural network approach.
+
+
 
 % \subsection{The Program}\label{subsec:program}
 % \subsubsection{Code Structure}\label{subsubsec:codestructure}
