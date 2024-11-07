@@ -43,7 +43,7 @@ class Scheduler:
         pass
 
 
-class ConstantScheduler(Scheduler):
+class Constant(Scheduler):
     """
     Constant learning rate scheduler.
 
