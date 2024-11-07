@@ -101,8 +101,8 @@ Using the same preprocessed dataset as in our neural network analysis (standardi
 To enable direct comparison with our neural network results, we performed a similar grid search over:
 
 \begin{itemize}
-    \item Learning rates \( \eta \): [\( 10^-{5,} 10^{-4}, 10{^-}3, 10^{-2}, 10^{-1} \)]
-    \item Regularization \( \lambda \): [\( 10^{-5}, 10^{-4}, 10^{-3}, 10^{-2}, 10^{-1} \)]
+    \item Learning rates \( \eta \): \( 10^{n}, n \in [-5, -1] \)
+    \item Regularization \( \lambda \): \( 10^{n}, n \in [-5, -1] \)
 \end{itemize}
 We maintained consistency with our other implementations by using stochastic gradient descent with batch size 20 and 20 epochs. The model's performance was evaluated using the accuracy score on both training and test sets, allowing comparison between the simpler logistic regression and the single-hidden-layer neural network approach.
 
