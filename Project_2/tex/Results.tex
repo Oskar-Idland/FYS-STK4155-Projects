@@ -25,9 +25,9 @@
     \label{fig: SGD_batch_gamma}
 \end{figure}
 
-Looking at \cref{fig: param_overview}  we found a region of parameters  in the lower-right corner, which gave the lowers MSE values. Using the best parameters found marked with a cross as a starting point, we found a good interval of values as seen in \cref{fig: param_narrowed}, with an order of magnitude around $10^{-4}$ and $10^{-3}$. In the following results, we only present the best intervals. The entire overview can be found the appendix \color{magenta}\#TODO: Reference \color{black}.
+Looking at \cref{fig: param_overview} we found a region of parameters  in the upper-half , which gave the lowers MSE values. Using the best parameters found marked with a cross as a starting point, we found a good interval of values as seen in \cref{fig: param_narrowed}, with an order of magnitude around $10^{-4}$ and $10^{-3}$. In the following results, we only present the best intervals.
 
-Continuing our search for the optimal batch number, we found between 5 and 20 batches to work well. In \cref{fig: SGD_batch_eta} we have no momentum. As a learning of $0.2$ gave good results, we used this as our fixed learning rate in \cref{fig: SGD_batch_gamma} to find an optimal number of batches as a function of momentum. We see that the effect of changing the momentum is almost negligible, and that the number of batches is the most important parameter to tune. Even though we see a clear gradient in the plot, all the MSE values are in the same order of magnitude around \(10^{-5}\). The same is true in \cref{fig: SGD_batch_eta}, where all learning rates between $0.1$ and $0.2$ give MSE values around \(10^{-4}\).
+Continuing our search for the optimal batch number, we found between 5 and 20 batches to work well. In \cref{fig: SGD_batch_eta} without momentum. As a learning of $0.2$ gave the best results, we used this as our fixed learning rate in \cref{fig: SGD_batch_gamma} to find an optimal number of batches as a function of momentum. We see that the effect of changing the momentum is almost negligible, and that the number of batches is the most important parameter to tune. Even though we see a clear gradient in the plot, we find a large area with MSE values in the order of magnitude of \(10^{-5}\). The same is true in \cref{fig: SGD_batch_eta}, where over half of the learning rates between $0.1$ and $0.2$ give MSE values around \(10^{-4}\).
 
 \subsubsection{AdaGrad}
 \begin{figure}[ht!]
@@ -42,7 +42,7 @@ Continuing our search for the optimal batch number, we found between 5 and 20 ba
     \caption{Plotting the learning rate against the momentum, using stochastic AdaGrad. The batch size is set to 20.}
     \label{fig: AdagradMomentum_stochastic_eta_gamma}
 \end{figure}
-Exploring further with \cref{fig: AdagradMomentum_eta_gamma} and \cref{fig: AdagradMomentum_stochastic_eta_gamma} we found that the stochastic performed better then plain gradient descent version with about 4 orders of magnitude. The stochastic version had an MSE of around \(10^{-5}\), while the plain version had an MSE of around \(10^{-1}\).
+Exploring further with \cref{fig: AdagradMomentum_eta_gamma} and \cref{fig: AdagradMomentum_stochastic_eta_gamma} we found that the stochastic performed better then plain gradient descent, of 2 orders of magnitude. The stochastic version had an MSE of around \(10^{-5}\), while the plain version had an MSE of around \(10^{-3}\).
 
 \subsubsection{RMSprop}
 \begin{figure}[ht!]
@@ -58,6 +58,7 @@ Exploring further with \cref{fig: AdagradMomentum_eta_gamma} and \cref{fig: Adag
     \caption{Plotting the learning rate against the decay rate, using stochastic RMSprop. The batch size is set to 20.}
     \label{fig: RMS_Prop_stochastic_eta_rho}
 \end{figure}
+The RMS propagation method was very sensitive to the learning rate. As seen in \cref{fig: RMS_Prop_eta_rho} and \cref{fig: RMS_Prop_stochastic_eta_rho}, there was only a narrow range of learning rates that gave good results. Outside of this range, computation became unstable, and a lot of NaN values were produced. The stochastic version performed better than the plain version, with an MSE of around \(10^{-3}\) compared to \(10^{-2}\). Looking closer at the MSE values of the stochastic variant, we found some spots with MSEs with a value around \( 10^{-4} \). For the plain version, we found some spots with an MSE of around \( 10^{-3} \).
 
 \subsubsection{Adam}
 \begin{figure}[ht!]
@@ -73,7 +74,7 @@ Exploring further with \cref{fig: AdagradMomentum_eta_gamma} and \cref{fig: Adag
     \label{fig: Adam_stochastic_eta_rho.pdf}
 \end{figure}
 
-From \cref{fig: RMS_Prop_eta_rho} and \cref{fig: RMS_Prop_stochastic_eta_rho} it seems that both versions underperformed with an MSE with around \( 10^-{-1} \). Looking closer at the MSE values of the stochastic variant, we found some spots with MSEs with a value around \( 10^{-5} \). Lastly, \cref{fig: Adam_eta_rho.pdf} and \cref{fig: Adam_stochastic_eta_rho.pdf} performed similar as RMSprop, in general there where too high MSE values, but with spots in the same order of magnitude.
+The Adam optimization method was both unstable and very sensitive to the learning rate. As seen in \cref{fig: Adam_eta_rho.pdf} and \cref{fig: Adam_stochastic_eta_rho.pdf}, the plain version had at best an MSE of around \(10^{-2}\), while the stochastic version had an MSE of around \(10^{-3}\). The stochastic version had some spots with an MSE of around \(10^{-6}\). The plain version had some spots with an MSE of around \(10^{-4}\).
 
 \clearpage
 
