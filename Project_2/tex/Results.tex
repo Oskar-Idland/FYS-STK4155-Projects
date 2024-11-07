@@ -80,9 +80,7 @@ The Adam optimization method was both unstable and very sensitive to the learnin
 
 \subsection{Neural Networks Regression}
 
-
 Our analysis of feed-forward neural networks began with the Franke function regression problem, allowing us to validate our implementation and explore the effects of various hyperparameters. The results demonstrate that our neural network implementation achieves robust performance across a wide range of configurations, with optimal models achieving MSE values around \( 10^{-3} \) and \( R^2 \) scores above 0.95.
-
 
 \begin{figure}[h!]
     \begin{minipage}{\textwidth}
@@ -154,7 +152,6 @@ Testing different activation functions (\cref{fig:NN_Franke_activation}), reveal
 Comparing our results with the PyTorch implementation in \cref{fig:NN_Torch_scores}, we see that our model performed similarly to the PyTorch model, settling on an MSE around \( 10^{-3} \) and an \( R^2 \) score over 0.98. An interesting feature in the PyTorch implementation's learning curve is the noticeable 'bump' in scoring metrics around epoch 500, followed by recovery and continued improvement. This behavior is characteristic of the model navigating through different local minima in the loss landscape. Rather than indicating instability, such transitions can actually be beneficial, as they suggest the optimizer is able to escape potential local minima in search of better solutions. This dynamic exploration of the parameter space likely contributes to the model's eventual superior performance and supports our earlier observation about its robustness. In contrast, our implementation's faster convergence might indicate it settles more quickly into the first acceptable minimum it finds.
 
 \clearpage
-
 
 \onecolumngrid
 \subsection{Neural Networks Classification}
