@@ -74,8 +74,8 @@ neural networks.
 `utils.py`: Contains a collections of utility functions used in the project. Mostly plotting or data handling functions and other repetitive tasks. 
 
 #### `Project_2/tex`: $\LaTeX$ files
-- `Project_2.tex`: The full report of the project.
-- `out/Project_2.pdf`: The compiled report. 
+- `main.tex`: The full report of the project.
+- `out/main.pdf`: The compiled report. 
 
 #### `Project_2`: Root folder for project 2.
 - `requirements.txt`: Required packages for the project, and their versions. 
