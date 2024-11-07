@@ -52,6 +52,6 @@ def CostLogReg_derivative(pred, targets):
     """
     eps = 1e-15  # Same small constant for numerical stability
     pred = np.clip(pred, eps, 1 - eps)
-    )
+
     derivative = (pred - targets) / (pred * (1 - pred))
     return derivative
