@@ -322,7 +322,7 @@ Using matrix notation with design matrix \( X \), target vector \( y \), and pre
     \frac{\partial C(\theta)}{\partial \theta} = -X^T(y-p).
 \end{equation}
 
-Like in neural networks, we often add regularization terms to prevent overfitting. The optimization can be performed using any of the gradient-based methods discussed earlier, though Newton-Raphson's method is traditionally preferred when computationally feasible due to its faster convergence near the minimum. % #TODO Cite lecture 38
+Like in neural networks, we often add regularization terms to prevent overfitting. The optimization can be performed using any of the gradient-based methods discussed earlier.
 
 The logistic regression model illustrates several key concepts that carry over to neural networks: the use of non-linear activation functions to constrain outputs, the importance of choosing appropriate cost functions for classification tasks, and the application of gradient-based optimization methods. Furthermore, many of the training considerations we will discuss next, such as batch processing and learning rate tuning, apply equally to logistic regression and neural networks.
 \subsection{Training Considerations for Optimization Methods}

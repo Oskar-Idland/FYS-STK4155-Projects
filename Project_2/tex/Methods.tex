@@ -33,7 +33,7 @@ Using the optimal values found in the previous step, we then iterate over all po
 \paragraph{No Momentum:}
 
 \subsection{Neural Networks}
-In order to explore the optimization methods discussed in the theory section, we consider again a regression problem on the Franke function, and also a classification problem on the Wisconsin Breast Cancer dataset. % #TODO cite sklearn
+In order to explore the optimization methods discussed in the theory section, we consider again a regression problem on the Franke function, and also a classification problem on the Wisconsin Breast Cancer dataset. 
 The hyperparameter space is vast, and in order to effectively produce results we narrow down the possibilities by first deciding on a singular network model to base our work on. This entails initializing our models with pseudo-random weights sampled from a univariate normal distribution with zero mean and a variance of one. The same goes for the biases, but with an added constant of 0.01 in order to break symmetry. With the focus on exploring the influence of hyperparameters, we choose to keep the network architecture simple, with a single hidden layer and a fixed number of nodes. This allows us to focus on the effects of the learning rate, batch size, and regularization strength on the network's performance.
 \subsubsection{Franke Function Regression}
 
@@ -106,18 +106,14 @@ To enable direct comparison with our neural network results, we performed a simi
 \end{itemize}
 We maintained consistency with our other implementations by using stochastic gradient descent with batch size 20 and 20 epochs. The model's performance was evaluated using the accuracy score on both training and test sets, allowing comparison between the simpler logistic regression and the single-hidden-layer neural network approach.
 
-% \subsection{The Program}\label{subsec:program}
-% \subsubsection{Code Structure}\label{subsubsec:codestructure}
-% All the source code that we developed and used to produce our results is available on our GitHub repository, linked in \cref{appsec:code}. The \verb|README.md| file contains the entire project structure. Our code is divided into the following files and notebooks:
+\subsection{Benchmark Implementations}
+For validation and comparison purposes, we implemented equivalent models using established machine learning frameworks - PyTorch\cite{PyTorch} and scikit-learn\cite{scikit-learn}. This allowed us to benchmark our implementations against industry-standard tools.
 
-% \verb|franke.ipynb|: Jupyter notebook containing the analysis of the Franke function data, which we used to to validate our implementation.
+For the Franke function regression problem, we created a PyTorch neural network with a similar architecture to our implementation: an input layer of 2 neurons (for x and y coordinates), two hidden layers of 50 and 25 neurons with sigmoid activation functions, and a single output neuron with linear activation. The model was trained using stochastic gradient descent with a batch size of 32 over 2000 epochs.
 
-% \verb|data_analysis.ipynb|: Jupyter notebook containing the analysis of the dark matter density data. Here we have applied and further tested our regression models.
+For the breast cancer classification task, we implemented both a PyTorch neural network and scikit-learn's LogisticRegression. The PyTorch model consisted of two hidden layers (10 and 5 neurons) with sigmoid activations, followed by a binary output layer. For direct comparison with our logistic regression implementation, we utilized scikit-learn's implementation with L2 regularization and the LBFGS optimizer. Both frameworks' models were trained on the same standardized data splits as our implementations to ensure fair comparison.
 
-% \verb|functions.py|: Python script containing all the functions used in the notebooks, all properly documented. The file includes a main block, testing the functions.
-
-% \subsubsection{Tools}\label{subsubsec:tools}
-% All our code is written in Python \cite{Python}, and we used scikit-learn \cite{scikit-learn} to create most of our models. To vectorize our code we used \verb|numpy| \cite{Numpy}, and for visualization we used \verb|matplotlib.pyplot| \cite{Matplotlib}. Code completion and debugging was done in Visual Studio Code \cite{VSCode} with additional assistance of GitHub Copilot \cite{Copilot}. We used \verb|git| \cite{Git} for version control, and \verb|GitHub| \cite{GitHub} for remote storage of our code.
+To maintain consistency in evaluation metrics, we used the same performance measures (MSE and $R^2$ for regression, accuracy for classification) across all implementations. This provided a robust framework for validating our custom implementations against established tools.
 
 \subsection{Program}\label{sec:program}
 \subsubsection{Code Structure}\label{subsec:codestructure}
@@ -135,6 +131,10 @@ All the source code that we developed and used to produce our results is availab
 
 \verb|nn_breast_cancer.ipynb| contains the analysis of the breast cancer data using neural networks. This is where we truly optimize the hyperparameters of the neural networks.
 
+\verb|logistic_regression_anal.ipynb| contains the analysis of the breast cancer data using logistic regression.
+
+\verb|nn_pytorch.ipynb| Contains the analysis of the Franke function and the Wisconsin Breast Cancer dataset using PyTorch and the analysis of the latter dataset using scikit-learn's logistic regression implementation.
+
 \verb|activation_funcs.py| contains the activation functions used in the neural networks.
 
 \verb|cost_funcs.py| contains the cost functions used in the neural networks.
@@ -144,4 +144,4 @@ All the source code that we developed and used to produce our results is availab
 
 \subsection{Tools}\label{subsec:tools}
 
-All our code is written in Python (3.12) \cite{Python},  and we used scikit-learn \cite{scikit-learn} and py-torch to test against our models. To vectorize our code we used \verb|numpy| \cite{Numpy}, and for visualization we used \verb|matplotlib.pyplot| \cite{Matplotlib}. All python packages and their versions can be found in our \verb|requirements.txt|. Code completion and debugging was done in Visual Studio Code \cite{VSCode} with additional assistance of GitHub Copilot \cite{Copilot}. We used \verb|git| \cite{Git} for version control, and \verb|GitHub| \cite{GitHub} for remote storage of our code.
+All our code is written in Python (3.12) \cite{Python},  and we used scikit-learn \cite{scikit-learn} and PyTorch\cite{PyTorch} to test against our models. To vectorize our code we used \verb|numpy| \cite{Numpy}, and for visualization we used \verb|matplotlib.pyplot| \cite{Matplotlib}. All python packages and their versions can be found in our \verb|requirements.txt|. Code completion and debugging was done in Visual Studio Code \cite{VSCode} with additional assistance of GitHub Copilot \cite{Copilot}. We used \verb|git| \cite{Git} for version control, and \verb|GitHub| \cite{GitHub} for remote storage of our code.

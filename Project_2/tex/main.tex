@@ -116,14 +116,11 @@ breaklinks=true}
 \twocolumngrid
 % ===========================================
 
-%#TODO punctuate the equations
+
 
 \section{Introduction}\label{sec:introduction}
-\begin{comment}
-  #TODO: Maybe angle it more towards exploring breast cancer?
-  #TODO: Mention the appendix and what it contains
-\end{comment}
-% \input{Introduction}
+
+\input{Introduction}
 
 % In \cref{sec:theory} we present relevant background theory, the majority of which has been sourced from the lecture notes by Morten Hjorth-Jensen \cite{notes}. We go into detail explaining central concepts such as OLS, Ridge and Lasso regression, the bias-variance tradeoff and two crucial resampling methods; bootstrapping and cross-validation, both of which will be implemented in this work. A few of the most important expressions introduced in this section are derived in \cref{appsec:derivations}. Our methodology is explained in \cref{sec:methods}, specifically how we define the essential design matrix, scale our data and implement the regression and resampling techniques. We also give an overview of our code structure and present the cosmological simulation data. In \cref{sec:results discussion} we present, interpret and discuss the results of our analyses in light of expectations based on our previous knowledge of the implemented regression and resampling methods. In \cref{appsec:figures} we include some additional figures that are not essential to our discussions, yet still referred to in the aforementioned section because they are necessary in reasoning our choice of presented results. Lastly, we summarize and conclude the main findings of our work in \cref{sec:conclusion}, and provide some open questions for further exploration.
 
@@ -139,8 +136,24 @@ breaklinks=true}
 
 \section{Conclusion}\label{sec:conclusion}
 % \vspace*{-2.5pt}
-In our study, our regression analysis proved mostly successful. With the exceptions of finding a good range of values for the Adam and RMSprop schedulers, although individual values were found. The neural network analysis proved to be more successful, performing well across the board. Our classification model were exceptional and scored better than the PyTorch implementation. Although on such a small dataset as  the breast cancer dataset, one should be critical to the amount of training possible.
+In this study, we have implemented and analyzed various optimization algorithms and neural network architectures for bot regression and classification tasks. Our regression analysis demonstrated mixed success across different optimization method. While plain gradient descent and stochastic gradient descent with AdagGrad achieved satisfactory result performance with MSE values around $ 10^{-5} $, we encountered challenges in optimizing the hyperparameter for RMSprop and Adam. These methods showed inconsistent performance, with occasional regions of good convergence (MSE $\approx 10^{-5}$) amid generally poorer results (MSE $\approx 10^{-1}$). 
 
+The neural network implementation proved more robust, particularly in regression task using the Franke function. Our systematic analysis of hyperparameter revealed optimal configurations achieving MSE values of $10^{-3}$ and $R^2$ scores above 0.99. The comparison of different activation functions showed that while sigmoid activation performed marginally better (MSE $\approx 0.003$), both ReLU and Leaky ReLU maintained strong performance (MSE $\approx 0.010$), demonstrating the flexibility of our implementation.
+
+For the classification task using the Wisconsin Breast Cancer dataset, our neural network achieved impressive accuracy ($>98\%$) across various architectures, notably performing on par with and occasionally exceeding the PyTorch implementation. However, this result should be interpreted with caution given the relatively small dataset size. The observed rapid convergence of our model, while computationally efficient, may indicate premature settling into local minima rather than finding truly optimal solutions.
+
+Several areas warrant further investigation, particularly given the constraints of our current study. Due to computational limitations, we significantly restricted our hyperparameter search space, exploring only a modest range of learning rates, batch sizes, and network architectures. The runtime constraints also limited our ability to test higher polynomial degrees and more complex network configurations, especially for the regression task. A more comprehensive study with access to greater computational resources could explore:
+
+\begin{itemize}
+    \item Broader hyperparameter spaces, particularly for RMSprop and Adam optimization
+    \item Larger network architectures with more hidden layers and nodes
+    \item Higher polynomial degrees for the regression analysis
+    \item More extensive cross-validation and ensemble methods
+    \item The effect of different initialization strategies
+    \item Alternative regularization techniques beyond L2 regularization
+\end{itemize}
+
+Additionally, while our neural network performed well on both tasks, a more extensive analysis of its behavior on larger datasets would better validate its generalization capabilities. The relationship between network depth and overfitting, particularly evident in the classification task, merits deeper exploration to establish more reliable guidelines for architecture selection.
 % \section*{Acknowledgements}\label{sec:cknowledgements}
 % % MAYBE REMOVE
 
@@ -150,9 +163,22 @@ In our study, our regression analysis proved mostly successful. With the excepti
 
 \newpage
 % ===========================================
-% \appendix
+\appendix
 \section{Code}\label{appsec:code}
 Link to our GitHub repository: \href{https://github.com/Oskar-Idland/FYS-STK4155-Projects}{https://github.com/Oskar-Idland/FYS-STK4155-Projects}
+
+\section{Additional Figures}\label{appsec:figures}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\columnwidth]{../figs/franke_model_pred.pdf}
+    \caption{Plotted prediction of the Franke function using an optimal model that strikes balance between performance and computational efficiency. The model is a neural network with a single hidden layer of 15 neurons, trained with the Adam optimizer ($\eta = 0.001, \ \rho_1 = 0.9, \ \rho_2 = 0.999$)and Leaky ReLU activation function. The model was trained for 1000 epochs with 20 batches and a regularization strength of $\lambda = 0.0001$.}
+    \label{fig:franke_model_pred}
+\end{figure}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\textwidth]{../figs/classification_activations_layers_multi.pdf}
+    \caption{The experiment from \cref{fig:NN_Classification_activations_layers} extended to allow for all combinations of activation functions through hidden layers 1-3.}
+\end{figure}
 
 \end{document}
 
