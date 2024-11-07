@@ -230,7 +230,7 @@ Our analysis of feed-forward neural networks began with the Franke function regr
 Our feed-forward neural network demonstrated consistently strong performance on the Franke function regression task across a range of hyperparameters. As shown in \cref{fig:NN_Franke_eta_lambda}, the model achieves stable MSE scores around $10^{-3}$ and $R^2$ scores above 0.99 for combinations of learning rates $ \eta $ in the range $ 10^{-1} $ to $ 10^{-3}$ and regularization strengths $ \lambda $ in $ 10^{-3} $ to $ 10^{-5}$ . The model only shows significant performance degradation with the highest tested learning rate ($\eta = 0.5$), suggesting robust behavior across most of the hyperparameter space.
 
 \onecolumngrid
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width = .9\textwidth]{../figs/b_schedulers.pdf}
     \caption{The effect of different learning rate schedulers on the Franke function regression problem. The plot shows the training MSE and \( R^2 \) scores for different learning rate schedulers as a function of epochs. The schedulers MSEs are marked with a cross indicating at which epoch convergence was reached.}
@@ -240,21 +240,25 @@ Our feed-forward neural network demonstrated consistently strong performance on 
 
 The comparison of different optimization schedulers in \cref{fig:NN_Franke_schedulers} shows that all implemented methods have varying success with Adam and RMSprop performing the best. The marked convergence points indicate that both Adagrad methods are slower to converge than the other methods, while RMSprop reach its point around just 100 epochs. As the criteria for convergence is chosen somewhat arbitrarily, as describe in \cref{subsec:nn_schedulers}, the marked crosses may not showcase where the schedulers converge, but gives insight into when the learning rates are slowing down relative to eachother as the networks are training. The figure also suggest that given enough epochs, both Adagrads, Adam and RMSprop will converge to an mse of just short of \( 10^{-3} \) and an \( R^2 \) score of 0.95. While constant learning rate and plain momentum will perform worse.
 
-\begin{figure*}[h]
+\onecolumngrid
+\begin{figure}[h!]
     \centering
     \includegraphics[width = .9\textwidth]{../figs/c_activation_funcs.pdf}
     \caption{The effect of different activation functions on the Franke function regression problem. The plot shows the test MSE and \( R^2 \) scores for different activation functions.}
     \label{fig:NN_Franke_activation}
-\end{figure*}
+\end{figure}
+\twocolumngrid
 
 Testing different activation functions (\cref{fig:NN_Franke_activation}), reveals similar performance levels among non-linear functions. The sigmoid activation in the hidden layer performs slightly better with an MSE of $0.005$ and $R^2$ of $0.995$, but ReLU and Leaky ReLU follow closely with MSE around $0.011$ and $R^2$ of $0.989$. As expected, removing the non-linear capability of the network by using the identity function in the hidden layer results in significantly worse performance, with an MSE of $\approx 0.09$ and $R^2$ of $\approx0.91$. 
 
-\begin{figure*}[b]
+\onecolumngrid
+\begin{figure}[h!]
     \centering
     \includegraphics[width = .9\textwidth]{../figs/nn_torch_franke.pdf}
     \caption{PyTorch neural network regression on the Franke function. The plot shows the training and test MSE and \( R^2 \) as a function of epochs. The plots are annotated with the values at epochs 500, 1000 and 2000}
     \label{fig:NN_Torch_scores}
-\end{figure*}
+\end{figure}
+\twocolumngrid
 
 Comparing our results with the PyTorch implementation in \cref{fig:NN_Torch_scores}, we see that our model performed similarly to the PyTorch model, with an MSE around \( 10^{-3} \) and an \( R^2 \) score around 0.95. The main takeaway from this is that our models were faster to reach stable performance, wile the PyTorch model took more epochs to become stable at slightly better performance. This might suggest that the PyTorch model is more robust to overfitting, but at the cost of longer training times.
 
@@ -263,39 +267,45 @@ Comparing our results with the PyTorch implementation in \cref{fig:NN_Torch_scor
 
 \subsection{Neural Networks Classification}
 
-\begin{figure*}[b]
+\onecolumngrid
+\begin{figure}[h!]
     \centering
     \includegraphics[width = .9\textwidth]{../figs/classification_lambda_eta.pdf}
     \caption{Model performance for different learning rates and regularization strengths on the breast cancer classification problem. The plot shows the training and test accuracy scores for different combinations of learning rate and regularization strength. The optimal values are highlighted in green.}
     \label{fig:NN_Classification_lambda_eta}
-\end{figure*}
+\end{figure}
+\twocolumngrid
 
 Our feed-forward neural network achieved strong classification performance on the Wisconsin Breast Cancer dataset. As shown in \cref{fig:NN_Classification_lambda_eta}, the model maintains high accuracy ($<95\%$) across a broad range of hyperparameter combinations. Performance is most dependent on the learning rate, having optimal performance for $\eta$ between $10^{-1}$ and $10^{-2}$, while the regularization strength is less critical with a slight trend for better performance with lower $\lambda$ values. In the figure, the optimal values for training accuracy and test accuracy differ. Since the dataset is small, the model is prone to overfitting and this could be the reason for the discrepancy.
 
-\begin{figure*}[b]
+\onecolumngrid
+\begin{figure}[h!]
     \centering
     \includegraphics[width = .9\textwidth]{../figs/classification_hidden_layers_nodes.pdf}
     \caption{Model performance for different network architectures on the breast cancer classification problem. The plot shows the training and test accuracy scores for different numbers of hidden layers and nodes. The optimal values are highlighted in green.}
     \label{fig:NN_Classification_hidden_layers_nodes}
-\end{figure*}
+\end{figure}
+\twocolumngrid
 
 The exploration of network architectures demonstrates that model performance remains robust across different configurations. Networks with 2-3 hidden layers and 15-25 nodes per layer consistently achieve test accuracies above 96\%. Notably, very small networks (5 nodes) show degraded performance, particularly with three layers where training accuracy drops to 61.5\%, suggesting insufficient model capacity. Our initial assumptions that it would suffice to have a small network for this dataset are somewhat backed up by the results, but the faster runtimes do have a tradeoff in performance.
 
-\begin{figure*}[b]
+\onecolumngrid
+\begin{figure}[h!]
     \centering
     \includegraphics[width = .9\textwidth]{../figs/classification_activations_layers.pdf}
     \caption{Model performance for different activation functions on the breast cancer classification problem. The plot shows the training and test accuracy scores for different activation functions and numbers of hidden layers.}
     \label{fig:NN_Classification_activations_layers}
-\end{figure*}
+\end{figure}
+\twocolumngrid
 
 All tested activation functions perform similarly well, with accuracy variations within 2-3 percentage points. In single-layer configurations, sigmoid achieves slightly better performance, while ReLU and Leaky ReLU trends to better performance in deeper networks. This is only true for the training data, as all test accuracies degrade with more layers. This again suggest the danger of overfitting, and that the dataset is too small to support deep networks. 
 
-\begin{figure*}
+\begin{figure}[h!]
     \centering
     \includegraphics[width =.45\textwidth]{../figs/nn_torch_breast_cancer.pdf}
     \caption{PyTorch neural network classification on the breast cancer dataset. The plot shows the training and test accuracy as a function of epochs. The figure is annotated with the test accuracies at epochs 500, 1000 and 2000.}
     \label{fig:NN_Torch_breast_cancer}
-\end{figure*}
+\end{figure}
 
 From \cref{fig:NN_Torch_breast_cancer}, we see that the PyTorch model is a more stable model, taking more time to reach high performance levels, but manages to hold a test accuracy of $<98\%$ after 500 epochs. As our models are often scoring above 98\% after only 20 epochs. A possible explanation for this is that the PyTorch model is a more advanced model, increasing the difficulty to train the network compared to our relatively simple model for a small data set as the Wisconsin Breast Cancer data.
 
@@ -312,15 +322,13 @@ From \cref{fig:NN_Torch_breast_cancer}, we see that the PyTorch model is a more 
 
 Our logistic regression implementation achieves high performance on the breast cancer dataset, with test accuracies consistently above 96\% across most hyperparameter combinations. \cref{fig:logistic_regression_gridsearch} shows that performance is robust across a wide range of learning rates and regularization strengths, with optimal test accuracy of 98.2\% achieved at $\eta$ = 0.0001 and a regularization strength of 0.1. The model demonstrates good generalization, with test accuracies closely matching training accuracies across the parameter space.
 
-\clearpage
-
 \begin{figure}[h!]
     \includegraphics[width =.45\textwidth]{../figs/confusion_matrix.pdf}
     \caption{Confusion matrix for the breast cancer classification problem with Skikit's Logistic Regression. The plot shows the confusion matrix for the test set, with the number of true positives, true negatives, false positives, and false negatives.}
     \label{fig:confusion_matrix}
 \end{figure}
 
-The confusion matrix from scikit-learn's implementation (\cref{fig:cion}) shows excellent classification performance with only 3 misclassified samples out of 114 test cases. The model correctly identified 41 out of 43 malignant cases and 70 out of 71 benign cases, demonstrating balanced performance across both classes. The similar performance between our implementation and scikit-learn's validates our approach while suggesting that the classification task may be well-suited for linear decision boundaries.
+The confusion matrix from scikit-learn's implementation (\cref{fig:confusion_matrix}) shows excellent classification performance with only 3 misclassified samples out of 114 test cases. The model correctly identified 41 out of 43 malignant cases and 70 out of 71 benign cases, demonstrating balanced performance across both classes. The similar performance between our implementation and scikit-learn's validates our approach while suggesting that the classification task may be well-suited for linear decision boundaries.
 
 
 \clearpage
