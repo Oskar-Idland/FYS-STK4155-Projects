@@ -23,21 +23,47 @@ def FrankeFunction(x: float | np.ndarray,y: float | np.ndarray, noise: float = 0
 
 def MSE(pred: np.ndarray | float, targets: np.ndarray | float) -> float:
     """
-    The function calculates the mean squared error between predicted and target values.
-    
-    Args:
-    pred (np.ndarray | float): The `pred` parameter represents the predicted values, which can be
-    either a NumPy array or a single float value.
-    targets (np.ndarray | float): The `targets` parameter in the `MSE` function represents the actual
-    values or ground truth values that you are trying to predict or estimate. These are the values that
-    your model is attempting to approximate or match with its predictions.
+    Calculate the Mean Squared Error (MSE) between predictions and targets.
+    Parameters
+    ----------
+    pred : np.ndarray or float
+        Predicted values.
+    targets : np.ndarray or float
+        Actual target values.
+    Returns
+    -------
+    float
+        The mean squared error between the predictions and targets.
     """
     return np.mean((pred - targets) ** 2)
 
 def MSE_derivative(pred: np.ndarray | float, targets: np.ndarray | float) -> np.ndarray | float:
+    """
+    Compute the derivative of the Mean Squared Error (MSE) loss function.
+
+    Parameters
+    ----------
+    pred : np.ndarray or float
+        Predicted values.
+    """
     return 2 * (pred - targets) / len(pred)
 
-def R2(pred: np.ndarray | float, targets: np.ndarray | float) -> float:    
+def R2(pred: np.ndarray | float, targets: np.ndarray | float) -> float:
+    """
+    Calculate the R-squared (coefficient of determination) regression score function.
+    Parameters
+    ----------
+    pred : np.ndarray or float
+        Predicted values.
+    targets : np.ndarray or float
+        True values.
+    Returns
+    -------
+    float
+        The R-squared score, which indicates the proportion of the variance in the dependent variable
+        that is predictable from the independent variable(s). The best possible score is 1.0 and it can
+        be negative (because the model can be arbitrarily worse).
+    """
     return 1 - np.sum((targets - pred) ** 2) / np.sum((targets - np.mean(targets)) ** 2)
 
 
@@ -64,26 +90,6 @@ def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
     return X
 
 def optimal_parameters(matrix: np.ndarray, x: np.ndarray, y: np.ndarray, max_or_min: str = 'min') -> tuple[np.ndarray, np.ndarray]:
-    """
-    This function calculates optimal parameters based on a matrix and input arrays, with an option to
-    minimize or maximize the result.
-    
-    Args:
-    matrix (np.ndarray): The `matrix` parameter is a NumPy array that represents the data or
-    coefficients for a mathematical model.
-    x (np.ndarray): `x` is an array containing the input values for your model. It is typically used
-    as the independent variable in a regression or optimization problem.
-    y (np.ndarray): The `optimal_parameters` function seems to be missing some important information
-    about the parameters. Could you please provide more details about the `y` parameter so that I can
-    assist you better?
-    max_or_min (str): The `max_or_min` parameter specifies whether we are looking to maximize or
-    minimize a certain value. In this case, it can take on the values 'max' or 'min' to indicate whether
-    we want to maximize or minimize the objective function. Defaults to min
-    """
-    
-    
-    
-    
     '''This function calculates optimal parameters based on a matrix and input arrays, with an option to
     minimize or maximize the result.
     
@@ -107,18 +113,6 @@ def optimal_parameters(matrix: np.ndarray, x: np.ndarray, y: np.ndarray, max_or_
     matrix and arrays
     
     '''
-    """
-    Finds the indices of the minimum value in a matrix.
-
-    ## Parameters:
-    matrix (np.ndarray): The matrix to search.
-    x (np.ndarray): The x-values.
-    y (np.ndarray): The y-values.
-    max_or_min (str ['min' | 'max']): Whether to find the maximum or minimum value. Default is 'min'.
-
-    ## Returns:
-    tuple[np.ndarray, np.ndarray]: The indices of the minimum value.
-    """
     if max_or_min == 'max':
         idx = np.unravel_index(np.nanargmax(matrix), matrix.shape, )
     elif max_or_min == 'min':
@@ -193,31 +187,57 @@ def plot_mse_contour(MSE_matrix: np.ndarray[float, float], x_array: np.ndarray, 
         return fig 
     
 def gridsearch_plot(scores, ticks, cmap = "viridis", opt_search = None, opt_color = "red", fmt1 = ".2f", fmt2 = ".2f"):
-    
+    """
+    Plots the results of a grid search as heatmaps.
+    Parameters
+    ----------
+    scores : tuple of np.ndarray
+        A tuple containing two 2D arrays of scores to be plotted.
+    ticks : tuple of list
+        A tuple containing two lists of tick labels for the x and y axes.
+    cmap : str, optional
+        The colormap to be used for the heatmaps (default is "viridis").
+    opt_search : tuple of str, optional
+        A tuple containing two strings indicating whether to highlight the 
+        maximum ("max") or minimum ("min") score in each heatmap (default is None).
+    opt_color : str, optional
+        The color to be used for highlighting the optimal values (default is "red").
+    fmt1 : str, optional
+        The format string for annotations in the first heatmap (default is ".2f").
+    fmt2 : str, optional
+        The format string for annotations in the second heatmap (default is ".2f").
+    Returns
+    -------
+    fig : matplotlib.figure.Figure
+        The figure object containing the heatmaps.
+    axs : np.ndarray of matplotlib.axes._subplots.AxesSubplot
+        An array of the axes objec ts for the heatmaps.
+    """
+
     score1, score2 = scores
     ticks1, ticks2 = ticks
 
     fig, axs = plt.subplots(1, 2, figsize=(13, 5))
-    
+
     sns.heatmap(score1, 
-        cmap=cmap,
-        xticklabels=ticks1,
-        yticklabels=ticks2, 
-        annot=True,
-        ax=axs[0],
-        fmt=fmt1,
-        cbar=False,
-    )
+                cmap=cmap,
+                xticklabels=ticks1,
+                yticklabels=ticks2, 
+                annot=True,
+                ax=axs[0],
+                fmt=fmt1,
+                cbar=False,
+            )
 
     sns.heatmap(score2,
-        cmap=cmap,
-        xticklabels=ticks1,
-        yticklabels=ticks2, 
-        annot=True,
-        ax=axs[1],
-        fmt=fmt2,
-        cbar=False,
-    )
+                cmap=cmap,
+                xticklabels=ticks1,
+                yticklabels=ticks2, 
+                annot=True,
+                ax=axs[1],
+                fmt=fmt2,
+                cbar=False,
+            )
 
     # Highlight optimal values if requested
     if opt_search is not None:
@@ -306,6 +326,34 @@ def plot_mse_contour(MSE_matrix: np.ndarray[float, float], x_array: np.ndarray, 
     
     
 def parameter_print_plot(MSE_array, R2_array, x_array, y_array, x_label, y_label, n_ticks: int | None = None, scatter: bool = False, show: bool = False):
+    """
+    Prints the optimal parameters and plots the MSE contour.
+    Parameters
+    ----------
+    MSE_array : array-like
+        Array of Mean Squared Error (MSE) values.
+    R2_array : array-like
+        Array of R-squared (R2) values.
+    x_array : array-like
+        Array of x-axis parameter values.
+    y_array : array-like
+        Array of y-axis parameter values.
+    x_label : str
+        Label for the x-axis parameter.
+    y_label : str
+        Label for the y-axis parameter.
+    n_ticks : int, optional
+        Number of ticks for the contour plot (default is None).
+    scatter : bool, optional
+        If True, scatter plot the optimal points (default is False).
+    show : bool, optional
+        If True, display the plot (default is False).
+    Returns
+    -------
+    fig : matplotlib.figure.Figure
+        The figure object containing the MSE contour plot.
+    """
+
     x_optimal, y_optimal = optimal_parameters(MSE_array, x_array, y_array)
     
     greek_dict = {r'$\eta$': 'η', r'$\gamma$': 'γ', r'$\rho$': 'ρ'}

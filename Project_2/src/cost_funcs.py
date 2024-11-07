@@ -1,7 +1,20 @@
 import autograd.numpy as np
 
 def CostOLS(target):
+    """
+    Compute the Ordinary Least Squares (OLS) cost function.
     
+    Parameters:
+    ----------
+    target : np.ndarray
+        The true target values.
+    
+    Returns:
+    -------
+    func : function
+        A function that computes the OLS cost for a given set of predictions.
+        The returned function takes a single argument X (the predictions) and returns the OLS cost.
+    """
     def func(X):
         return (1.0 / target.shape[0]) * np.sum((target - X) ** 2)
 
@@ -23,7 +36,6 @@ def CostLogReg(pred, targets):
     # Clip predictions to avoid numerical instability
     pred = np.clip(pred, eps, 1 - eps)
     
-    # Binary cross-entropy formula: -[y*log(p) + (1-y)*log(1-p)]
     cost = -np.mean(targets * np.log(pred) + (1 - targets) * np.log(1 - pred))
     return cost
 
@@ -40,7 +52,6 @@ def CostLogReg_derivative(pred, targets):
     """
     eps = 1e-15  # Same small constant for numerical stability
     pred = np.clip(pred, eps, 1 - eps)
-    
-    # Derivative of binary cross-entropy: (p-y)/(p(1-p))
+    )
     derivative = (pred - targets) / (pred * (1 - pred))
     return derivative

@@ -3,12 +3,10 @@ from typing import Callable
 import math
 import sys
 from copy import copy
-from sklearn.utils import resample
 
-from activation_funcs import *
-from cost_funcs import *
+from activation_funcs import identity, sigmoid, derivate
 from Schedulers import *
-from utils import MSE, MSE_derivative, R2, create_X, FrankeFunction
+from utils import MSE, MSE_derivative, R2, FrankeFunction, create_X
 
 import matplotlib.pyplot as plt
 from matplotlib import cm
@@ -64,17 +62,24 @@ class FFNN:
 		self._set_classification()
 
 	def fit(self, X, y, scheduler, epochs=100, batches=1, lmbda=0, convergence_tol: float = None, X_test: np.ndarray = None, y_test: np.ndarray = None):
+		
 		"""
 		Train the network using stochastic gradient descent.
 
-		Paremeters:
-			X: Training data
-			y: Target values 
-			scheduler: Learning rate scheduler
-			epochs: Number of epochs (Default = 100)
-			batches: Number of mini-batches (Default = 1)
-			lmbda: Regularization parameter (Default = 0)	
+		Parameters:
+			X (np.ndarray): Training data.
+			y (np.ndarray): Target values.
+			scheduler: Learning rate scheduler.
+			epochs (int, optional): Number of epochs (Default = 100).
+			batches (int, optional): Number of mini-batches (Default = 1).
+			lmbda (float, optional): Regularization parameter (Default = 0).
+			convergence_tol (float, optional): Tolerance for convergence (Default = None).
+			X_test (np.ndarray, optional): Test data (Default = None).
+			y_test (np.ndarray, optional): Test target values (Default = None).
 
+		Returns:
+			dict: Dictionary containing training scores and optionally test scores and accuracies.
+			int (optional): Epoch at which convergence was achieved, if convergence_tol is specified.	
 		"""	
 		if self.seed is not None:
 			np.random.seed(self.seed)
@@ -423,22 +428,6 @@ if __name__ == "__main__":
 	target = zz.reshape(-1,1)
 
 	poly_degree = 4
-	# X = create_X(x, y, poly_degree)
-	
-
-	# X_train, X_test, z_train, z_test = train_test_split(X, z, test_size=0.2, random_state=seed)
-	# print(f"{X_train.shape = }, {X_test.shape = }, {z_train.shape = }, {z_test.shape = }")
-
-
-	# scaler_x = StandardScaler()
-	# scaler_z = StandardScaler()
-
-	# X_train_scaled = scaler_x.fit_transform(X_train)
-	# X_test_scaled = scaler_x.transform(X_test)
-
-	# z_train_scaled = scaler_z.fit_transform(z_train)
-	# z_test_scaled = scaler_z.transform(z_test)
-
 
 	scaler_x = StandardScaler()
 	scaler_y = StandardScaler()
@@ -509,4 +498,3 @@ if __name__ == "__main__":
 	# plt.savefig("../figs/a_Franke_surf.pdf")
 	plt.show()
 
-	

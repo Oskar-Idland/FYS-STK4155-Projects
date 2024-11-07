@@ -22,7 +22,7 @@ class RegressionModel:
         seed(int | None, optional): The random seed for reproducibility. Default is None.
         """
         self.x, self.y, self.degree, self.test_size, self.seed = x, y, degree, test_size, seed
-
+        
         self.X = self.create_X()
         self._split()
         self._scale()
@@ -65,17 +65,6 @@ class RegressionModel:
         Sets the portion of the dataset to include in the test split.
         """
         self.test_size = test_size
-
-        # Update design matrix, training and test data
-        self.X = self.create_X()
-        self._split()
-        self._scale()
-
-    def set_seed(self, seed: int): # TODO: Delete?
-        """
-        Sets the seed used for reproducibility.
-        """
-        self.seed = seed
 
         # Update design matrix, training and test data
         self.X = self.create_X()
