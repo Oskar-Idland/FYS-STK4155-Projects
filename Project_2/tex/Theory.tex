@@ -223,15 +223,7 @@ To address the "dying ReLU" problem, the Leaky RELU function introduces a small 
 \end{equation}
 where \( \alpha \) is a small constant (typically 0.01). This modification prevents complete deactivation of neurons while maintaining the computational efficiency of the standard ReLU. By allowing a small, non-zero output for negative inputs, Leaky ReLU ensures that neurons can continue to participate in the learning process even when receiving predominantly negative inputs.
 
-\paragraph*{Softmax:}
-Used primarily in the output layer for multi-class classification, the softmax function generalizes the sigmoid to multiple classes:
-\begin{equation}
-    \text{softmax}(z)_i = \frac{e^{z_i}}{\sum_{j=1}^{K} e^{z_j}}.
-\end{equation}
-
-Where \( K \) is the number of classes. The softmax function produces a probability distribution, I.e. the output values sum to 1, which is useful for interpreting the network's output as class probabilities.
-
-The choice of activation function is a critical design decision that can significantly impact the network's performance. For the hidden layers, the ReLU and Leaky ReLU functions are often preferred due to their computational efficiency and generally better training performance than sigmoid. \colorbox{magenta}{Cite} While the activation function for the output layer depends on the task, the softmax function is commonly used for multi-class classification tasks, while the sigmoid function is suitable for binary classification problems and in regression problems one often uses the identity function.
+The choice of activation function is a critical design decision that can significantly impact the network's performance. For the hidden layers, the ReLU and Leaky ReLU functions are often preferred in deep learning due their computational efficiency and generally better training performance. While the activation function for the output layer depends on the task, the sigmoid function is suitable for binary classification problems and in regression problems one often uses the identity function.
 
 \subsubsection{Backpropagation}
 

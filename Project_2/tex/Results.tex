@@ -82,6 +82,7 @@ The Adam optimization method was both unstable and very sensitive to the learnin
 
 Our analysis of feed-forward neural networks began with the Franke function regression problem, allowing us to validate our implementation and explore the effects of various hyperparameters. The results demonstrate that our neural network implementation achieves robust performance across a wide range of configurations, with optimal models achieving MSE values around \( 10^{-3} \) and \( R^2 \) scores above 0.95.
 
+\onecolumngrid
 \begin{figure}[h!]
     \begin{minipage}{\textwidth}
         \centering
@@ -90,12 +91,11 @@ Our analysis of feed-forward neural networks began with the Franke function regr
         \label{fig:NN_Franke_batch_epoch}
     \end{minipage}
 \end{figure}
+\twocolumngrid
 
 The clear trend in \cref{fig:NN_Franke_batch_epoch} more batches and epochs lead to better performance, with the optimal model using 1000 epochs and 100 batches. The model shows stable performance across a wide range of batch sizes and epochs, with MSE values around \( 10^{-3} \) and \( R^2 \) scores above 0.95. The improvements in both MSE and $R^2$ show diminishing returns as we increase either epochs or batches.
 
 Moving from 100 to 1000 epochs yields substantial improvements in MSE (reducing it by roughly $60-70\%$ across all batch sizes), but the gains from 1000 to 2000 epochs are much smaller ($10-20\%$ reduction). Similarly, while increasing from 1 to 20 batches significantly improves performance, further increases to 50 or 100 batches yield only marginal benefits. This suggests that a configuration using $20-50$ batches with 1000 epochs represents an efficient compromise between model performance and computational cost
-
-\clearpage
 
 \onecolumngrid
 \begin{figure}[h!]
@@ -122,8 +122,6 @@ Our feed-forward neural network demonstrated consistently strong performance on 
 \twocolumngrid
 
 The comparison of different optimization schedulers in \cref{fig:NN_Franke_schedulers} shows that all implemented methods have varying success with plain momentum, both Adagrads and Adam performing the best. The marked convergence points indicate that both Adagrad methods are slightly faster to converge than the other methods. As the criteria for convergence is chosen somewhat arbitrarily, as described in \cref{subsec:nn_schedulers}, the marked crosses may not showcase where the schedulers actually converge, but gives insight into when the learning rates are slowing down relative to each other as the networks are training. The figure also suggest that given enough epochs, both Adagrads, Adam and plain momentum will converge to an mse of just around of \( 10^{-2} \) and an \( R^2 \) score above of 0.95. RMSprop shows the same unstability found in \colorbox{magenta}{REF TO RMSprop} of our gradient descent analysis.
-
-\clearpage
 
 \onecolumngrid
 \begin{figure}[h!]
@@ -153,9 +151,9 @@ Comparing our results with the PyTorch implementation in \cref{fig:NN_Torch_scor
 
 \clearpage
 
-\onecolumngrid
 \subsection{Neural Networks Classification}
 
+\onecolumngrid
 \begin{figure}[h!]
     \centering
     \includegraphics[width = .9\textwidth]{../figs/classification_lambda_eta.pdf}
@@ -183,7 +181,6 @@ The exploration of network architectures (\cref{fig:NN_Classification_hidden_lay
 
 The relationship between network depth and model performance provides insights into the dataset's complexity. The fact that accuracy plateaus with modest network sizes suggests that the underlying classification boundary, while nonlinear, does not require extremely complex feature hierarchies to model effectively. This aligns with our understanding of the biological features in the dataset, which are already engineered to be informative for classification.
 
-\clearpage
 \onecolumngrid
 \begin{figure}[h!]
     \begin{minipage}{\textwidth}
@@ -206,11 +203,10 @@ The degradation of test accuracy with increasing network depth, despite improvin
     \label{fig:NN_Torch_breast_cancer}
 \end{figure}
 
-Comparing our results with PyTorch's implementation (\cref{fig:NN_Torch_breast_cancer}) reveals interesting differences in learning dynamics. The PyTorch model shows more gradual but ultimately more stable learning, achieving consistent test accuracy >98\% after 500 epochs. In contrast, our implementation reaches similar performance levels much faster, as they are alle trained for 20 epochs. This difference likely stems from two factors: first, our simpler implementation may be better suited to this relatively small dataset, avoiding the overhead of PyTorch's more sophisticated optimization techniques. Second, PyTorch's implementation might include additional regularization mechanisms that slow down initial learning but provide better stability.
+Comparing our results with PyTorch's implementation (\cref{fig:NN_Torch_breast_cancer}) reveals interesting differences in learning dynamics. The PyTorch model shows more gradual but ultimately more stable learning, achieving consistent test accuracy $>98\%$ after 500 epochs. In contrast, our implementation reaches similar performance levels much faster, as they are alle trained for 20 epochs. This difference likely stems from two factors: first, our simpler implementation may be better suited to this relatively small dataset, avoiding the overhead of PyTorch's more sophisticated optimization techniques. Second, PyTorch's implementation might include additional regularization mechanisms that slow down initial learning but provide better stability.
 
 These results suggest that for datasets of this size and complexity, simpler models with careful hyperparameter tuning can match or exceed the performance of more sophisticated implementations. However, the faster convergence of our model should be interpreted with some caution, as it might indicate a tendency to find good but not optimal solutions quickly, rather than exploring the parameter space more thoroughly as the PyTorch implementation appears to do.
 
-\clearpage
 \onecolumngrid
 \subsection{Logistic Regression}
 
