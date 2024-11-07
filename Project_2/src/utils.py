@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import colors as mcolors
 import seaborn as sns
-# TODO: Add docstrings to the functions below
+from tqdm import tqdm
 
 def FrankeFunction(x: float | np.ndarray,y: float | np.ndarray, noise: float = 0, seed: int = 42) -> float | np.ndarray:
     """ 
@@ -89,6 +90,57 @@ def create_X(x: np.ndarray, y: np.ndarray, n: int) -> np.ndarray:
             X[:, q + k] = (x ** (i - k)) * (y**k)
     return X
 
+def grid_search(x_array: np.ndarray,  y_array: np.ndarray, search_params_name: tuple, method: str,  model,  stochastic: bool = False, n_iterations: int = 100, **kwargs):
+    """
+    Perform a grid search over specified parameters for a given model using gradient descent.
+    Parameters
+    ----------
+    x_array : np.ndarray
+        Array of values for the first parameter to search over.
+    y_array : np.ndarray
+        Array of values for the second parameter to search over.
+    search_params_name : tuple
+        Tuple containing the names of the parameters to search over. Example: ('eta', 'gamma').
+    method : str
+        The tuning method to be used in the gradient descent. Example: 'AdaGrad'.
+    model : object
+        The model object which contains the gradient descent methods.
+    stochastic : bool, optional
+        If True, use stochastic gradient descent. Otherwise, use regular gradient descent. Default is False.
+    n_iterations : int, optional
+        Number of iterations for the gradient descent. Default is 100.
+    **kwargs
+        Additional keyword arguments to pass to the gradient descent method.
+    Returns
+    -------
+    MSE_matrix : np.ndarray
+        Array of Mean Squared Error (MSE) values for the grid search.
+    R2_matrix : np.ndarray
+        Array of R-squared (R2) values for the grid search.
+    """
+
+    nx = len(x_array) ; ny = len(y_array)
+    MSE_matrix = np.zeros((ny, nx))
+    R2_matrix = np.zeros((ny, nx))
+    
+    if stochastic:
+        descent = model.stochastic_gradient_descent
+    else:
+        descent = model.gradient_descent
+    
+    for i, y in enumerate(tqdm(y_array)):
+        for j, x in enumerate(x_array):
+            param_dict = {param_name: x if i == 0 else y for i, param_name in enumerate(search_params_name) if isinstance(param_name, str)}
+            param_dict.update({param_name: y for _, param_name in enumerate(search_params_name) if isinstance(param_name, tuple) for param_name in param_name})
+            MSE, R2 = descent(n_iterations, **param_dict , tuning_method=method, **kwargs)
+            MSE_matrix[i, j] = MSE
+            R2_matrix[i, j] = R2
+
+    return  MSE_matrix, R2_matrix
+
+
+
+
 def optimal_parameters(matrix: np.ndarray, x: np.ndarray, y: np.ndarray, max_or_min: str = 'min') -> tuple[np.ndarray, np.ndarray]:
     '''This function calculates optimal parameters based on a matrix and input arrays, with an option to
     minimize or maximize the result.
@@ -99,72 +151,72 @@ def optimal_parameters(matrix: np.ndarray, x: np.ndarray, y: np.ndarray, max_or_
         The `matrix` parameter is a NumPy array that represents the data or coefficients for a mathematical
     model.
     x : np.ndarray
-        `x` is an array containing the input values for your model. It is used as one of the inputs to
-    calculate the optimal parameters.
+        `x` the x-axis parameter values used to generate the matrix.
     y : np.ndarray
-        The `optimal_parameters` function seems to be missing some important information about the
-    parameters `y` and `x`. Could you please provide more details about what these parameters represent
-    or how they are used in the function? This will help me provide a more accurate explanation or
-    assistance.
+        `y` the y-axis parameter values used to generate the
     max_or_min : str, optional
-        The `max_or_min` parameter specifies whether you want to maximize or minimize a certain value. In
-    this case, it is a string parameter that can take the values 'max' or 'min'. This parameter helps
-    determine the direction of optimization when finding the optimal parameters based on the input
-    matrix and arrays
+        The `max_or_min` parameter is a string that determines whether to minimize or maximize the result. Options are 'min' or 'max' (default is 'min').
     
     '''
     if max_or_min == 'max':
-        idx = np.unravel_index(np.nanargmax(matrix), matrix.shape, )
+        idx = np.where(matrix == np.nanmax(matrix))
     elif max_or_min == 'min':
-        idx = np.unravel_index(np.nanargmin(matrix), matrix.shape)
+        idx = np.where(matrix == np.nanmin(matrix))
     else:
         raise ValueError("max_or_min must be either 'max' or 'min'.")
     
-    return x[idx[1]], y[idx[0]]
-
-
-def plot_mse_contour(MSE_matrix: np.ndarray[float, float], x_array: np.ndarray, x_name: str, y_array: np.ndarray, y_name: str, n_ticks: int | None = None, scatter: bool = False, show: bool = False) -> None | plt.Figure:
-    '''This function plots a contour plot of Mean Squared Error (MSE) values based on a given MSE matrix
-    and corresponding x and y arrays, with options to customize axis labels, tick marks, and scatter
-    points.
     
+    i = idx[0][0] ; j = idx[1][0]
+    return x[j], y[i]
+
+
+def plot_mse_contour(MSE_matrix: np.ndarray[float, float], x_array: np.ndarray, x_name: str, y_array: np.ndarray, y_name: str, log: bool = False, levels: bool = False, n_ticks: int | None = None, scatter: bool = False, show: bool = False) -> None | plt.Figure:
+    """
+    Plots a contour plot of the Mean Squared Error (MSE) matrix as a function of two parameters.
     Parameters
     ----------
     MSE_matrix : np.ndarray[float, float]
-        An array containing Mean Squared Error (MSE) values for different combinations of x and y
-    parameters.
+        A 2D array containing the MSE values.
     x_array : np.ndarray
-        x_array is an array containing the values for the x-axis in the contour plot.
+        A 1D array containing the values of the first parameter.
     x_name : str
-        The `x_name` parameter is a string that represents the name of the x-axis in the plot. It is used
-    to label the x-axis with a descriptive name that indicates what the values on the x-axis represent.
+        The name of the first parameter.
     y_array : np.ndarray
-        `y_array` is an array containing the values for the y-axis in the contour plot. It is used to
-    generate the contour plot based on the Mean Squared Error (MSE) values provided in the `MSE_matrix`.
+        A 1D array containing the values of the second parameter.
     y_name : str
-        The `y_name` parameter is a string that represents the name of the y-axis in the plot. It is used
-    to label the y-axis with a descriptive name that helps users understand the data being displayed.
-    n_ticks : int | None
-        The `n_ticks` parameter in the `plot_mse_contour` function is used to specify the number of ticks
-    on the contour plot axes. If `n_ticks` is set to `None`, the plotting function will determine the
-    number of ticks automatically based on the data range. If a specific
+        The name of the second parameter.
+    log : bool, optional
+        If True, use a logarithmic scale for the color normalization. Default is False.
+    levels : bool, optional
+        If True, use specific levels for the contour plot. Default is False.
+    n_ticks : int or None, optional
+        Number of ticks to use on the x and y axes. If None, default ticks are used. Default is None.
     scatter : bool, optional
-        The `scatter` parameter in the `plot_mse_contour` function is a boolean flag that determines
-    whether to plot the MSE values as a scatter plot on top of the contour plot. If `scatter` is set to
-    `True`, the function will overlay a scatter plot of the MSE values on
-    
-    '''
-
-    nx, ny = MSE_matrix.shape
-    MSE_max, MSE_min = np.max(MSE_matrix), np.min(MSE_matrix)
-    levels = np.linspace(MSE_min, MSE_max, nx*ny)
+        If True, scatter plot the optimal parameters on the contour plot. Default is False.
+    show : bool, optional
+        If True, display the plot. If False, return the figure object. Default is False.
+    Returns
+    -------
+    None or plt.Figure
+        If show is False, returns the figure object. Otherwise, displays the plot and returns None.
+    """
+    if levels:
+        MSE_max, MSE_min = np.max(MSE_matrix), np.min(MSE_matrix)
+        ny, nx = MSE_matrix.shape
+        levels = np.linspace(MSE_min, MSE_max, nx*ny)
+    else:
+        levels = None
+        
+    if log:
+        norm = mcolors.LogNorm()
+    else:
+        norm = None
     
     fig = plt.figure()
-    plt.contourf(x_array, y_array, MSE_matrix, cmap='viridis', extend='both')
+    plt.contourf(x_array, y_array, MSE_matrix, levels=None, cmap='viridis', extend='both', norm=norm)
     plt.colorbar(label='MSE', format='%.0e')
-    plt.contourf(x_array, y_array, MSE_matrix, levels=levels, cmap='viridis')
+        
     
-    x_optimal, y_optimal = optimal_parameters(MSE_matrix, x_array, y_array)
     
     if n_ticks:
         x_min = np.min(x_array) ; x_max = np.max(x_array) 
@@ -173,6 +225,7 @@ def plot_mse_contour(MSE_matrix: np.ndarray[float, float], x_array: np.ndarray, 
         plt.yticks(np.linspace(y_min, y_max, n_ticks))
         
     if scatter:
+        x_optimal, y_optimal = optimal_parameters(MSE_matrix, x_array, y_array)
         plt.scatter(x_optimal, y_optimal, color='r', label='Optimal parameters', marker='x')
         plt.legend()
         
@@ -261,100 +314,42 @@ def gridsearch_plot(scores, ticks, cmap = "viridis", opt_search = None, opt_colo
 
     return fig, axs
 
-
-def plot_mse_contour(MSE_matrix: np.ndarray[float, float], x_array: np.ndarray, x_name: str, y_array: np.ndarray, y_name: str, n_ticks: int | None = None, scatter: bool = False, show: bool = False) -> None | plt.Figure:
-    '''This function plots a contour plot of Mean Squared Error (MSE) values based on a given MSE matrix
-    and corresponding x and y arrays, with options to customize axis labels, tick marks, and scatter
-    points.
     
-    Parameters
-    ----------
-    MSE_matrix : np.ndarray[float, float]
-        An array containing Mean Squared Error (MSE) values for different combinations of x and y
-    parameters.
-    x_array : np.ndarray
-        x_array is an array containing the values for the x-axis in the contour plot.
-    x_name : str
-        The `x_name` parameter is a string that represents the name of the x-axis in the plot. It is used
-    to label the x-axis with a descriptive name that indicates what the values on the x-axis represent.
-    y_array : np.ndarray
-        `y_array` is an array containing the values for the y-axis in the contour plot. It is used to
-    generate the contour plot based on the Mean Squared Error (MSE) values provided in the `MSE_matrix`.
-    y_name : str
-        The `y_name` parameter is a string that represents the name of the y-axis in the plot. It is used
-    to label the y-axis with a descriptive name that helps users understand the data being displayed.
-    n_ticks : int | None
-        The `n_ticks` parameter in the `plot_mse_contour` function is used to specify the number of ticks
-    on the contour plot axes. If `n_ticks` is set to `None`, the plotting function will determine the
-    number of ticks automatically based on the data range. If a specific
-    scatter : bool, optional
-        The `scatter` parameter in the `plot_mse_contour` function is a boolean flag that determines
-    whether to plot the MSE values as a scatter plot on top of the contour plot. If `scatter` is set to
-    `True`, the function will overlay a scatter plot of the MSE values on
-    
-    '''
-    nx, ny = MSE_matrix.shape
-    MSE_max, MSE_min = np.max(MSE_matrix), np.min(MSE_matrix)
-    levels = np.linspace(MSE_min, MSE_max, nx*ny)
-    
-    fig = plt.figure()
-    plt.contourf(x_array, y_array, MSE_matrix, cmap='viridis', extend='both')
-    plt.colorbar(label='MSE', format='%.0e')
-    plt.contourf(x_array, y_array, MSE_matrix, levels=levels, cmap='viridis')
-    
-    x_optimal, y_optimal = optimal_parameters(MSE_matrix, x_array, y_array)
-    
-    if n_ticks:
-        x_min = np.min(x_array) ; x_max = np.max(x_array) 
-        y_min = np.min(y_array) ; y_max = np.max(y_array)
-        plt.xticks(np.linspace(x_min, x_max, n_ticks))
-        plt.yticks(np.linspace(y_min, y_max, n_ticks))
-        
-    if scatter:
-        plt.scatter(x_optimal, y_optimal, color='r', label='Optimal parameters', marker='x')
-        plt.legend()
-        
-            
-    plt.title(f'MSE as a function of {x_name} and {y_name}')
-    plt.xlabel(f'{x_name}')
-    plt.ylabel(f'{y_name}')
-    
-    if show:
-        plt.show()
-    else:
-        return fig
-    
-    
-def parameter_print_plot(MSE_array, R2_array, x_array, y_array, x_label, y_label, n_ticks: int | None = None, scatter: bool = False, show: bool = False):
+def parameter_print_plot(MSE_matrix: np.ndarray[float, float], R2_matrix: np.ndarray[float, float], x_array: np.ndarray, y_array: np.ndarray, x_label: str, y_label: str, log: bool = True, levels: bool = False, n_ticks: int | None = None, scatter: bool = False, show: bool = False):
     """
     Prints the optimal parameters and plots the MSE contour.
     Parameters
     ----------
-    MSE_array : array-like
-        Array of Mean Squared Error (MSE) values.
-    R2_array : array-like
-        Array of R-squared (R2) values.
-    x_array : array-like
-        Array of x-axis parameter values.
-    y_array : array-like
-        Array of y-axis parameter values.
+    MSE_matrix : np.ndarray[float, float]
+        Matrix of Mean Squared Errors.
+    R2_matrix : np.ndarray[float, float]
+        Matrix of R-squared values.
+    x_array : np.ndarray
+        Array of x-axis values.
+    y_array : np.ndarray
+        Array of y-axis values.
     x_label : str
-        Label for the x-axis parameter.
+        Label for the x-axis.
     y_label : str
-        Label for the y-axis parameter.
-    n_ticks : int, optional
-        Number of ticks for the contour plot (default is None).
+        Label for the y-axis.
+    log : bool, optional
+        Whether to use a logarithmic scale for the plot (default is True).
+    levels : bool, optional
+        Whether to use levels in the contour plot (default is False).
+    n_ticks : int or None, optional
+        Number of ticks on the axes (default is None).
     scatter : bool, optional
-        If True, scatter plot the optimal points (default is False).
+        Whether to scatter plot the optimal points (default is False).
     show : bool, optional
-        If True, display the plot (default is False).
+        Whether to show the plot (default is False).
     Returns
     -------
     fig : matplotlib.figure.Figure
-        The figure object containing the MSE contour plot.
+        The figure object containing the plot.
     """
+    
 
-    x_optimal, y_optimal = optimal_parameters(MSE_array, x_array, y_array)
+    x_optimal, y_optimal = optimal_parameters(MSE_matrix, x_array, y_array)
     
     greek_dict = {r'$\eta$': 'η', r'$\gamma$': 'γ', r'$\rho$': 'ρ'}
     if x_label in greek_dict:
@@ -368,18 +363,17 @@ def parameter_print_plot(MSE_array, R2_array, x_array, y_array, x_label, y_label
     
     
         
-    x_label_greek = greek_dict[x_label]
-    y_label_greek = greek_dict[y_label]
-    print(f'Minimum MSE: {np.nanmin(MSE_array):>16.3e}')
+    print(f'Minimum MSE: {np.nanmin(MSE_matrix):>16.3e}')
     print(f'Optimal {x_label_greek} for MSE: {x_optimal: 3.3e}')
     print(f'Optimal {y_label_greek} for MSE: {y_optimal: 3.3e}')
     
     print()
     
-    x_optimal, y_optimal = optimal_parameters(R2_array, x_array, y_array, max_or_min='max')
-    print(f'Maximum R2: {np.nanmax(R2_array):>16.2%}')
+    x_optimal, y_optimal = optimal_parameters(R2_matrix, x_array, y_array, max_or_min='max')
+    print(f'Maximum R2: {np.nanmax(R2_matrix):>16.2%}')
     print(f'Optimal {x_label_greek} for R2: {x_optimal: 3.3e}')
     print(f'Optimal {y_label_greek} for R2: {y_optimal: 3.3e}')
     
-    fig = plot_mse_contour(MSE_array, x_array, x_label, y_array, y_label, n_ticks=n_ticks, scatter=scatter, show=show)
+    fig = plot_mse_contour(MSE_matrix, x_array, x_label, y_array, y_label,log=log, levels=levels, n_ticks=n_ticks, scatter=scatter, show=show)
     return fig
+
