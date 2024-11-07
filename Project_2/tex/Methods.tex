@@ -33,7 +33,7 @@ Using the optimal values found in the previous step, we then iterate over all po
 \paragraph{No Momentum:}
 
 \subsection{Neural Networks}
-In order to explore the optimization methods discussed in the theory section, we consider again a regression problem on the Franke function, and also a classification problem on the Wisconsin Breast Cancer dataset. % #TODO cite sklearn
+In order to explore the optimization methods discussed in the theory section, we consider again a regression problem on the Franke function, and also a classification problem on the Wisconsin Breast Cancer dataset. 
 The hyperparameter space is vast, and in order to effectively produce results we narrow down the possibilities by first deciding on a singular network model to base our work on. This entails initializing our models with pseudo-random weights sampled from a univariate normal distribution with zero mean and a variance of one. The same goes for the biases, but with an added constant of 0.01 in order to break symmetry. With the focus on exploring the influence of hyperparameters, we choose to keep the network architecture simple, with a single hidden layer and a fixed number of nodes. This allows us to focus on the effects of the learning rate, batch size, and regularization strength on the network's performance.
 \subsubsection{Franke Function Regression}
 

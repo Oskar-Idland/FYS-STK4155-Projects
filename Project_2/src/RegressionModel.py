@@ -8,7 +8,6 @@ from jax import jit
 from Schedulers import Adagrad, AdagradMomentum, RMS_prop, Adam, Constant, Momentum
 
 
-#TODO Add docstring to rho 
 class RegressionModel:
     def __init__(self, x: list | np.ndarray, y: np.ndarray, degree: int, test_size: float = 0.2, seed: int | None = None):
         """
@@ -177,38 +176,46 @@ class RegressionModel:
     """
     def gradient_descent(self, n_iter: int, eta: float | None = None, tuning_method: str  = 'Const', rho_1: float | None = None, rho_2: float | None = None, lmbd: float | None = 0.0, gamma: float | None = 0.0, use_autograd: bool = False, return_theta: bool = False) -> tuple[np.ndarray]:
         """
-        Uses gradient descent with or without momentum to minimize the cost function. TODO maybe change
-
-        ## Parameters:
-        n_iter (int): The number of iterations to perform in gradient descent.
-        eta (float | None, optional): The learning rate. Must either be between 0.0 and 1.0 or None. If passed as None, it is computed from the Hessian matrix. Default is None.
-        tuning_method (str | None, optional): Which tuning method to implement. The options are "Const", "AdaGrad", "RMS_prop", "Adam" and None. Default is None (Const). #TODO does it make sense to group decaying rate together with the others? how are they tuning methods?
-        tuning_params: (list, optional): List containing the parameters needed for the tuning method. If None, or if tuning_method is passed as None, no tuning is performed. Default is None. The expected signatures for the different methods are:
-        "Const":   None         
-        "Momentum": None
-        "AdaGrad": None               
-        "RMS_prop": rho: float    
-        "Adam":     beta_1: float, beta_1: float
-        lmbd (float, optional): The regularization parameter in Ridge regression. Passing as zero corresponds to OLS. Default is 0.0.
-        gamma (float, optional): The momentum parameter. Must be between 0.0 and 1.0. Passing as zero corresponds to using gradient descent without momentum. Default is 0.0.
-        use_autograd (bool, optional): Whether to use autograd's grad function to compute the gradients. Default is False.
-        return_theta (bool, optional): Whether to return the features theta. Default is False.
-
-        ## Returns:
-        tuple: A tuple containing the Mean-Squared Error (MSE) score and the R-squared (R2) score, as well as the theta values (coefficients) if return_theta is passed as True.
+        Perform gradient descent optimization to estimate model parameters.
+        Parameters
+        ----------
+        n_iter : int
+            Number of iterations for the gradient descent.
+        eta : float, optional
+            Learning rate for the gradient descent. If None, it will be set based on the largest eigenvalue of the Hessian matrix.
+        tuning_method : str, optional
+            Method for tuning the gradient descent. Options are 'Const', 'Momentum', 'Adagrad', 'AdagradMomentum', 'RMS_prop', and 'Adam'. Default is 'Const'.
+        rho_1 : float, optional
+            Decay rate for RMS_prop and Adam methods. Must be between 0.0 and 1.0.
+        rho_2 : float, optional
+            Second decay rate for Adam method. Must be between 0.0 and 1.0.
+        lmbd : float, optional
+            Regularization parameter. Default is 0.0.
+        gamma : float, optional
+            Momentum parameter. Must be between 0.0 and 1.0. Default is 0.0.
+        use_autograd : bool, optional
+            If True, use autograd for automatic differentiation. Default is False.
+        return_theta : bool, optional
+            If True, return the estimated theta values. Default is False.
+        Returns
+        -------
+        tuple[np.ndarray]
+            A tuple containing the Mean Squared Error (MSE) and R-squared (R2) values. If return_theta is True, the estimated theta values are also included.
+        Raises
+        ------
+        ValueError
+            If an invalid tuning method is provided.
+        AssertionError
+            If required parameters for RMS_prop or Adam methods are not provided or are out of bounds.
         """
+
         np.random.seed(self.seed)
-        #TODO do this in a better way
-        Hessian = False
-        if eta is None:
-            Hessian = True
-        elif eta < 0.0 or eta > 1.0:
-            Hessian = True
-            print("The learning rate eta must be between 0.0 and 1.0! Computing using the Hessian matrix.")
-        if Hessian:
-            H = 2.0 * ((1.0 / len(self.y_train)) * self.X_train.T @ self.X_train + lmbd * np.eye(self.X_train.shape[1])) #TODO correct to use len(y_train)? generalize to 2D
+       
+        if eta < 0.0 or eta > 1.0:
+            H = 2.0 * ((1.0 / len(self.y_train)) * self.X_train.T @ self.X_train + lmbd * np.eye(self.X_train.shape[1])) 
             eigvals, eigvecs = np.linalg.eig(H)
             eta = 1.0 / np.max(eigvals)
+      
 
         if gamma < 0.0 or gamma > 1.0:
             print("The momentum parameter gamma must be between 0.0 and 1.0! Setting to 0.0.")
@@ -216,11 +223,10 @@ class RegressionModel:
 
         if use_autograd:
             def cost_func(theta):
-                return (1.0 / len(self.y_train)) * np.sum((self.X_train @ theta - self.y_train)**2) + lmbd * np.sum(theta**2) #TODO correct to use len(y_train)? generalize to 2D
-            training_gradient = grad(cost_func)
+                return (1.0 / len(self.y_train)) * np.sum((self.X_train @ theta - self.y_train)**2) + lmbd * np.sum(theta**2)
         else:
             def training_gradient(theta):
-                return 2.0 * ((1.0 / len(self.y_train)) * self.X_train.T @ (self.X_train @ theta - self.y_train) + lmbd * theta) #TODO correct to use len(y_train)? generalize to 2D
+                return 2.0 * ((1.0 / len(self.y_train)) * self.X_train.T @ (self.X_train @ theta - self.y_train) + lmbd * theta)
             
             
         match tuning_method.lower():
@@ -245,7 +251,7 @@ class RegressionModel:
             
         
         # Estimating theta's with gradient descent
-        theta = np.random.randn(self.X.shape[1], 1) #TODO correct shape?
+        theta = np.random.randn(self.X.shape[1], 1) 
         for _ in range(n_iter):
             gradients = training_gradient(theta)
             change = gradient_change.update_change(gradients)
@@ -263,31 +269,41 @@ class RegressionModel:
         gradient_change.reset()
         return quantities
 
-    #TODO have one method for each tuning method?
-    #TODO if not, optimize anyway
     def stochastic_gradient_descent(self, n_epochs: int, M: int, eta: float | None = None, tuning_method: str = 'Const', rho_1: float | None = None, rho_2: float | None = None, lmbd: float | None = 0.0, gamma: float | None = 0.0, use_autograd: bool = False, return_theta: bool = False) -> tuple[np.ndarray]:
         """
-        Uses stochastic gradient descent with or without momentum to minimize the cost function. TODO maybe change
-
-        n_epochs (int): Number of epochs to use.
-        M (int): Size of each minibatch.
-        eta (float | None, optional): The learning rate. Must either be between 0.0 and 1.0 or None. If passed as None, it is computed from the Hessian matrix. Default is None.
-        tuning_method (str | None, optional): Which tuning method to implement. The options are "Const", "AdaGrad", "AdaGradMomentum", "RMS_prop", "Adam" and None. Default is None. #TODO does it make sense to group decaying rate together with the others? how are they tuning methods?
-        tuning_params: (list, optional): List containing the parameters needed for the tuning method. If None, or if tuning_method is passed as None, no tuning is performed. Default is None. The expected signatures for the different methods are:
-            "Const":   None      
-            "Momentum": None  
-            "AdaGrad": [float]   
-            "AdagradMomentum": [float, gamma: float]            
-            "RMS_prop": [float, rho: float]    
-            "Adam":    [float, rho_1: float, rho_2: float]      
-        lmbd (float, optional): The regularization parameter in Ridge regression. Passing as zero corresponds to OLS. Default is 0.0.
-        gamma (float, optional): The momentum parameter. Must be between 0.0 and 1.0. Passing as zero corresponds to using gradient descent without momentum. Default is 0.0.
-        use_autograd (bool, optional): Whether to use autograd's grad function to compute the gradients. Default is False.
-        return_theta (bool, optional): Whether to return the features theta. Default is False.
-
-        ## Returns:
-        tuple: A tuple containing the Mean-Squared Error (MSE) score and the R-squared (R2) score, as well as the theta values (coefficients) if return_theta is passed as True.
+        Perform stochastic gradient descent to optimize the regression model parameters.
+        Parameters
+        ----------
+        n_epochs : int
+            Number of epochs to run the gradient descent.
+        M : int
+            Size of the mini-batches.
+        eta : float, optional
+            Learning rate. Default is None.
+        tuning_method : str, optional
+            Method for tuning the gradient descent. Options are 'Const', 'Momentum', 'Adagrad', 'AdagradMomentum', 'RMS_prop', 'Adam'. Default is 'Const'.
+        rho_1 : float, optional
+            Hyperparameter for RMS_prop and Adam methods. Default is None.
+        rho_2 : float, optional
+            Hyperparameter for Adam method. Default is None.
+        lmbd : float, optional
+            Regularization parameter. Default is 0.0.
+        gamma : float, optional
+            Momentum parameter. Must be between 0.0 and 1.0. Default is 0.0.
+        use_autograd : bool, optional
+            Whether to use autograd for gradient computation. Default is False.
+        return_theta : bool, optional
+            Whether to return the optimized theta parameters. Default is False.
+        Returns
+        -------
+        tuple[np.ndarray]
+            A tuple containing the Mean Squared Error (MSE), R-squared (R2) value, and optionally the optimized theta parameters.
+        Raises
+        ------
+        ValueError
+            If an invalid tuning method is provided.
         """
+       
         np.random.seed(self.seed)
         if gamma < 0.0 or gamma > 1.0:
             print("The momentum parameter gamma must be between 0.0 and 1.0! Setting to 0.0.")
@@ -295,11 +311,11 @@ class RegressionModel:
 
         if use_autograd:
             def cost_func(X, y, theta):
-                return (1.0 / len(y)) * np.sum((X @ theta - y)**2) + lmbd * np.sum(theta**2) #TODO correct to use len(y? generalize to 2D
+                return (1.0 / len(y)) * np.sum((X @ theta - y)**2) + lmbd * np.sum(theta**2) 
             training_gradient = grad(cost_func, 2)
         else:
             def training_gradient(X, y, theta):
-                return 2.0 * ((1.0 / len(y)) * X.T @ (X @ theta - y) + lmbd * theta) #TODO correct to use len(y)? generalize to 2D
+                return 2.0 * ((1.0 / len(y)) * X.T @ (X @ theta - y) + lmbd * theta) 
 
         
         match tuning_method.lower():
@@ -320,10 +336,10 @@ class RegressionModel:
             
             
         # Estimating theta's with gradient descent
-        m      = int(len(self.y_train) / M) # Number of minibatches TODO correct shape?
-        theta  = np.random.randn(self.X.shape[1], 1) #TODO correct shape?
+        m      = int(len(self.y_train) / M) 
+        theta  = np.random.randn(self.X.shape[1], 1) 
         
-        for epoch in range(1, n_epochs + 1):
+        for s in range(1, n_epochs + 1):
             for i in range(m):
                 k  = M*np.random.randint(m)
                 Xi = self.X_train[k:k+M]
@@ -351,17 +367,29 @@ class RegressionModel:
     """
     def bootstrap(self, n: int, return_theta: bool = False) -> tuple[np.ndarray]:
         """
-        Performs bootstrapping with Ordinary Least Squares.
-
-        ## Parameters:
-        n (int): The number of bootstraps to perform.
-        return_theta (bool, optional): Whether to return the features theta. Default is False.
-
-        ## Returns:
-        tuple: A tuple of length 3 containing the Mean-Squared Error (MSE) score, bias, and variance, as well as the theta values (coefficients) if return_theta is passed as True.
+        Perform bootstrap resampling to estimate the mean squared error (MSE), bias, and variance of the model.
+        Parameters
+        ----------
+        n : int
+            Number of bootstrap samples.
+        return_theta : bool, optional
+            If True, the function also returns the mean of the estimated coefficients (theta). Default is False.
+        Returns
+        -------
+        tuple[np.ndarray]
+            A tuple containing the following elements:
+            - MSE : float
+                Mean squared error of the predictions.
+            - bias : float
+                Bias of the predictions.
+            - variance : float
+                Variance of the predictions.
+            - theta : np.ndarray, optional
+                Mean of the estimated coefficients, returned only if `return_theta` is True.
         """
+        
         y_pred = np.empty((self.y_test.shape[0], n))
-        theta = np.empty((self.X.shape[0], n)) #TODO correct shape?
+        theta = np.empty((self.X.shape[0], n)) 
 
         for i in range(n):
             X_, y_ = resample(self.X_train, self.y_train)
@@ -370,7 +398,6 @@ class RegressionModel:
 
             y_pred[:, i] = (self.X_test @ theta[:, i]).ravel()
 
-        #TODO use MSE method instead?
         MSE  = np.mean(np.mean((self.y_test - y_pred)**2, axis = 1, keepdims = True))  
         bias = np.mean((self.y_test - np.mean(y_pred, axis = 1, keepdims = True))**2) 
                    
