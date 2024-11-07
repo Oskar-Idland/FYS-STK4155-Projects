@@ -25,7 +25,7 @@
     \label{fig: SGD_batch_gamma}
 \end{figure}
 
-Looking at \cref{fig: param_overview} we found a region of parameters  in the upper-half , which gave the lowers MSE values. Using the best parameters found marked with a cross as a starting point, we found a good interval of values as seen in \cref{fig: param_narrowed}, with an order of magnitude around $10^{-4}$ and $10^{-3}$. In the following results, we only present the best intervals.
+Looking at \cref{fig: param_overview} we found a region of parameters  in the upper-half , which gave the lowers MSE values. Using the best parameters found marked with a cross as a starting point, we found a good interval of values as seen in \cref{fig: param_narrowed}, with an order of magnitude around $10^{-4}$ and $10^{-3}$ At the top we see "hairs" of MSE values with an order of magnitude higher values. It might be wise to stay below a momentum of \(0.9\), to ensure we do not end up in these zones. In the following results, we only present the best intervals.
 
 Continuing our search for the optimal batch number, we found between 5 and 20 batches to work well. In \cref{fig: SGD_batch_eta} without momentum. As a learning of $0.2$ gave the best results, we used this as our fixed learning rate in \cref{fig: SGD_batch_gamma} to find an optimal number of batches as a function of momentum. We see that the effect of changing the momentum is almost negligible, and that the number of batches is the most important parameter to tune. Even though we see a clear gradient in the plot, we find a large area with MSE values in the order of magnitude of \(10^{-5}\). The same is true in \cref{fig: SGD_batch_eta}, where over half of the learning rates between $0.1$ and $0.2$ give MSE values around \(10^{-4}\).
 
@@ -58,25 +58,56 @@ Exploring further with \cref{fig: AdagradMomentum_eta_gamma} and \cref{fig: Adag
     \caption{Plotting the learning rate against the decay rate, using stochastic RMSprop. The batch size is set to 20.}
     \label{fig: RMS_Prop_stochastic_eta_rho}
 \end{figure}
-The RMS propagation method was very sensitive to the learning rate. As seen in \cref{fig: RMS_Prop_eta_rho} and \cref{fig: RMS_Prop_stochastic_eta_rho}, there was only a narrow range of learning rates that gave good results. Outside of this range, computation became unstable, and a lot of NaN values were produced. The stochastic version performed better than the plain version, with an MSE of around \(10^{-3}\) compared to \(10^{-2}\). Looking closer at the MSE values of the stochastic variant, we found some spots with MSEs with a value around \( 10^{-4} \). For the plain version, we found some spots with an MSE of around \( 10^{-3} \).
+The RMS propagation method was very sensitive to the learning rate. As seen in \cref{fig: RMS_Prop_eta_rho} and \cref{fig: RMS_Prop_stochastic_eta_rho}, there was only a narrow range of learning rates that gave good results. Outside of this range, computation became unstable, and a lot of NaN values were produced. The stochastic version performed better than the plain version, with an MSE of around \(10^{-3}\) compared to \(10^{-2}\). Looking closer at the MSE values of the stochastic variant, we found some spots with MSEs with a value around \( 10^{-4} \). For the plain version, we found some spots with an MSE of around \( 10^{-3} \). These results prove the model capable of finding good solutions, but the optimization method is very sensitive to the learning rate.
 
+
+\clearpage
+\onecolumngrid
 \subsubsection{Adam}
-\begin{figure}[ht!]
+\begin{figure}[h!]
     \centering
     \includegraphics[width = 0.475\textwidth]{../figs/Adam_eta_rho.pdf}
     \caption{Plotting the learning rate against the decay rate. We have set the same value for $\rho_1$ and $\rho_2$, using Adam}
     \label{fig: Adam_eta_rho.pdf}
 \end{figure}
-\begin{figure}[ht!]
+\begin{figure}[h!]
     \centering
     \includegraphics[width = 0.475\textwidth]{../figs/Adam_stochastic_eta_rho.pdf}
     \caption{Plotting the learning rate against the decay rate, using stochastic Adam. The batch size is set to 20, and the same value for $\rho_1$ and $\rho_2$ is used.}
     \label{fig: Adam_stochastic_eta_rho.pdf}
 \end{figure}
 
+
 The Adam optimization method was both unstable and very sensitive to the learning rate. As seen in \cref{fig: Adam_eta_rho.pdf} and \cref{fig: Adam_stochastic_eta_rho.pdf}, the plain version had at best an MSE of around \(10^{-2}\), while the stochastic version had an MSE of around \(10^{-3}\). The stochastic version had some spots with an MSE of around \(10^{-6}\). The plain version had some spots with an MSE of around \(10^{-4}\).
 
 \clearpage
+
+
+
+\subsubsection{Exploration of Hot Spots}
+
+
+\onecolumngrid
+\begin{figure}[h!]
+    \begin{minipage}{\textwidth}
+        \centering
+        \includegraphics[width = 0.9\textwidth]{../figs/Adam_zoom.pdf}
+        \caption{Choosing a constant decay rate to investigate the learning rate.}
+        \label{fig: Adam_zoom}
+    \end{minipage}
+\end{figure}
+\begin{figure}[h!]
+    \begin{minipage}{\textwidth}
+        \centering
+        \includegraphics[width = 0.9\textwidth]{../figs/RMS_Prop_zoom.pdf}
+        \caption{Choosing a constant decay rate to investigate the learning rate.}
+        \label{fig: RMS_Prop_zoom}
+    \end{minipage}
+\end{figure}
+\twocolumngrid
+
+In both \cref{fig: Adam_zoom} and \cref{fig: RMS_Prop_zoom}, we see the sensitivity of the learning rate. For the Adam optimization method, we found parameters giving an MSE of around \(10^{-4}\) for the plain version, and \(10^{-6}\) for the stochastic version. For the RMS propagation method, we found parameters giving an MSE of around \(10^{-3}\) for the plain version, and \(10^{-4}\) for the stochastic version. The Adam method is very chaotic, while the RMS propagation method has a very small window of parameters. 
+
 
 \subsection{Neural Networks Regression}
 
@@ -121,7 +152,7 @@ Our feed-forward neural network demonstrated consistently strong performance on 
 \end{figure}
 \twocolumngrid
 
-The comparison of different optimization schedulers in \cref{fig:NN_Franke_schedulers} shows that all implemented methods have varying success with plain momentum, both Adagrads and Adam performing the best. The marked convergence points indicate that both Adagrad methods are slightly faster to converge than the other methods. As the criteria for convergence is chosen somewhat arbitrarily, as described in \cref{subsec:nn_schedulers}, the marked crosses may not showcase where the schedulers actually converge, but gives insight into when the learning rates are slowing down relative to each other as the networks are training. The figure also suggest that given enough epochs, both Adagrads, Adam and plain momentum will converge to an mse of just around of \( 10^{-2} \) and an \( R^2 \) score above of 0.95. RMSprop shows the same unstability found in \colorbox{magenta}{REF TO RMSprop} of our gradient descent analysis.
+The comparison of different optimization schedulers in \cref{fig:NN_Franke_schedulers} shows that all implemented methods have varying success with plain momentum, both Adagrads and Adam performing the best. The marked convergence points indicate that both Adagrad methods are slightly faster to converge than the other methods. As the criteria for convergence is chosen somewhat arbitrarily, as described in \cref{subsec:nn_schedulers}, the marked crosses may not showcase where the schedulers actually converge, but gives insight into when the learning rates are slowing down relative to each other as the networks are training. The figure also suggest that given enough epochs, both Adagrads, Adam and plain momentum will converge to an mse of just around of \( 10^{-2} \) and an \( R^2 \) score above of 0.95. RMSprop and Adam shows some of the same sensitivity found in our gradient descent analysis\cref{fig: Adam_zoom}.
 
 \onecolumngrid
 \begin{figure}[h!]
@@ -151,14 +182,17 @@ Comparing our results with the PyTorch implementation in \cref{fig:NN_Torch_scor
 
 \clearpage
 
+\onecolumngrid
 \subsection{Neural Networks Classification}
 
-\onecolumngrid
+
 \begin{figure}[h!]
-    \centering
-    \includegraphics[width = .9\textwidth]{../figs/classification_lambda_eta.pdf}
-    \caption{Model performance for different learning rates and regularization strengths on the breast cancer classification problem. The plot shows the training and test accuracy scores for different combinations of learning rate and regularization strength. The optimal values are highlighted in green.}
-    \label{fig:NN_Classification_lambda_eta}
+    \begin{minipage}{\textwidth}
+        \centering
+        \includegraphics[width = .9\textwidth]{../figs/classification_lambda_eta.pdf}
+        \caption{Model performance for different learning rates and regularization strengths on the breast cancer classification problem. The plot shows the training and test accuracy scores for different combinations of learning rate and regularization strength. The optimal values are highlighted in green.}
+        \label{fig:NN_Classification_lambda_eta}
+    \end{minipage}
 \end{figure}
 \twocolumngrid
 

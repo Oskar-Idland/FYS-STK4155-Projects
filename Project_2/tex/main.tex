@@ -101,7 +101,7 @@ breaklinks=true}
 
 \begin{abstract}
     \centering
-    In this project, we extend our exploration of machine learning techniques to include advanced optimization algorithms and neural networks. We implement and analyze gradient descent methods and feed-forward neural networks, through systematically tuning the actors in the vast hypersparameter space and analyze their influence on our models. This is accomplished to both regression and classification tasks, using synthetic data generated through the Franke function and the Wisconsin Breast Cancer dataset. Our neural network implementation achieves MSE values of $10^{-3}$ and $R^2$ scores above 0.99 for the Franke function regression. For the breast cancer classification task, our model attains 98.2\% test accuracy, demonstrating the effectiveness of our optimization approach. Our results demonstrate the importance of activation functions, initialization strategies, and regularization methods in training effective neural networks. We also highlight the impact of optimization techniques on model convergence and generalization, providing a comprehensive overview of the fundamental building blocks of modern machine learning systems.
+    In this project, we extend our exploration of machine learning techniques to include advanced optimization algorithms and neural networks. We implement and analyze gradient descent methods and feed-forward neural networks, through systematically tuning the actors in the vast hypersparameter space and analyze their influence on our models. This is accomplished with both regression and classification tasks, using synthetic data generated through the Franke function and the Wisconsin Breast Cancer dataset. Our neural network implementation achieves MSE values of $10^{-3}$ and $R^2$ scores above 0.99 for the Franke function regression. For the breast cancer classification task, our model attains 98.2\% test accuracy, demonstrating the effectiveness of our optimization approach. Our results demonstrate the importance of activation functions, initialization strategies, and regularization methods in training effective neural networks.  
 \end{abstract}
 \maketitle
 \onecolumngrid
@@ -134,19 +134,19 @@ breaklinks=true}
 
 \section{Conclusion}\label{sec:conclusion}
 % \vspace*{-2.5pt}
-In this study, we have implemented and analyzed various optimization algorithms and neural network architectures for bot regression and classification tasks. Our regression analysis demonstrated mixed success across different optimization method. While plain gradient descent and stochastic gradient descent with AdagGrad achieved satisfactory result performance with MSE values around $ 10^{-5} $, we encountered challenges in optimizing the hyperparameter for RMSprop and Adam. These methods showed inconsistent performance, with occasional regions of good convergence (MSE $\approx 10^{-5}$) amid generally poorer results (MSE $\approx 10^{-1}$). 
+In this study, we have implemented and analyzed various optimization algorithms and neural network architectures for both regression and classification tasks. Our regression analysis demonstrated mixed success across different optimization method. While plain gradient descent and stochastic gradient descent with Adam achieved satisfactory result performance with MSE values around $ 10^{-6} $, we encountered challenges in optimizing the hyperparameter for RMSprop and Adam. These methods showed inconsistent performance, with occasional regions of good convergence (MSE $\approx 10^{-5}$) amid generally poorer results (MSE $\approx 10^{-1}$). 
 
-The neural network implementation proved more robust, particularly in regression task using the Franke function. Our systematic analysis of hyperparameter revealed optimal configurations achieving MSE values of $10^{-3}$ and $R^2$ scores above 0.99. The comparison of different activation functions showed that while sigmoid activation performed marginally better (MSE $\approx 0.003$), both ReLU and Leaky ReLU maintained strong performance (MSE $\approx 0.010$), demonstrating the flexibility of our implementation.
+The neural network implementation proved more robust, particularly in regression task using the Franke function. Our systematic analysis of hyperparameter revealed optimal configurations achieving MSE values of $10^{-3}$ and $R^2$ scores above 0.99. The comparison of different activation functions showed that while sigmoid activation performed marginally better (MSE $= 3 \cdot10^{-3}$), both ReLU and Leaky ReLU maintained strong performance (MSE $ = 10^{-2}$), demonstrating the flexibility of our implementation.
 
-For the classification task using the Wisconsin Breast Cancer dataset, our neural network achieved impressive accuracy ($>98\%$) across various architectures, notably performing on par with and occasionally exceeding the PyTorch implementation. However, this result should be interpreted with caution given the relatively small dataset size. The observed rapid convergence of our model, while computationally efficient, may indicate premature settling into local minima rather than finding truly optimal solutions.
+For the classification task using the Wisconsin Breast Cancer dataset, our neural network achieved impressive accuracy ($>98\%$) across various architectures, notably performing on par with and occasionally exceeding the PyTorch implementation. However, this result should be interpreted with caution given the relatively small dataset size.
 
 Several areas warrant further investigation, particularly given the constraints of our current study. Due to computational limitations, we significantly restricted our hyperparameter search space, exploring only a modest range of learning rates, batch sizes, and network architectures. The runtime constraints also limited our ability to test higher polynomial degrees and more complex network configurations, especially for the regression task. A more comprehensive study with access to greater computational resources could explore:
 
 \begin{itemize}
-    \item Broader hyperparameter spaces, particularly for RMSprop and Adam optimization
+    \item Narrower hyperparameter spaces to pinpoint optimal configurations
     \item Larger network architectures with more hidden layers and nodes
     \item Higher polynomial degrees for the regression analysis
-    \item More extensive cross-validation and ensemble methods
+    \item More extensive cross-validation and ensemble methods 
     \item The effect of different initialization strategies
     \item Alternative regularization techniques beyond L2 regularization
 \end{itemize}

@@ -18,10 +18,6 @@ Secondly, we use the ideal learning rate, and then iterate over possible values 
 
 Moving on to the more advanced optimization methods, we implement AdaGrad, RMSprop, and Adam. We follow the same procedure as before, iterating over all possible learning rates and momentum values to find the optimal combination. We note the optimal values to use in the neural network implementation.
 
-\begin{comment}
-  #TODO: Update if we iterate over momentum and rho values as well
-\end{comment}
-
 \subsubsection{AdaGrad}
 \paragraph{No Momentum:}
 For both the regular and stochastic versions of AdaGrad, we iterate over all possible learning rates to find the optimal value.
@@ -60,7 +56,7 @@ Our first step was to explore the relationship between the number of epochs and 
 This was conducted in similar fashion to the previous step, with the learning rate \( \eta \) ranging from values (\( 1e^{-4} \) to \( 1e^{-1} \) and 0.5), and the regularization parameter \( \lambda \) ranging from (\( 1e^{-5} \) to \( 1e^{-1} \)).
 
 \paragraph*{Schedulers:}\label{subsec:nn_schedulers}
-To compare the different learning rate schedulers discussed in \cref{sec:learning_rate_tuning}, we implemented one instance of each of them with the standard learning rate. For plain momentum and Adagrad with momentum, we used the parameters \( \gamma = 0.8 \) again. For Adam, we used the parameters \( \rho = 0.9, \rho_2 = 0.999 \). RMPprop had the same \( \rho \) value as Adam. To ensure numerical stability, we used a small value of \( \epsilon = 1e^{-8} \) for all the optimizers. The momentum and decay parameters were chosen based on common values in deep learning literature that typically show good performance across different problems. % #TODO cite
+To compare the different learning rate schedulers discussed in \cref{sec:learning_rate_tuning}, we implemented one instance of each of them with the standard learning rate. For plain momentum and Adagrad with momentum, we used the parameters \( \gamma = 0.8 \) again. For Adam, we used the parameters \( \rho = 0.9, \rho_2 = 0.999 \). RMPprop had the same \( \rho \) value as Adam. To ensure numerical stability, we used a small value of \( \epsilon = 1e^{-8} \) for all the optimizers. The momentum and decay parameters were chosen based on common values in deep learning literature that typically show good performance across different problems.
 
 Training progression was monitored by computing both MSE and \( R^2 \) scores on the training data at each epoch. Convergence was defined quantitatively as the point where the relative difference between the mean MSE of the last 10 epochs and the current MSE fell below \( 10^{-2} \), providing a relative convergence criterion for comparing optimizer efficiency. For final model evaluation, we computed these metrics on the held-out test set to assess generalization performance.
 \subsubsection{Breast Cancer Classification}
