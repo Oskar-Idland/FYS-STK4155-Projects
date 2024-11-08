@@ -54,14 +54,15 @@ Full report can be found [here](Project_2/tex/out/Project2.pdf)
 Franke function data, which we used to validate our implementation.
 
 ##### Neural Networks 
-- `FNN.py`: Contains the classes for the neural networks.
+- `FFNN.py`: Contains the classes for the neural networks.
 - `nn_Franke.ipynb`: Contains the analysis of the Franke
 function to validate the implementation of neural net-
 works.
 - `nn_breast_cancer.ipynb`: Contains the analysis of the
 breast cancer data using neural networks. This is where
-we truly optimize the hyperparameters of the neural networks.
+we train a neural network model and tune the hyperparameters for a standard classification problem.
 - `activation_funcs.py`: Contains the activation functions used in the neural networks.
+
 cost_funcs.py: Contains the cost functions used in the
 neural networks.
 - `cost_funcs.py`: Contains the cost functions used in the
