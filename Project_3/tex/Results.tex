@@ -7,7 +7,7 @@ We present our analysis through confusion matrices (\cref{fig:confusion_matrix})
 
 \onecolumngrid
 \begin{figure}[h!]
-    \begin{minipage}{\textwidth}
+    \begin{minipage}{.95\textwidth}
         \centering
         \includegraphics[width = .9\textwidth]{../figs/confusion_matrices.pdf}
         \caption{Confusion matrices for the three neural network architectures (Simple CNN, MobileNet, and ResNet101) evaluated on the breast cancer histopathological test dataset. Values and color intensity indicate the number of images classified in each category.}
@@ -17,7 +17,6 @@ We present our analysis through confusion matrices (\cref{fig:confusion_matrix})
 \twocolumngrid
 
 The confusion matrices demonstrate distinct classification behaviors across architectures. ResNet101 exhibits balanced prediction distribution across classes, while both the simple CNN and MobileNet display systematic bias toward the majority class (benign), as evidenced by the disproportionate predictions in their respective primary columns.
-
 
 \begin{table}[h!]
     \centering
