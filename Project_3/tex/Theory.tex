@@ -1,0 +1,162 @@
+
+\section{Neural networks}
+
+Neural Networks are computational models inspired by biological neural networks in the human brain. They learn by example, rather than being explicitly programmed with detailed instructions for a task. This learning process uses data split into training and testing sets. 
+
+A neural network consists of layers of interconnected units called neurons. Each neuron receives multiple inputs, combines them using adjustable factors called weights, applies a mathematical function to decide its output, and then passes this output to the next layer. The weights determine the strength of the connections between neurons, and by fine-tuning these weights, the network learns to identify patterns and improve its performance.
+
+Mathematically, this process can be represented as in Equation \ref{neuralnetwork}.
+
+\begin{equation}
+   y = f\left(\sum_{i=1}^{n} w_i x_i\right) = f(z)
+   \label{neuralnetwork}
+\end{equation}
+
+where \( y \) is the output, \( w_i \) are the weights, \( x_i \) are the input values, and \( f(z) \) is the activation function applied to the combined inputs.
+
+\subsection{Convolution Neural Network}
+
+
+There are various types of neural networks designed for specific tasks, and among them, Convolution Neural Networks (CNN) are one of the most widely used and impactfull. CNN were originally created for tasks like recognizing handwritten characters. Today, they are more central to many advancements in artificial intelligence, particularly in image processing and computer vision. CNNs are similar to traditional Neural Networks in that they consist of neurons with adjustable weights that learn patterns from data.
+
+%Through training methods like backpropagation and gradient descent, CNNs improve their accuracy by adjusting these weights over time. 
+
+%What makes CNNs unique is their ability to leverage the specific properties of images, such as identifying edges, textures, and shapes, while requiring fewer parameters than traditional neural networks. This efficiency makes CNNs faster, more scalable, and ideal for tasks like object detection, face recognition, and autonomous vehicle navigation.
+
+
+CNNs are great at using the natural structure of visual data. Unlike other types of data, images have unique features like edges, textures, and shapes. CNNs are specifically designed to recognize and process these features efficiently, requiring less parameters than the traditional neural networks. This efficiency makes CNNs faster and easier to use on large tasks, and very effective for things like object detection and face recognition. They are specifically built for image data, with a structure that aligns with the way images are organized. Unlike traditional neural networks, CNN layers arrange neurons in three dimensions: width, height, and depth.
+
+To understand why CNNs are so effective, it's important to first examine how neural networks process data. Neural networks commonly use an affine transformation, a method that works for any type of data that can be flattened into a single list of numbers. However, for structured data like images, this approach has a significant drawback: it ignores the natural structure of the data. Images are multi-dimensional grids of pixels where the spatial arrangement, such as width, height and depth is crucial. Flattening these grids into a single vector removes this valuable information. This is where convolutions layers is essential.
+
+\subsubsection{ Convolution layers}
+
+CNNs are able to recognize patterns in images because of their convolution layers. Convolution layers are a type of hidden layer in CNNs. Each convolution layer takes an input, applies a transformation to it, and passes the transformed data to the next layer. This transformation is performed through the convolution.
+Convolution a mathematical operation that processes structured data while maintaining its original form and relationships. It applies a filter (or kernel) to the input data, combining nearby values to extract features such as edges or textures in images. Mathematically, convolution is represented as:
+
+\begin{equation}
+    y(t) = \int x(a)w(t-a) \, da
+\end{equation}
+
+where \( x(a) \) represents the input,  \( w(t-a) \) is the filter or kernel, which slides over the input to process it locally and \( y(t) \)is the output after applying the convolution.
+
+For digital data like images, this integral is replaced by a summation in the discrete form as in Equation \ref{conv_dis}
+
+\begin{equation}
+    y(t) = \sum_{a=-\infty}^{\infty} x(a)w(t-a)
+\label{conv_dis}
+\end{equation}
+
+This operation ensures that the structure of the data is maintained, making it particularly suited for tasks involving visual data. Convolution Neural Networks use this property by arranging neurons in width, height, and depth to efficiently process and learn from structured data.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsubsection{MobileNet}
+
+MobileNet is a lightweight and efficient deep neural network architecture designed specifically for mobile and embedded vision tasks \cite{howard2017mobilenetsefficientconvolutionalneural}. It reduces computational complexity and memory usage by employing depthwise separable convolutions instead of traditional convolutions \cite{howard2017mobilenetsefficientconvolutionalneural}. This involves splitting the standard convolution process into two distinct steps: a depthwise convolution, which applies a single filter to each input channel, and a pointwise convolution (1×1 convolution), which combines the outputs to form new features \cite{howard2017mobilenetsefficientconvolutionalneural}. This factorization drastically reduces the computational cost and model size, making MobileNet an ideal choice for resource-constrained devices \cite{howard2017mobilenetsefficientconvolutionalneural}.
+
+The depthwise convolution operation in MobileNets can be mathematically represented as follows:
+
+\[ G_{k,l,m} = \sum_{i,j} K_{i,j,m} \cdot F_{k+i-1,l+j-1,m} \]
+
+\begin{itemize}
+    \item  \( G_{k,l,m} \): Output feature map at position \( (k, l) \) for the \( m \)-th channel \cite{howard2017mobilenetsefficientconvolutionalneural}.
+    \item  \( K_{i,j,m} \): Depthwise convolution kernel for the \( m \)-th channel, of size \( D_K \times D_K \) \cite{howard2017mobilenetsefficientconvolutionalneural}.
+    \item  \( F_{k+i-1,l+j-1,m} \): Input feature map at the shifted position \( (k+i-1, l+j-1) \) for the \( m \)-th channel \cite{howard2017mobilenetsefficientconvolutionalneural}.
+    \item \( i, j \): Kernel index variables, ranging over the kernel size \( D_K \) \cite{howard2017mobilenetsefficientconvolutionalneural}.
+\end{itemize}
+
+This formula indicates that for each output position \( (k, l) \) and each channel \( m \), the convolution is computed by applying a kernel \( K_{i,j,m} \) to the corresponding input positions \( (k+i-1, l+j-1) \) \cite{howard2017mobilenetsefficientconvolutionalneural}. The kernel filters the input feature map \( F \) for each channel independently, without mixing features between channels \cite{howard2017mobilenetsefficientconvolutionalneural}. This selective filtering significantly reduces the computational resources required as compared to traditional convolutions that combine inputs across all channels \cite{howard2017mobilenetsefficientconvolutionalneural}.
+
+
+
+
+
+\subsection{Residual Networks (ResNet)}
+Deep neural networks often face two significant challenges: the \textit{degradation problem} and the \textit{vanishing/exploding gradients problem} \cite{he2015deepresiduallearningimage}. As networks increase in depth, their performance tends to saturate, and adding more layers can lead to higher training errors, a phenomenon known as the degradation problem. Additionally, during backpropagation, gradients can become extremely small (vanishing) or excessively large (exploding), which hampers the effective training of very deep networks \cite{he2015deepresiduallearningimage}.
+
+To address these challenges, Residual Networks (ResNet) introduce a \textit{residual learning framework}. Instead of learning the full mapping \( H(x) \) from inputs to outputs, ResNet learns the \textit{residual mapping}, \( F(x) = H(x) - x \). This reformulation allows the model to compute the output as \( H(x) = F(x) + x \), where \( x \) is the input. The residual learning approach makes it easier for the network to optimize, as the residual function \( F(x) \) often has a simpler structure than the direct mapping \( H(x) \) \cite{he2015deepresiduallearningimage}.
+
+At the core of ResNet is the \textit{residual block} \cite{he2015deepresiduallearningimage}, which includes a \textit{skip connection (shortcut)} that bypasses one or more layers \cite{he2015deepresiduallearningimage}. These skip connections add the input \( x \) directly to the output of the block, facilitating the flow of gradients during backpropagation \cite{he2015deepresiduallearningimage}. This design mitigates the vanishing gradient problem and allows the network to retain information from earlier layers, making it possible to train networks with much greater depth \cite{he2015deepresiduallearningimage}.
+
+ResNet architectures are built by stacking multiple residual blocks, enabling the construction of very deep networks. Popular versions include:
+\begin{itemize}
+    \item \textbf{ResNet-50:} A network with 50 layers \cite{he2015deepresiduallearningimage}.
+    \item \textbf{ResNet-101:} A deeper network with 101 layers \cite{he2015deepresiduallearningimage}.
+    \item \textbf{ResNet-152:} An even deeper variant with 152 layers \cite{he2015deepresiduallearningimage}.
+\end{itemize}
+These networks typically start with an initial convolutional layer, followed by multiple residual blocks grouped into stages, and conclude with a fully connected layer for classification tasks.
+
+ResNet achieves state-of-the-art performance in tasks like image classification, particularly in the ImageNet Large Scale Visual Recognition Challenge (ILSVRC) \cite{he2015deepresiduallearningimage}. For example, ResNet achieved a top-5 error rate of 3.57\% on ImageNet \cite{he2015deepresiduallearningimage}. The introduction of residual learning and skip connections enables the training of networks with hundreds or even thousands of layers, solving critical challenges in deep learning and setting a new standard for neural network design \cite{he2015deepresiduallearningimage}.
+
+
+Before the final fully connected layer, ResNet employs \textit{Global Average Pooling (GAP)} to reduce each feature map into a single value \cite{he2015deepresiduallearningimage}. This technique provides a compact representation of the feature maps, improving computational efficiency and reducing the risk of overfitting.
+
+
+
+\section*{Evaluation Metrics}
+\subsection*{Precision}
+\textbf{Formula:}
+\[
+\text{Precision} = \frac{\text{True Positives (TP)}}{\text{True Positives (TP)} + \text{False Positives (FP)}}
+\]
+
+Precision measures the proportion of true positive predictions among all instances predicted as positive. This metric is particularly important in scenarios where false positives carry significant costs, such as in fraud detection or medical testing. A high precision indicates that the model has effectively minimized false positive predictions \cite{hossin2015review}.
+
+\subsection*{Recall (Sensitivity or True Positive Rate)}
+\textbf{Formula:}
+\[
+\text{Recall} = \frac{\text{True Positives (TP)}}{\text{True Positives (TP)} + \text{False Negatives (FN)}}
+\]
+
+ 
+Recall quantifies the ability of the model to identify actual positive cases. It is critical in applications where missing positive cases (false negatives) have severe implications, such as in medical diagnoses or safety-critical systems \cite{hossin2015review}.
+
+\subsection*{F1-Score}
+\textbf{Formula:}
+\[
+\text{F1-Score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}
+\]
+
+
+The F1-score provides a harmonic mean of Precision and Recall, offering a balanced evaluation metric that is particularly useful in datasets with imbalanced class distributions. It penalizes extreme differences between Precision and Recall, ensuring a more holistic assessment of model performance \cite{hossin2015review}.
+
+\subsection*{Accuracy}
+\textbf{Formula:}
+\[
+\text{Accuracy} = \frac{\text{True Positives (TP)} + \text{True Negatives (TN)}}{\text{Total Instances}}
+\]
+
+
+Accuracy measures the overall proportion of correctly classified instances among all predictions. While it is easy to compute and interpret, it can be misleading in imbalanced datasets where one class dominates, necessitating supplementary metrics like F1-score \cite{hossin2015review, dalianis2018clinical}.
+
+\subsection*{Confusion Matrix}
+These metrics are derived from the confusion matrix, which provides a detailed breakdown of model predictions:
+\begin{itemize}
+    \item \textbf{True Positives (TP):} Correctly predicted positive instances.
+    \item \textbf{True Negatives (TN):} Correctly predicted negative instances.
+    \item \textbf{False Positives (FP):} Negative instances incorrectly predicted as positive.
+    \item \textbf{False Negatives (FN):} Positive instances incorrectly predicted as negative.
+\end{itemize}
+
+The confusion matrix serves as the foundation for most classification metrics, offering insights into both model strengths and weaknesses \cite{hossin2015review, dalianis2018clinical}.
+
+
+
+
+%### Notes:
+
+%- Replace `hossin2015review` and `dalianis2018clinical` with the appropriate citation keys from your `.bib` file.
+%- Make sure your `.bib` file includes the sources:
+%  - Hossin, M. (2015). *A Review on Evaluation Metrics for Data Classification Evaluations*.
+ % - Dalianis, H. (2018). *Clinical Text Mining: Secondary Use of Electronic Patient Records*.
