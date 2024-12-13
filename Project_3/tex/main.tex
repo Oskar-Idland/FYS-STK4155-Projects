@@ -91,10 +91,11 @@ breaklinks=true}
 \section{Methods \& Implementation}\label{sec:methods}
 \input{Methods}
 
-\clearpage
+\hspace{5mm}
 
+\onecolumngrid
 \section{Results \& Discussion}\label{sec:results discussion}
-\include{Results}
+\input{Results}
 
 \section{Conclusion}\label{sec:conclusion}
 
@@ -108,6 +109,8 @@ These experimental results yield several crucial insights for developing practic
 \end{itemize}
 
 These findings demonstrate that successful medical image classification with limited data requires careful consideration of model complexity, transfer learning opportunities, and computational constraints rather than defaulting to more complex architectures. Future work should investigate methods to improve minority class performance and explore architectural modifications that better utilize limited training data.
+
+For future work, we suggest several methodological enhancements to build upon our current findings. Implementation of cross-validation techniques, particularly k-fold validation, would provide more robust performance estimates and better insight into model stability across different data partitions. Evaluation of additional architectural variants, such as VGGnet or EfficientNet, could offer new perspectives on the relationship between model complexity and performance on small medical datasets. Systematic hyperparameter optimization through techniques like grid search or Bayesian optimization could further improve model performance within the existing architectures. Additionally, we suggest exploring more sophisticated data augmentation strategies, such as mixup or cutmix, specifically tailored for histopathological images to better address class imbalance and enhance model generalization.
 
 \Urlmuskip=0mu plus 1mu\relax
 \onecolumngrid
