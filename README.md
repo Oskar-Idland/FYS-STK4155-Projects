@@ -18,6 +18,13 @@
         - [Misc](#misc)
       - [`Project_2/tex`: $\LaTeX$ files](#project_2tex-latex-files)
       - [`Project_2`: Root folder for project 2.](#project_2-root-folder-for-project-2)
+  - [Project 3: Surveying Convolution Neural Network Architectures for Small Datasets](#project-3-surveying-convolution-neural-network-architectures-for-small-datasets)
+    - [Project Structure](#project-structure-2)
+      - [`Project_3/data`: Data used in the project.](#project_3data-data-used-in-the-project)
+      - [`Project_3/figs`: Figures generated from the code. Saved as pdf files.](#project_3figs-figures-generated-from-the-code-saved-as-pdf-files)
+      - [`Project_3/src`: Python source code. This is divided into the following files.](#project_3src-python-source-code-this-is-divided-into-the-following-files)
+      - [`Project_3/tex`: $\LaTeX$ files](#project_3tex-latex-files)
+      - [`Project_3`: Root folder for project 3.](#project_3-root-folder-for-project-3)
 - [Authors](#authors)
 
 ## Repository Structure 
@@ -82,7 +89,7 @@ neural networks.
 #### `Project_2`: Root folder for project 2.
 - `requirements.txt`: Required packages for the project, and their versions. 
 
-## Project 3: Surveying Convolution Neural Network Architectures for small datasets
+## Project 3: Surveying Convolution Neural Network Architectures for Small Datasets
 Full report can be found [here](Project_3/tex/out/main.pdf)
 ### Project Structure
 #### `Project_3/data`: Data used in the project. 
