@@ -98,7 +98,7 @@ Full report can be found [here](Project_3/tex/out/main.pdf)
 
 #### `Project_3/data`: Data used in the project. 
 - `data/original`: Original breast cancer data.
-- `data/working`: Augmented version of original data used to generate more data points. 
+- `data/working`: Augmented and original data used to generate more data points. This is divided into training, testing and validation data.   
 
 #### `Project_3/figs`: Figures generated from the code. Saved as pdf files.
 
