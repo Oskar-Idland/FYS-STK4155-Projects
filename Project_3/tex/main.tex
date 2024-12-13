@@ -66,9 +66,8 @@ breaklinks=true}
 \affiliation{University of Oslo, Department of Physics}
 
 \begin{abstract}
-    \centering
-    The rapid growth of artificial intelligence (AI) and machine learning has significantly impacted medical imaging, particularly in tasks such as tumor detection and disease classification. However, deploying deep learning models like Convolutional Neural Networks (CNNs) in environments with limited resources remains a challenge. To address this issue, efficient architectures like MobileNet and ResNet have been developed. MobileNet is designed for computational efficiency, making it suitable for mobile medical applications, while ResNet, with its residual connections, tackles the degradation problem in deeper networks. This study compares the performance of three neural network architectures: custom CNN, MobileNet, and ResNet101 on a breast cancer histopathological dataset. We aim to evaluate how these models perform on a small, imbalanced dataset, focusing on their accuracy and efficiency in a medical context. Our results show that ResNet101, significantly outperforms the other models, achieving higher F1-scores (0.87) and more balanced class performance. In contrast, while MobileNet demonstrated high precision for certain classes, it struggled with recall due to class imbalance. The findings suggest that ResNet101’s superior performance makes it more suitable for complex medical image classification tasks, particularly when higher accuracy and balanced class performance are essential. This study highlights the balance between model complexity, data limitations, and computational constraints in creating practical medical AI systems.
-    %   \colorbox{magenta}{Add abstract here}
+    \centering 
+    Machine learning technologies have had a profound impact in the field of diagnostic imaging and disease detection.\cite{litjens2017survey} Convolutional Neural Networks (CNNs) have demonstrated remarkable success in medical image analysis, but deploying these models effectively requires significant computational resources and large training datasets, presenting a critical challenge for practical medical applications. Here we show through evaluation of three neural architectures (MobileNet, ResNet101 and a architecture of our design) on breast cancer histopathological images that model complexity must be carefully balanced against dataset size. While ResNet101 significantly outperforms other models with higher F1-scores (0.87), simpler architectures trained from scratch showed surprisingly robust performance, suggesting that architectural complexity should be carefully balanced against dataset size in medical applications. This highlights the importance of considering data availability when selecting model architectures for practical medical image classification systems.
 \end{abstract}
 \maketitle
 \onecolumngrid
@@ -91,6 +90,8 @@ breaklinks=true}
 
 \section{Methods \& Implementation}\label{sec:methods}
 \input{Methods}
+
+\clearpage
 
 \section{Results \& Discussion}\label{sec:results discussion}
 \include{Results}

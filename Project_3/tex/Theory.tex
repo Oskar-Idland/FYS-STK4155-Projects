@@ -1,20 +1,5 @@
 
-\section{Neural networks}
-
-Neural Networks are computational models inspired by biological neural networks in the human brain \cite{wikipedia_neural_network}. They learn by example, rather than being explicitly programmed with detailed instructions for a task. This learning process uses data split into training and testing sets. 
-
-Each neuron operates in three steps: It receives multiple inputs, adjusts them using weights and a bias, and applies an activation function to generate its output. This output is subsequently forwarded to the next layer in the network \cite{dagostino_neural_networks}. The weights, \( w_i \), determines the strength of the connection between neurons, influencing how much each input, \( x_i \), contributes to the neuron’s output. The bias, \( b \), shifts the activation threshold, allowing the neuron to adapt more flexibly. Weights and biases are adjusted during training to help the network learn, recognize patterns, and make better predictions \cite{paperspace_weights_biases}.
-
-The activation function, \( f(z) \),  is a crucial element that introduces non-linearity into the network, enabling it to model complex relationships in the data. It converts the combined input into an output that is either passed to the next layer or used for further processing. Mathematically, the output of a neuron is expressed as:
-
-\begin{equation}
-   y = f\left(b + \sum_{i=1}^{n} w_i x_i\right) = f(z)
-   \label{neuralnetwork}
-\end{equation}
-
-Here, \( y \) represents the output of the neuron, \( x_i \) are the input values, \( w_i \) are the weights assigned to each input, and \( b \) is the bias term. The term \( z = b + \sum_{i=1}^n w_i x_i \) is the weighted sum of the inputs, while \( f(z) \) is the activation function applied to \( z \).
-
-This formula describes how a single neuron processes and transforms information. In a neural network, this process is repeated across all neurons in each layer, with the outputs from one layer serving as the inputs to the next \cite{dagostino_neural_networks}. This interconnected flow of information allows the network to learn and perform complex tasks by progressively refining its understanding of the data.
+Neural networks form the foundation of the architectures discussed in this paper. For a comprehensive treatment of neural network fundamentals, including their structure, training process, and mathematical foundations, we refer readers to our previous work.\cite{Project2} Building upon this foundation, we focus here on the specialized architectures and techniques relevant to our current analysis of medical image classification.
 
 
 \subsection{Convolution Neural Network}
@@ -50,8 +35,9 @@ In practice, the filter slides over the input data spatially, computing a dot pr
 The spatial dimensions of the output feature map are determined as:
 
 \begin{equation}
-    W_{\text{output}} = \frac{W_{\text{input}} - F + 2P}{S} + 1, \quad H_{\text{output}} = \frac{H_{\text{input}} - F + 2P}{S} + 1
+    W_{\text{output}} = \frac{W_{\text{input}} - F + 2P}{S} + 1, \quad H_{\text{output}} = \frac{H_{\text{input}} - F + 2P}{S} + 1, 
     \label{conv_spatial}
+    D_{\text{output}} = K
 \end{equation}
 
 
@@ -61,13 +47,34 @@ Convolutional layers achieve computational efficiency through parameter sharing,
 
 Key parameters such as filter size \(F\), padding \(P\), stride \(S\), and the number of filters \(K\), optimize the layer's functionality \cite{cs231n_cnn}. Smaller filters capture fine details, padding keeps edge information, and strides controls how much the filter moves. The number of filters sets the output depth, with each filter learning different features. These parameters, along with the mathematical formula for output dimensions, makes convolutional layers essential to modern computer vision.
 
+\textbf{Kernel}
+
+Convolutional kernels, also called filters, are critical components of convolutional neural networks (CNNs), performing feature extraction through sliding-window operations over input feature maps \cite{jain2020convolutions}. Each kernel is defined by its dimensions and weights, which are refined during training to detect specific features in the input data. The application of kernels produces feature maps by combining the input image with the learned filters. This process reduces the number of trainable parameters, enhancing the efficiency of training and inference. The spatial dimensions of the output feature map can be calculated using the formula \( W_{\text{out}} = W - F + 2P/S + 1 \), where \( W \) is the input width, \( F \) is the kernel size, \( P \) is the padding, and \( S \) is the stride. This shared-weight scheme inherent in kernel operations not only accelerates network computation but also improves generalization, making CNNs highly effective for computer vision tasks \cite{bhatt2021cnn}.
+
+\subsubsection{Pooling layers}
+
+In CNN architecture, there is no direct communication between layers that allows information to flow backward \cite{zhao2024improved}. As a result, each layer processes the data independently. However, it is crucial for the pooling layer to pass relevant information to the next layer. Pooling plays an important role by reducing the spatial dimensions of the feature maps, making them more manageable while retaining key information. There are different types of pooling methods, such as average pooling and max pooling, each with its own characteristics and applications. 
+
+\textbf{Max pooling}
 
 
+Max pooling is a commonly used operation in CNN for feature extraction. The main purpose of max pooling is to reduce the spatial dimensions of feature maps, which helps make the network more computationally efficient while preserving important information.
 
+In max pooling, the input image is divided into small regions or windows (e.g., a 2x2 or 3x3 window). From each window, max pooling selects the maximum value and uses it as the representative value for that region. This allows the network to focus on the most prominent features in the image, such as edges, textures, and shapes, while discarding less important details. As a result, max pooling helps preserve important local features. Max pooling is particularly effective at preserving sharp, local features like edges and corners, making it highly useful in image processing and computer vision tasks \cite{zhao2024improved}.
 
+However, this operation results in some information loss, as it only keeps the maximum value from each window and discards the rest. While this makes the data more compact, it can also lead to a reduction in accuracy by losing finer details of the image. This is mathematically expressed as: 
+
+\begin{equation}
+ y = \max(x_1, x_2, \dots, x_n)
+ \label{maxpooling}
+\end{equation}
+
+Where \(x_1, x_2, \dots, x_n\) represent the values in the pooling region, and \(y\) is the output value for that region.
+
+ 
 \subsection{MobileNet}
 
-MobileNet is a lightweight and efficient deep neural network architecture designed specifically for mobile and embedded vision tasks \cite{howard2017mobilenetsefficientconvolutionalneural}. It reduces computational complexity and memory usage by employing depthwise separable convolutions instead of traditional convolutions \cite{howard2017mobilenetsefficientconvolutionalneural}. This involves splitting the standard convolution process into two distinct steps: a depthwise convolution , which applies a single filter to each input channel , and a pointwise convolution (1×1 convolution) , which combines the outputs to form new features \cite{howard2017mobilenetsefficientconvolutionalneural}. This factorization drastically reduces the computational cost and model size, making MobileNet an ideal choice for resource-constrained devices.
+MobileNet is a lightweight and efficient deep neural network architecture designed specifically for mobile and embedded vision tasks. It reduces computational complexity and memory usage by employing depthwise separable convolutions instead of traditional convolutions. This involves splitting the standard convolution process into two distinct steps: a depthwise convolution,which applies a single filter to each input channel, and a point-wise convolution (1×1 convolution), which combines the outputs to form new features \cite{howard2017mobilenetsefficientconvolutionalneural}. This factorization drastically reduces the computational cost and model size, making MobileNet an ideal choice for resource-constrained devices.
 
 The depthwise convolution operation in MobileNets can be mathematically represented as follows:
 
@@ -78,17 +85,17 @@ The depthwise convolution operation in MobileNets can be mathematically represen
 
 
 %represents the \textbf{depthwise convolution} operation, where each filter (\(\hat{K}\)) is applied to a single input channel independently. 
-Here, \(\hat{G}_{k,l,m}\) is the output value at spatial location \((k, l)\) in the \(m\)-th output channel \cite{howard2017mobilenetsefficientconvolutionalneural}. The filter \(\hat{K}_{i,j,m}\) is applied to the corresponding region of the input feature map \(F\) with the position \((k+i-1, l+j-1)\) \cite{howard2017mobilenetsefficientconvolutionalneural}, where \(i\) and \(j\) represent the spatial coordinates within the kernel \cite{howard2017mobilenetsefficientconvolutionalneural}. The summation (\(\sum_{i,j}\)) aggregates the product of each filter weight and its corresponding input value across the kernel's spatial dimensions \cite{howard2017mobilenetsefficientconvolutionalneural}, producing a filtered output for each input channel. Depthwise convolution thus filters each input channel independently \cite{howard2017mobilenetsefficientconvolutionalneural}, preserving spatial relationships within each channel but not combining information across channels, which is later handled by pointwise convolution in the depthwise separable convolution process \cite{howard2017mobilenetsefficientconvolutionalneural}.
+Here, \(\hat{G}_{k,l,m}\) is the output value at spatial location \((k, l)\) in the \(m\)-th output channel. The filter \(\hat{K}_{i,j,m}\) is applied to the corresponding region of the input feature map \(F\) with the position \((k+i-1, l+j-1)\), where \(i\) and \(j\) represent the spatial coordinates within the kernel. The summation (\(\sum_{i,j}\)) aggregates the product of each filter weight and its corresponding input value across the kernel's spatial dimensions, producing a filtered output for each input channel. depthwise convolution thus filters each input channel independently, preserving spatial relationships within each channel but not combining information across channels, which is later handled by point-wise convolution in the depthwise separable convolution process \cite{howard2017mobilenetsefficientconvolutionalneural}.
 
-Pointwise convolution refers to a \( 1 \times 1 \) convolution that combines the outputs of the depthwise convolution across channels to create new feature representations \cite{howard2017mobilenetsefficientconvolutionalneural}. It operates after depthwise convolution, where each input channel is filtered independently, and then a \( 1 \times 1 \) convolution mixes the results across all channels \cite{howard2017mobilenetsefficientconvolutionalneural}. This process reduces computational cost significantly while maintaining the ability to learn complex features by mixing the depthwise outputs efficiently \cite{he2015deepresiduallearningimage}.
+Pointwise convolution refers to a \( 1 \times 1 \) convolution that combines the outputs of the depthwise convolution across channels to create new feature representations . It operates after depthwise convolution, where each input channel is filtered independently, and then a \( 1 \times 1 \) convolution mixes the results across all channels \cite{howard2017mobilenetsefficientconvolutionalneural}. This process reduces computational cost significantly while maintaining the ability to learn complex features by mixing the depthwise outputs efficiently \cite{he2015deepresiduallearningimage}.
 
 \subsection{Residual Networks (ResNet)}
 
-Deep neural networks faces two major challenges: the degradation problem and the vanishing/exploding gradients problem \cite{he2015deepresiduallearningimage}. As networks get deeper, their performance can reach a limit, and adding more layers may actually increase training errors, a phenomenon known as the degradation problem \cite{he2015deepresiduallearningimage}. Additionally, during backpropagation, gradients may become extremely small (vanishing) or excessively large (exploding), which hampers the effective training of very deep networks \cite{he2015deepresiduallearningimage}.
+Deep neural networks faces two major challenges: the degradation problem and the vanishing/exploding gradients problem. As networks get deeper, their performance can reach a limit, and adding more layers may actually increase training errors, a phenomenon known as the degradation problem. Additionally, during backpropagation, gradients may become extremely small (vanishing) or excessively large (exploding), which hampers the effective training of very deep networks \cite{he2015deepresiduallearningimage}.
 
-Residual Networks (ResNet) address these challenges by introducing a residual learning framework \cite{he2015deepresiduallearningimage}. Instead of directly approximating the desired mapping \( H(x) \), ResNet reformulates the task to learn a residual function \( F(x) = H(x) - x \), where \( x \) is the input \cite{he2015deepresiduallearningimage}. The final output is computed as \( H(x) = F(x) + x \), which simplifies optimization, especially when the optimal function is close to an identity mapping \cite{he2015deepresiduallearningimage}. This reformulation alleviates the degradation problem by preconditioning the learning process. 
+Residual Networks (ResNet) address these challenges by introducing a residual learning framework. Instead of directly approximating the desired mapping \( H(x) \), ResNet reformulates the task to learn a residual function \( F(x) = H(x) - x \), where \( x \) is the input. The final output is computed as \( H(x) = F(x) + x \), which simplifies optimization, especially when the optimal function is close to an identity mapping \cite{he2015deepresiduallearningimage}. This reformulation alleviates the degradation problem by preconditioning the learning process. 
 
-At the core of ResNet is the Residual block, which incorporates a skip connection (shortcut) that directly adds the input \( x \) to the output of the residual function, defined as \( y = F(x, \{W_i\}) + x \) \cite{he2015deepresiduallearningimage}. These skip connections facilitate gradient flow during backpropagation, addressing the vanishing gradient problem, and require no additional parameters or computational overhead \cite{he2015deepresiduallearningimage}. If the input and output dimensions differ, a linear projection \( W_sx \) can be used (\( y = F(x, \{W_i\}) + W_sx \)) \cite{he2015deepresiduallearningimage}, though identity mappings are often sufficient. Residual blocks can be applied to both fully connected and convolutional layers, enabling the construction of deeper and more scalable networks \cite{he2015deepresiduallearningimage}. By retaining information from earlier layers and simplifying the learning of deeper representations, ResNet has become a cornerstone of modern deep learning architectures \cite{he2015deepresiduallearningimage}.
+At the core of ResNet is the Residual block, which incorporates a skip connection (shortcut) that directly adds the input \( x \) to the output of the residual function, defined as \( y = F(x, \{W_i\}) + x \). These skip connections facilitate gradient flow during backpropagation, addressing the vanishing gradient problem, and require no additional parameters or computational overhead. If the input and output dimensions differ, a linear projection \( W_sx \) can be used (\( y = F(x, \{W_i\}) + W_sx \)), though identity mappings are often sufficient. Residual blocks can be applied to both fully connected and convolutional layers, enabling the construction of deeper and more scalable networks. By retaining information from earlier layers and simplifying the learning of deeper representations, ResNet has become a cornerstone of modern deep learning architectures \cite{he2015deepresiduallearningimage}.
 
 ResNet architectures are composed of multiple stacked residual blocks, making it possible to build very deep networks. Popular variants include:
 \begin{itemize}
@@ -102,9 +109,16 @@ These architectures typically begin with an initial convolutional layer, followe
 
 Before the final fully connected layer, ResNet employs Global Average Pooling (GAP) to condense each feature map into a single value \cite{he2015deepresiduallearningimage}. GAP provides a compact representation of the feature maps, improving computational efficiency and reducing the risk of overfitting \cite{he2015deepresiduallearningimage}. 
 
-ResNet achieves state-of-the-art performance on tasks like image classification, particularly in the ImageNet Large Scale Visual Recognition Challenge (ILSVRC) \cite{he2015deepresiduallearningimage}. For instance, ResNet-152 achieved a top-5 error rate of 3.57\% on ImageNet \cite{he2015deepresiduallearningimage}. By enabling the training of networks with hundreds or even thousands of layers, ResNet solved critical challenges in deep learning and set a new standard for neural network design \cite{he2015deepresiduallearningimage}.
+ResNet achieves state-of-the-art performance on tasks like image classification, particularly in the ImageNet Large Scale Visual Recognition Challenge (ILSVRC). For instance, ResNet-152 achieved a top-5 error rate of 3.57\% on ImageNet. By enabling the training of networks with hundreds or even thousands of layers, ResNet solved critical challenges in deep learning and set a new standard for neural network design \cite{he2015deepresiduallearningimage}.
 
+\subsection{Transfer Learning}
+Transfer learning enables neural networks to leverage knowledge gained from one task to improve performance on another. This approach is particularly valuable when working with limited datasets, as it allows models to build upon features already learned from much larger datasets rather than learning everything from scratch.
 
+In deep neural networks like ResNet101, the early layers typically learn basic visual features such as edges, textures, and simple shapes, while deeper layers learn more task-specific features. These basic visual features are often useful across different types of image recognition tasks, even when the domains are quite different (such as natural images versus medical images). This makes it possible to use models pre-trained on large datasets like ImageNet as a starting point for more specific tasks.
+
+When applying transfer learning, the pre-trained model's weights serve as an intelligent initialization point instead of random initialization. The model can then be fine-tuned on the target dataset, allowing it to adapt its learned features to the specific task while retaining the beneficial general features it has already learned. This approach is especially useful in medical imaging applications where labeled data is often limited, as it reduces the amount of data needed to achieve good performance.
+
+The effectiveness of transfer learning helps explain why a deep, pre-trained model like ResNet101 might perform differently from simpler models trained from scratch when working with limited datasets. While simpler models must learn all their features from the available data, pre-trained models begin with a rich set of relevant features that need only be refined for the specific task.
 
 \subsection{Evaluation Metrics}
 
@@ -117,7 +131,7 @@ The metrics are derived from the confusion matrix, which provides a detailed bre
     \item False Negatives (FN): Positive instances incorrectly predicted as negative.
 \end{itemize}
 
-The confusion matrix serves as the foundation for most classification metrics, offering insights into both model strengths and weaknesses \cite{article,dalianis2018clinical}.
+The confusion matrix serves as the foundation for most classification metrics, offering insights into both model strengths and weaknesses \cite{article, dalianis2018clinical}.
 
 \subsubsection{Precision}
 Precision measures the proportion of true positive predictions among all instances predicted as positive. This metric is particularly important in scenarios where false positives carry significant costs, such as in fraud detection or medical testing. A high precision indicates that the model has effectively minimized false positive predictions \cite{article}. Precision is mathematically expressed as: 
@@ -128,7 +142,8 @@ Precision measures the proportion of true positive predictions among all instanc
 
 Precision is a valuable metric for evaluating classification models, particularly in cases involving imbalanced datasets. It measures the model's correctness in identifying the target class, making it effective for scenarios where false positives carry significant costs \cite{evidentlyai_accuracy_precision_recall}. For example, in medical diagnostics, precision is crucial for confirming diagnoses like cancer, ensuring minimal unnecessary treatments due to false positives \cite{appliedai_evaluation_metrics}. Precision works well when correctly identifying the negative class is less critical and is most suited for binary classification tasks \cite{bose_classification_metrics}.
 
-However, precision has notable limitations. It does not consider false negatives, meaning it overlooks cases where the target event is missed, which can be critical in many applications \cite{evidentlyai_accuracy_precision_recall,pareto_precision_recall}. This lack of consideration for false negatives means that precision alone does not provide a complete picture of model performance \cite{pareto_precision_recall}. Additionally, an excessive focus on precision can lead to overly conservative models that avoid predicting the positive class to maintain a high precision score, potentially missing many true positives \cite{pareto_precision_recall}. For these reasons, precision should be used alongside other metrics, such as recall, to gain a holistic understanding of the model’s performance \cite{pareto_precision_recall}.
+However, precision has notable limitations. It does not consider false negatives, meaning it overlooks cases where the target event is missed, which can be critical in many applications \cite{evidentlyai_accuracy_precision_recall,pareto_precision_recall}. This lack of consideration for false negatives means that precision alone does not provide a complete picture of model performance . Additionally, an excessive focus on precision can lead to overly conservative models that avoid predicting the positive class to maintain a high precision score, potentially missing many true positives
+. For these reasons, precision should be used alongside other metrics, such as recall, to gain a holistic understanding of the model’s performance \cite{pareto_precision_recall}.
 
 \subsubsection{Recall}
 Recall quantifies the ability of the model to identify actual positive cases. It is critical in applications where missing positive cases (false negatives) have severe implications, such as in medical diagnoses or safety-critical systems \cite{article}.
@@ -138,9 +153,9 @@ This is given as:
     \text{Recall} = \frac{\text{True Positives (TP)}}{\text{True Positives (TP)} + \text{False Negatives (FN)}}
 \end{equation}
 
-Recall is a critical metric for evaluating model performance, particularly in applications involving imbalanced datasets. It highlights how well a model identifies the minority class, helping us understand its performance in such scenarios \cite{bose_classification_metrics}. Recall also provides insights into potential biases in the data, showcasing how much the data or model leans toward a specific class \cite{bose_classification_metrics}. Additionally, it evaluates the efficiency of the model in capturing true positives, making it highly relevant in tasks where missing positive cases can have significant consequences, such as fraud detection or diagnostic medical tests \cite{appliedai_evaluation_metrics,evidentlyai_accuracy_precision_recall}.
+Recall is a critical metric for evaluating model performance, particularly in applications involving imbalanced datasets. It highlights how well a model identifies the minority class, helping us understand its performance in such scenarios. Recall also provides insights into potential biases in the data, showcasing how much the data or model leans toward a specific class \cite{bose_classification_metrics}. Additionally, it evaluates the efficiency of the model in capturing true positives, making it highly relevant in tasks where missing positive cases can have significant consequences, such as fraud detection or diagnostic medical tests \cite{appliedai_evaluation_metrics,evidentlyai_accuracy_precision_recall}.
 
-However, recall has limitations. It only considers true positives and false negatives, ignoring true negatives, which means it doesn’t provide a complete picture of model performance across all aspects of the confusion matrix \cite{bose_classification_metrics}. Furthermore, recall focuses exclusively on the positive class, making it less suitable in situations where correctly identifying negative classes is also important \cite{bose_classification_metrics}. This metric is best suited for binary classification tasks, where the focus is on maximizing true positive rates \cite{bose_classification_metrics}.
+However, recall has limitations. It only considers true positives and false negatives, ignoring true negatives, which means it doesn’t provide a complete picture of model performance across all aspects of the confusion matrix . Furthermore, recall focuses exclusively on the positive class, making it less suitable in situations where correctly identifying negative classes is also important . This metric is best suited for binary classification tasks, where the focus is on maximizing true positive rates \cite{bose_classification_metrics}.
 
 Recall is especially valuable in cases like fraud detection, where identifying as many fraudulent cases as possible is critical, even at the cost of some false positives \cite{appliedai_evaluation_metrics}. Similarly, in medical diagnostics, recall ensures that most cases of a condition, such as a disease, are flagged, minimizing the risk of missing affected individuals \cite{evidentlyai_accuracy_precision_recall} . It is particularly effective in situations where identifying the negative class is not a priority \cite{bose_classification_metrics} .
 
@@ -155,7 +170,7 @@ Accuracy measures the overall proportion of correctly classified instances among
 
 Accuracy is a widely used metric for evaluating classification models due to its simplicity and ease of use. It is straightforward to understand, making it an intuitive choice for many practitioners. Additionally, accuracy works well for balanced datasets, providing a single value that allows for easy comparison of model performance \cite{bose_classification_metrics}.
 
-However, accuracy has several notable limitations. It can be misleading when applied to imbalanced datasets \cite{appliedai_evaluation_metrics}. For instance, in cases where 95\% of the samples belong to one class, a model predicting only the majority class will achieve high accuracy but perform poorly in identifying the minority class, undermining its overall utility \cite{appliedai_evaluation_metrics}. Furthermore, accuracy does not offer insights into the specific types of errors made by the model, such as false positives or false negatives \cite{bose_classification_metrics}. It also fails to consider the probability scores of predictions, limiting its interpretability compared to metrics like the confusion matrix \cite{bose_classification_metrics}. While accuracy is suitable for balanced datasets \cite{cohere_classification_metrics,duong_ml_evaluation_metrics}, it may not be the best choice for evaluating models in scenarios involving imbalanced data distributions \cite{duong_ml_evaluation_metrics}.
+However, accuracy has several notable limitations. It can be misleading when applied to imbalanced datasets . For instance, in cases where 95\% of the samples belong to one class, a model predicting only the majority class will achieve high accuracy but perform poorly in identifying the minority class, undermining its overall utility \cite{appliedai_evaluation_metrics}. Furthermore, accuracy does not offer insights into the specific types of errors made by the model, such as false positives or false negatives \cite{bose_classification_metrics}. It also fails to consider the probability scores of predictions, limiting its interpretability compared to metrics like the confusion matrix \cite{bose_classification_metrics}. While accuracy is suitable for balanced datasets \cite{cohere_classification_metrics,duong_ml_evaluation_metrics}, it may not be the best choice for evaluating models in scenarios involving imbalanced data distributions \cite{duong_ml_evaluation_metrics}.
 
 \subsubsection{F1-Score}
 The F1-score provides a harmonic mean of Precision and Recall, offering a balanced evaluation metric that is particularly useful in datasets with imbalanced class distributions. It penalizes extreme differences between Precision and Recall, ensuring a more holistic assessment of model performance \cite{article}. This can be expressed as: 
@@ -167,6 +182,11 @@ The F1-score provides a harmonic mean of Precision and Recall, offering a balanc
 
 The F1-Score is a widely used evaluation metric that combines precision and recall into a single value, making it suitable for comparing models \cite{serokell_f1_score_guide}. By using the harmonic mean, the F1-score ensures that the result reflects the lower of the two values, effectively emphasizing weaknesses when either precision or recall is low \cite{bose_classification_metrics}. This makes the F1-Score particularly effective in imbalanced datasets where the balance between these metrics is crucial for a holistic understanding of performance \cite{appliedai_evaluation_metrics}.
 
-However, the F1-Score has its limitations. It provides no insight into the distribution of errors, which can be critical for applications requiring detailed error analysis, such as medical diagnostics or fraud detection. Additionally, it assumes that precision and recall have equal importance, which may not align with real-world scenarios where the costs or significance of false positives and false negatives differ \cite{serokell_f1_score_guide}. The F1-Score is also a generic metric, meaning it does not account for specific data patterns or unique problem characteristics, potentially leading to an incomplete evaluation of the model's performance \cite{serokell_f1_score_guide}. Furthermore, it is primarily designed for binary classification and may require adaptation for multi-class problems, such as micro or macro averaging, to be meaningful in those contexts \cite{serokell_f1_score_guide}.
+However, the F1-Score has its limitations. It provides no insight into the distribution of errors, which can be critical for applications requiring detailed error analysis, such as medical diagnostics or fraud detection. Additionally, it assumes that precision and recall have equal importance, which may not align with real-world scenarios where the costs or significance of false positives and false negatives differ . The F1-Score is also a generic metric, meaning it does not account for specific data patterns or unique problem characteristics, potentially leading to an incomplete evaluation of the model's performance. Furthermore, it is primarily designed for binary classification and may require adaptation for multi-class problems, such as micro or macro averaging, to be meaningful in those contexts \cite{serokell_f1_score_guide}.
 
 The F1-Score is particularly effective for applications with imbalanced datasets, where precision and recall alone might fail to reflect the model's performance accurately. For instance, in detecting rare events like fraud or disease, the F1-Score can provide a more balanced and reliable measure of model effectiveness \cite{appliedai_evaluation_metrics}.
+
+
+
+
+
