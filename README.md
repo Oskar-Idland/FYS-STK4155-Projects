@@ -31,6 +31,7 @@
 All projects are stored in the root directory of the repository. Each project has its own folder and internal structure as described below. 
 - [Project 1: Machine Learning on Dark Matter Distribution](#project-1-machine-learning-on-dark-matter-distribution)
 - [Project 2: Neural Networks for Breast Cancer Classification](#project-2-neural-networks-for-breast-cancer-classification)
+- [Project 3: Surveying Convolution Neural Network Architectures for Small Datasets](#project-3-surveying-convolution-neural-network-architectures-for-small-datasets)
 
 ## Project 1: Machine Learning on Dark Matter Distribution
 Full report can be found [here](Project_1/tex/out/Project_1.pdf)
@@ -92,6 +93,9 @@ neural networks.
 ## Project 3: Surveying Convolution Neural Network Architectures for Small Datasets
 Full report can be found [here](Project_3/tex/out/main.pdf)
 ### Project Structure
+#### `Project_3/`: Root folder for project 3.
+- `requirements.txt`: Required packages for the project, and their versions.
+
 #### `Project_3/data`: Data used in the project. 
 - `data/original`: Original breast cancer data.
 - `data/working`: Augmented version of original data used to generate more data points. 
@@ -106,8 +110,6 @@ Full report can be found [here](Project_3/tex/out/main.pdf)
 - `main.tex`: The full report of the project.
 - `out/main.pdf`: The compiled report.
 
-#### `Project_3`: Root folder for project 3.
-- `requirements.txt`: Required packages for the project, and their versions.
 
 ---
 # Authors 
