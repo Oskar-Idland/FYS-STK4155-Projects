@@ -16,5 +16,14 @@ The models were trained using the Adam optimizer, selected for its adaptive lear
 
 Models were evaluated using a comprehensive set of metrics: accuracy, precision, recall, and F1-score, with particular attention to per-class performance given the imbalanced nature of our dataset. Confusion matrices were generated to provide detailed insight into class-wise performance and misclassification patterns.
 
+\clearpage
+
 \subsection{Implementation Details}
 The implementation used the PyTorch framework and was executed on GPU hardware. Training was conducted with a batch size of 8, chosen to balance between computational efficiency and stable gradient updates. Data normalization used ImageNet statistics (mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]) to ensure compatibility with pre-trained models and standardize feature scales. All experiments were conducted with a fixed random seed for reproducibility, with final evaluation performed on the held-out test set to ensure unbiased performance assessment.
+
+\subsection{Tools}\label{subsec:tools}
+Our code is written in Python (3.10) \cite{Python}, we used scikit-learn \cite{scikit-learn} and PyTorch\cite{PyTorch} to test against our models. To vectorize our code we used \verb|numpy| \cite{Numpy}, and for visualization we used \verb|matplotlib.pyplot| \cite{Matplotlib}. All python packages and their versions can be found in our \verb|requirements.txt|. Code development was done in Visual Studio Code \cite{VSCode} with additional assistance of GitHub Copilot \cite{Copilot}. We used \verb|git| \cite{Git} for version control, and \verb|GitHub| \cite{GitHub} for remote storage of our code.
+
+\onecolumngrid
+
+\twocolumngrid

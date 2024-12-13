@@ -34,11 +34,12 @@ Where \( x(a) \) is the input data (e.g., an image), \( w(t-a) \) is the filter 
 In practice, the filter slides over the input data spatially, computing a dot product at each position \cite{cs231n_cnn}. The result is a feature map that highlights the presence of specific patterns associated with the filter. 
 The spatial dimensions of the output feature map are determined as:
 
-\begin{equation}
-    W_{\text{output}} = \frac{W_{\text{input}} - F + 2P}{S} + 1, \quad H_{\text{output}} = \frac{H_{\text{input}} - F + 2P}{S} + 1, 
+\begin{align}
+    W_{\text{output}} &= \frac{W_{\text{input}} - F + 2P}{S} + 1\\
+     H_{\text{output}} &= \frac{H_{\text{input}} - F + 2P}{S} + 1\\
     \label{conv_spatial}
-    D_{\text{output}} = K
-\end{equation}
+    D_{\text{output}} &= K
+\end{align}
 
 
 Here, \( W_{\text{input}} \) and \( H_{\text{input}} \) are the width and height of the input, \( F \) is the filter size, \( P \) is the padding (extra pixels added around the input to preserve edge information), and \( S \) is the stride (the step size of the filter). The depth of the output volume corresponds to the number of filters \( K \), with each filter learning to detect a specific feature.
@@ -47,7 +48,7 @@ Convolutional layers achieve computational efficiency through parameter sharing,
 
 Key parameters such as filter size \(F\), padding \(P\), stride \(S\), and the number of filters \(K\), optimize the layer's functionality \cite{cs231n_cnn}. Smaller filters capture fine details, padding keeps edge information, and strides controls how much the filter moves. The number of filters sets the output depth, with each filter learning different features. These parameters, along with the mathematical formula for output dimensions, makes convolutional layers essential to modern computer vision.
 
-\textbf{Kernel}
+\subsubsection{Kernel}
 
 Convolutional kernels, also called filters, are critical components of convolutional neural networks (CNNs), performing feature extraction through sliding-window operations over input feature maps \cite{jain2020convolutions}. Each kernel is defined by its dimensions and weights, which are refined during training to detect specific features in the input data. The application of kernels produces feature maps by combining the input image with the learned filters. This process reduces the number of trainable parameters, enhancing the efficiency of training and inference. The spatial dimensions of the output feature map can be calculated using the formula \( W_{\text{out}} = W - F + 2P/S + 1 \), where \( W \) is the input width, \( F \) is the kernel size, \( P \) is the padding, and \( S \) is the stride. This shared-weight scheme inherent in kernel operations not only accelerates network computation but also improves generalization, making CNNs highly effective for computer vision tasks \cite{bhatt2021cnn}.
 
@@ -137,7 +138,7 @@ The confusion matrix serves as the foundation for most classification metrics, o
 Precision measures the proportion of true positive predictions among all instances predicted as positive. This metric is particularly important in scenarios where false positives carry significant costs, such as in fraud detection or medical testing. A high precision indicates that the model has effectively minimized false positive predictions \cite{article}. Precision is mathematically expressed as: 
 
 \begin{equation}
-    \text{Precision} = \frac{\text{True Positives (TP)}}{\text{True Positives (TP)} + \text{False Positives (FP)}}
+    \text{Precision} = \frac{\text{TP}}{\text{TP} + \text{FP}}
 \end{equation}
 
 Precision is a valuable metric for evaluating classification models, particularly in cases involving imbalanced datasets. It measures the model's correctness in identifying the target class, making it effective for scenarios where false positives carry significant costs \cite{evidentlyai_accuracy_precision_recall}. For example, in medical diagnostics, precision is crucial for confirming diagnoses like cancer, ensuring minimal unnecessary treatments due to false positives \cite{appliedai_evaluation_metrics}. Precision works well when correctly identifying the negative class is less critical and is most suited for binary classification tasks \cite{bose_classification_metrics}.
@@ -150,7 +151,7 @@ Recall quantifies the ability of the model to identify actual positive cases. It
 
 This is given as: 
 \begin{equation}
-    \text{Recall} = \frac{\text{True Positives (TP)}}{\text{True Positives (TP)} + \text{False Negatives (FN)}}
+    \text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}}
 \end{equation}
 
 Recall is a critical metric for evaluating model performance, particularly in applications involving imbalanced datasets. It highlights how well a model identifies the minority class, helping us understand its performance in such scenarios. Recall also provides insights into potential biases in the data, showcasing how much the data or model leans toward a specific class \cite{bose_classification_metrics}. Additionally, it evaluates the efficiency of the model in capturing true positives, making it highly relevant in tasks where missing positive cases can have significant consequences, such as fraud detection or diagnostic medical tests \cite{appliedai_evaluation_metrics,evidentlyai_accuracy_precision_recall}.
@@ -164,7 +165,7 @@ Recall is especially valuable in cases like fraud detection, where identifying a
 Accuracy measures the overall proportion of correctly classified instances among all predictions. While it is easy to compute and interpret, accuracy can be misleading in imbalanced datasets where one class dominates, making additional metrics like the F1-score necessary \cite{article, dalianis2018clinical}. This is expressed as: 
 
 \begin{equation}
-    \text{Accuracy} = \frac{\text{True Positives (TP)} + \text{True Negatives (TN)}}{\text{Total Instances}}
+    \text{Accuracy} = \frac{\text{TP} + \text{TN}}{\text{Total Instances}}
 \end{equation}
 
 
