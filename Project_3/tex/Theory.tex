@@ -117,7 +117,7 @@ The metrics are derived from the confusion matrix, which provides a detailed bre
     \item False Negatives (FN): Positive instances incorrectly predicted as negative.
 \end{itemize}
 
-The confusion matrix serves as the foundation for most classification metrics, offering insights into both model strengths and weaknesses \cite{article, dalianis2018clinical}.
+The confusion matrix serves as the foundation for most classification metrics, offering insights into both model strengths and weaknesses \cite{article,dalianis2018clinical}.
 
 \subsubsection{Precision}
 Precision measures the proportion of true positive predictions among all instances predicted as positive. This metric is particularly important in scenarios where false positives carry significant costs, such as in fraud detection or medical testing. A high precision indicates that the model has effectively minimized false positive predictions \cite{article}. Precision is mathematically expressed as: 
@@ -170,8 +170,3 @@ The F1-Score is a widely used evaluation metric that combines precision and reca
 However, the F1-Score has its limitations. It provides no insight into the distribution of errors, which can be critical for applications requiring detailed error analysis, such as medical diagnostics or fraud detection. Additionally, it assumes that precision and recall have equal importance, which may not align with real-world scenarios where the costs or significance of false positives and false negatives differ \cite{serokell_f1_score_guide}. The F1-Score is also a generic metric, meaning it does not account for specific data patterns or unique problem characteristics, potentially leading to an incomplete evaluation of the model's performance \cite{serokell_f1_score_guide}. Furthermore, it is primarily designed for binary classification and may require adaptation for multi-class problems, such as micro or macro averaging, to be meaningful in those contexts \cite{serokell_f1_score_guide}.
 
 The F1-Score is particularly effective for applications with imbalanced datasets, where precision and recall alone might fail to reflect the model's performance accurately. For instance, in detecting rare events like fraud or disease, the F1-Score can provide a more balanced and reliable measure of model effectiveness \cite{appliedai_evaluation_metrics}.
-
-
-
-
-

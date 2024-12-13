@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex out/Project_1"] 1730974494 "out/Project_1.aux" "out/Project_1.bbl" "out/Project_1" 1730974499 0
+["bibtex out/Project_1"] 1734107307 "out/Project_1.aux" "out/Project_1.bbl" "out/Project_1" 1734107311 0
   "./references.bib" 1730201933 4615 784d04c106c565da48e3f8f072405d8b ""
   "c:/texlive/2023/texmf-dist/bibtex/bst/revtex4-1/apsrev4-1.bst" 1680269977 71515 e333383ed72bf24aa6de7e8cabb55f84 ""
-  "out/Project_1.aux" 1730974497 25346 91c5aa4e95e6ca7378e653270300e6ba "pdflatex"
-  "out/Project_1Notes.bib" 1730974497 103 48ad29797468f16e2853d8797278d7af "pdflatex"
+  "out/Project_1.aux" 1734107309 25346 91c5aa4e95e6ca7378e653270300e6ba "pdflatex"
+  "out/Project_1Notes.bib" 1734107309 103 48ad29797468f16e2853d8797278d7af "pdflatex"
   (generated)
   "out/Project_1.bbl"
   "out/Project_1.blg"
   (rewritten before read)
-["pdflatex"] 1730974495 "c:/Users/Erik/Documents/ELITE - Master/H24/FYS-STK4155/FYS-STK4155-Projects/Project_1/tex/Project_1.tex" "out/Project_1.pdf" "Project_1" 1730974499 0
+["pdflatex"] 1734107307 "c:/Users/Erik/Documents/ELITE - Master/H24/FYS-STK4155/FYS-STK4155-Projects/Project_1/tex/Project_1.tex" "out/Project_1.pdf" "Project_1" 1734107311 0
   "../figs/a_Franke_surf.pdf" 1730201933 227252 c0561b8f71fba11fae9dbb6c8d0edf2f ""
   "../figs/a_beta_scaled_vs_raw.pdf" 1728221208 137307 c16832bcacbd70480ab4723ce6d664cb ""
   "../figs/a_error_scaled_vs_raw.pdf" 1728221208 135181 136c7e289761da2cc94962160d5216af ""
@@ -239,9 +239,9 @@
   "c:/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1680271095 4662201 6a1520b5c5c935088be65b26dee0a7ec ""
   "c:/texlive/2023/texmf-var/web2c/pdftex/pdflatex.fmt" 1680271177 7883396 bdfdf750cf704fd1943e5c5018aea0b7 ""
   "c:/texlive/2023/texmf.cnf" 1680271078 713 e69b156964470283e0530f5060668171 ""
-  "out/Project_1.aux" 1730974497 25346 91c5aa4e95e6ca7378e653270300e6ba "pdflatex"
-  "out/Project_1.bbl" 1730974495 8041 8928d096ffd63bdcedfa10254e14fdc6 "bibtex out/Project_1"
-  "out/Project_1.out" 1730974497 8349 dfc97777715ef9ceedbdeb14a767df32 "pdflatex"
+  "out/Project_1.aux" 1734107309 25346 91c5aa4e95e6ca7378e653270300e6ba "pdflatex"
+  "out/Project_1.bbl" 1734107307 8041 8928d096ffd63bdcedfa10254e14fdc6 "bibtex out/Project_1"
+  "out/Project_1.out" 1734107309 8349 dfc97777715ef9ceedbdeb14a767df32 "pdflatex"
   (generated)
   "out/Project_1.aux"
   "out/Project_1.log"
