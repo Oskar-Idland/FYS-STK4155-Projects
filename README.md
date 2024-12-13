@@ -42,8 +42,9 @@ Full report can be found [here](Project_1/tex/out/Project_1.pdf)
 #### `Project_1/tex/`: $\LaTeX$ files
 - `Project_1.tex`: The full report of the project. 
 
+
 ## Project 2: Neural Networks for Breast Cancer Classification
-Full report can be found [here](Project_2/tex/out/Project2.pdf)
+Full report can be found [here](Project_2/tex/out/main.pdf)
 ### Project Structure
 #### `Project_2/figs`: Figures generated from the code. Saved as pdf files.
 
@@ -81,8 +82,30 @@ neural networks.
 #### `Project_2`: Root folder for project 2.
 - `requirements.txt`: Required packages for the project, and their versions. 
 
+## Project 3: Surveying Convolution Neural Network Architectures for small datasets
+Full report can be found [here](Project_3/tex/out/main.pdf)
+### Project Structure
+#### `Project_3/data`: Data used in the project. 
+- `data/original`: Original breast cancer data.
+- `data/working`: Augmented version of original data used to generate more data points. 
+
+#### `Project_3/figs`: Figures generated from the code. Saved as pdf files.
+
+#### `Project_3/src`: Python source code. This is divided into the following files. 
+- `cnn.py`: Contains the classes for the convolution neural networks.
+- `cnn_analysis.ipynb`: Contains the analysis of the dataset using convolution neural networks.
+
+#### `Project_3/tex`: $\LaTeX$ files
+- `main.tex`: The full report of the project.
+- `out/main.pdf`: The compiled report.
+
+#### `Project_3`: Root folder for project 3.
+- `requirements.txt`: Required packages for the project, and their versions.
+
 ---
 # Authors 
-- [~~Håvard Skåli~~](@paljettrosa)
 - [Erik Røset](@erikroset)
 - [Oskar Idland](@Oskar-Idland)
+- [Krithika Gunasegaran](@krithikaguna) (Project 3)
+- [Arangan Subramaniam](@Arra1807) (Project 3)
+- [~~Håvard Skåli~~](@paljettrosa) (Project 1)
