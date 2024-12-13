@@ -113,8 +113,8 @@ Full report can be found [here](Project_3/tex/out/main.pdf)
 
 ---
 # Authors 
-- [Erik Røset](@erikroset)
-- [Oskar Idland](@Oskar-Idland)
-- [Krithika Gunasegaran](@krithikaguna) (Project 3)
-- [Arangan Subramaniam](@Arra1807) (Project 3)
-- [~~Håvard Skåli~~](@paljettrosa) (Project 1)
+- Erik Røset [@erikroset](https://github.com/erikroset)
+- Oskar Idland [@Oskar](https://github.com/Oskar-Idland)
+- Krithika Gunasegaran [@krithikaguna](https://github.com/krithikaguna) (Project 3)
+- Arangan Subramaniam [@Arra1807](https://github.com/Arra1807) (Project 3)
+- ~~Håvard Skåli~~ [@paljettrosa](https://github.com/paljettrosa) (Project 1)
